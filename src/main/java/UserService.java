@@ -48,7 +48,37 @@ public class UserService {
 
     }
     // creates a new user
-    public User createUser(String name, String email) { return null; }
+    public static User createUser(String username, String password) {
+
+        Sql2o sql2o = new Sql2o("jdbc:mysql://localhost:3306/mobicars", "root", "");
+        String sql = "insert into user ( username, password ) values ( :username, :password )";
+
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("username", username)
+                    .addParameter("password", password)
+                    .executeUpdate();
+        }
+        return null;
+    }
+
+    public static User validateUser(String username, String password) {
+
+        //get the user who matches the supplied username
+        User user = getUserByUsername(username);
+
+        //if no user is returned the username is not in the database, return no user
+        if( user == null) {
+            return null;
+        }
+        //if the password supplied matches the password of the username return the validated user
+        else if(user.getPassword().equals(password)) {
+            return user;
+        }
+        //otherwise return no user
+        return user;
+    }
+
     // updates an existing user
     public User updateUser(String id, String name, String email) { return null; }
 }

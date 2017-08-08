@@ -1,10 +1,7 @@
 import java.util.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.ResultSet;
 
+import spark.ModelAndView;
+import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
 
 public class UserController {
@@ -12,8 +9,53 @@ public class UserController {
 
         staticFileLocation("/public");
 
+        get("/", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("template", "templates/map.vtl" );
+            return new ModelAndView(model, "templates/layout_main.vtl");
+        }, new VelocityTemplateEngine());
+
+        get("/register", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("template", "templates/register.vtl");
+            return new ModelAndView(model, "templates/layout_main.vtl");
+        }, new VelocityTemplateEngine());
+
+        get("/login", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("template", "templates/login.vtl");
+            return new ModelAndView(model, "templates/layout_main.vtl");
+        }, new VelocityTemplateEngine());
+
         get("/users", (request, response) -> {
             return UserService.getAllUsers();
+        });
+
+        post("/process_register", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            String username = request.queryParams("username");
+            String password = request.queryParams("password");
+            response.redirect("/login");
+            return UserService.createUser(username, password);
+        });
+
+        post("/process_login", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            String username = request.queryParams("username");
+            String password = request.queryParams("password");
+            if(UserService.validateUser(username, password)== null) {
+                response.redirect("/login");
+                return null;
+            }
+            request.session().attribute("session_username", username);
+            response.redirect("/");
+            return null;
+        });
+
+        get("/users/currentuser", (request, response) -> {
+            String currentUser = request.session().attribute("session_username");
+            return currentUser;
+
         });
 
         /*get("/users/:id", (request, response) -> {
@@ -27,21 +69,6 @@ public class UserController {
             return UserService.getUserByUsername(username);
 
         });
-        get("/favourite_photos", (request, response) ->
-                "<!DOCTYPE html>" +
-                        "<html>" +
-                        "<head>" +
-                        "<title>Hello Friend!</title>" +
-                        "<link rel='stylesheet'  href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>" +
-                        "</head>" +
-                        "<body>" +
-                        "<h1>Favorite Photos</h1>" +
-                        "<ul>" +
-                        "<li><img src='/images/star_citizen_vanguard_bulldog-HD.jpg' alt='A photo of a space ships.'/></li>" +
-                        "</ul>" +
-                        "</body>" +
-                        "</html>"
-        );
 
 
         // more routes
