@@ -3,6 +3,11 @@ import java.util.*;
 
 public class UserService {
 
+    public static String sqlDB = "jdbc:mysql://localhost:3306/mobicars";
+    public static String sqlUser = "root";
+    public static String sqlPass = "";
+
+
     // returns a list of all users
 /*
     public static List<User> getAllUsers() {
@@ -14,7 +19,7 @@ public class UserService {
         String sql = "SELECT *" +
                         "FROM user";
 
-        Sql2o sql2o = new Sql2o("jdbc:mysql://localhost:3306/mobicars", "root", "");
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         try(Connection con = sql2o.open()) {
             return con.createQuery(sql).executeAndFetch(User.class);
         }
