@@ -2,32 +2,42 @@ import java.util.*;
 
 public class User {
     private String id;
-    private String employee_id;
-    private String user_type;
-    private String username;
+    private String f_name;
+    private String l_name;
+    private String email;
     private String password;
+    private double lat;
+    private double lng;
     public static List<User> userList = new ArrayList<User>();
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(String id, String f_name, String l_name, String email, String password, double lat, double lng) {
+        this.id = id;
+        this.f_name = f_name;
+        this.l_name = l_name;
+        this.email = email;
+        this.password = password;
+        this.lat = lat;
+        this.lng = lng;
+    }
 
     @Override
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
-                ", employee_id='" + employee_id + '\'' +
-                ", user_type='" + user_type + '\'' +
-                ", username='" + username + '\'' +
+                ", f_name='" + f_name + '\'' +
+                ", l_name='" + l_name + '\'' +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", lat=" + lat +
+                ", lng=" + lng +
                 '}';
     }
 
-    public User(String id, String employee_id, String user_type, String username, String password) {
-        this.id = id;
-        this.employee_id = employee_id;
-        this.user_type = user_type;
-        this.username = username;
-        this.password = password;
-    }
-
-    // getter/setter
     public String getId() {
         return id;
     }
@@ -36,28 +46,28 @@ public class User {
         this.id = id;
     }
 
-    public String getEmployee_id() {
-        return employee_id;
+    public String getF_name() {
+        return f_name;
     }
 
-    public void setEmployee_id(String employee_id) {
-        this.employee_id = employee_id;
+    public void setF_name(String f_name) {
+        this.f_name = f_name;
     }
 
-    public String getUser_type() {
-        return user_type;
+    public String getL_name() {
+        return l_name;
     }
 
-    public void setUser_type(String user_type) {
-        this.user_type = user_type;
+    public void setL_name(String l_name) {
+        this.l_name = l_name;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -66,5 +76,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
     }
 }

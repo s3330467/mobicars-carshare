@@ -33,27 +33,27 @@ public class UserController {
 
         post("/process_register", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            String username = request.queryParams("username");
+            String email = request.queryParams("email");
             String password = request.queryParams("password");
             response.redirect("/login");
-            return UserService.createUser(username, password);
+            return UserService.createUser(email, password);
         });
 
         post("/process_login", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            String username = request.queryParams("username");
+            String email = request.queryParams("email");
             String password = request.queryParams("password");
-            if(UserService.validateUser(username, password)== null) {
+            if(UserService.validateUser(email, password)== null) {
                 response.redirect("/login");
                 return null;
             }
-            request.session().attribute("session_username", username);
+            request.session().attribute("session_email", email);
             response.redirect("/");
             return null;
         });
 
         get("/users/currentuser", (request, response) -> {
-            String currentUser = request.session().attribute("session_username");
+            String currentUser = request.session().attribute("session_email");
             return currentUser;
 
         });
@@ -64,9 +64,9 @@ public class UserController {
 
         });*/
 
-        get("/users/:username", (request, response) -> {
-            String username = request.params(":username");
-            return UserService.getUserByUsername(username);
+        get("/users/:email", (request, response) -> {
+            String email = request.params(":email");
+            return UserService.getUserByEmail(email);
 
         });
 
