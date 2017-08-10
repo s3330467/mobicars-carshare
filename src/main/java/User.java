@@ -37,6 +37,13 @@ public class User {
                 ", lng=" + lng +
                 '}';
     }
+    public static List<User> getUserList(){
+        userList = DB.fetchUsersFromDB();
+        return userList;
+    }
+    public static void updateUserList() {
+        userList = DB.fetchUsersFromDB();
+    }
 
     public String getId() {
         return id;

@@ -28,7 +28,7 @@ public class UserController {
         }, new VelocityTemplateEngine());
 
         get("/users", (request, response) -> {
-            return UserService.getAllUsers();
+            return User.getUserList();
         });
 
         post("/process_register", (request, response) -> {

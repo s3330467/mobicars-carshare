@@ -15,16 +15,6 @@ public class UserService {
     }
 */
     //returns an arraylist of all users in the database
-    public static List<User> getAllUsers(){
-        String sql = "SELECT *" +
-                        "FROM users";
-
-        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        try(Connection con = sql2o.open()) {
-            return con.createQuery(sql).executeAndFetch(User.class);
-        }
-    }
-
 
     // returns a single user by id
     public static User getUser(String id) {
@@ -56,15 +46,8 @@ public class UserService {
     // creates a new user
     public static User createUser(String email, String password) {
 
-        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "insert into users ( email, password ) values ( :email, :password )";
-
-        try (Connection con = sql2o.open()) {
-            con.createQuery(sql)
-                    .addParameter("email", email)
-                    .addParameter("password", password)
-                    .executeUpdate();
-        }
+        DB.insertUser(email, password);
+        User.updateUserList();
         return null;
     }
 
