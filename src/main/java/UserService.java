@@ -4,8 +4,8 @@ import java.util.*;
 public class UserService {
 
     public static String sqlDB = "jdbc:mysql://localhost:3306/mobicars";
-    public static String sqlUser = "root";
-    public static String sqlPass = "";
+    public static String sqlUser = "ubuntu";
+    public static String sqlPass = "password";
 
 
     // returns a list of all users
@@ -17,7 +17,7 @@ public class UserService {
     //returns an arraylist of all users in the database
     public static List<User> getAllUsers(){
         String sql = "SELECT *" +
-                        "FROM user";
+                        "FROM users";
 
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         try(Connection con = sql2o.open()) {
@@ -56,8 +56,8 @@ public class UserService {
     // creates a new user
     public static User createUser(String email, String password) {
 
-        Sql2o sql2o = new Sql2o("jdbc:mysql://localhost:3306/mobicars", "root", "");
-        String sql = "insert into user ( email, password ) values ( :email, :password )";
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String sql = "insert into users ( email, password ) values ( :email, :password )";
 
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
