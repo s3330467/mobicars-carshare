@@ -38,19 +38,19 @@
             <div class="collapse navbar-collapse" id="mainNavBar">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">How it Works </a></li>
-                    <li><a href="#">Locations </a></li>
-                    <li><a href="#">Cars </a></li>
-                    <li><a href="#">Rates </a></li>
+                    <li><a href="/">Locations </a></li>
+                    <li><a href="/cars">Cars </a></li>
+                    <li><a href="/">Rates </a></li>
                     <!--Drop Down Menu-->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Membership <span class="caret"></span> </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/register">Join Now</a></li>
-                            <li><a href="/login" data-target="popUpWindow" data-toggle="modal">Login</a></li>
+                            <li><a href="/register">Register</a></li>
+                            <li><a href="/login">Login</a></li>
                         </ul>
-                    <li><a href="#">Contact </a></li>
-                    <li><a href="#">About Us </a></li>
-                    <li><a href="#">F&Q's </a></li>
+                    <li><a href="/">Contact </a></li>
+                    <li><a href="/">About Us </a></li>
+                    <li><a href="/">FAQ's </a></li>
                 </ul>
 
                 <!--This will go once the login button is functional-->
@@ -61,7 +61,10 @@
              </div>
             </div>
         </nav>
-       <div class="container-fluid">
+        <div class="container-fluid">
+            <p>current User: $userEmail</p>
+        </div>
+        <div class="container-fluid">
              #parse( $template )
         </div>
 </body>

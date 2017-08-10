@@ -2,6 +2,7 @@ import java.util.*;
 
 public class Car {
     private String id;
+    private String type;
     private String make;
     private String model;
     private String plate_no;
@@ -9,9 +10,11 @@ public class Car {
     private double lat;
     private double lng;
     private boolean available;
+    public static List<Car> carList = new ArrayList<Car>();
 
-    public Car(String id, String make, String model, String plate_no, double hourly_price, double lat, double lng, boolean available) {
+    public Car(String id, String type, String make, String model, String plate_no, double hourly_price, double lat, double lng, boolean available) {
         this.id = id;
+        this.type = type;
         this.make = make;
         this.model = model;
         this.plate_no = plate_no;
@@ -25,6 +28,7 @@ public class Car {
     public String toString() {
         return "Car{" +
                 "id='" + id + '\'' +
+                ", type='" + type + '\'' +
                 ", make='" + make + '\'' +
                 ", model='" + model + '\'' +
                 ", plate_no='" + plate_no + '\'' +
@@ -34,6 +38,14 @@ public class Car {
                 ", available=" + available +
                 '}';
     }
+
+    public static void updateCarList() {
+        carList = DB.fetchCarsFromDB();
+    }
+
+    public String getType() { return type; }
+
+    public void setType(String type) { this.type = type; }
 
     public String getId() {
         return id;

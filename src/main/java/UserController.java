@@ -8,9 +8,10 @@ public class UserController {
     public UserController(final UserService userService) {
 
         staticFileLocation("/public");
-
+        String userEmail = "no user";
         get("/", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
+            model.put("userEmail", request.session().attribute("session_email"));
             model.put("template", "templates/map.vtl" );
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
@@ -28,27 +29,34 @@ public class UserController {
         }, new VelocityTemplateEngine());
 
         get("/users", (request, response) -> {
-            return User.getUserList();
+            User.updateUserList();
+            return User.userList;
         });
 
         post("/process_register", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String email = request.queryParams("email");
             String password = request.queryParams("password");
-            response.redirect("/login");
-            return UserService.createUser(email, password);
+            if(UserService.createUser(email, password)) {
+                response.redirect("/login");
+            }
+            else {
+                response.redirect("/register");
+            }
+            return null;
         });
 
         post("/process_login", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String email = request.queryParams("email");
             String password = request.queryParams("password");
-            if(UserService.validateUser(email, password)== null) {
-                response.redirect("/login");
+            if(UserService.validateUser(email, password)) {
+                request.session().attribute("session_email", email);
+                response.redirect("/");
                 return null;
             }
-            request.session().attribute("session_email", email);
-            response.redirect("/");
+            System.out.println("user validation failed");
+            response.redirect("/login");
             return null;
         });
 

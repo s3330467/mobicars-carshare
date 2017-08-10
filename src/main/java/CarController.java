@@ -7,7 +7,9 @@ import static spark.Spark.*;
 public class CarController {
     public CarController(final CarService carService) {
 
-    get("/cars", (request, response) -> {
-        return CarService.getAllCars();
-    });
+        get("/cars", (request, response) -> {
+            Car.updateCarList();
+            return Car.carList;
+        });
+    }
 }
