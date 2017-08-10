@@ -1,5 +1,6 @@
 import org.sql2o.*;
 import java.util.*;
+import org.jasypt.util.password.*;
 
 public class UserService {
 
@@ -9,21 +10,20 @@ public class UserService {
 
 
     // returns a list of all users
-/*
     public static List<User> getAllUsers() {
-        return User.getUserList();
+        User.updateUserList();
+        return User.userList;
     }
-*/
-    //returns an arraylist of all users in the database
+
 
     // returns a single user by id
     public static User getUser(String id) {
 
         int i;
-        List<User> userList = getAllUsers();
-        for (i = 0; i < userList.size(); i++) {
-            if (userList.get(i).getId().equals(id)) {
-                return userList.get(i);
+        User.updateUserList();
+        for (i = 0; i < User.userList.size(); i++) {
+            if (User.userList.get(i).getId().equals(id)) {
+                return User.userList.get(i);
             }
         }
         return null;
@@ -32,11 +32,11 @@ public class UserService {
     public static User getUserByEmail(String email) {
 
         int i;
-        List<User> userList = getAllUsers();
-        for(i = 0; i <userList.size(); i++) {
-            if(userList.get(i).getEmail().equals(email)) {
-                System.out.print("checking email: " + userList.get(i).getEmail());
-                return userList.get(i);
+        User.updateUserList();
+        for(i = 0; i <User.userList.size(); i++) {
+            if(User.userList.get(i).getEmail().equals(email)) {
+                System.out.print("checking email: " + User.userList.get(i).getEmail());
+                return User.userList.get(i);
             }
         }
         return null;
@@ -44,27 +44,39 @@ public class UserService {
 
     }
     // creates a new user
-    public static User createUser(String email, String password) {
+    public static boolean createUser(String email, String userPassword) {
 
-        DB.insertUser(email, password);
+        //create an encrypted password based off the supplied password string
+        StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
+        String encryptedPassword = passwordEncryptor.encryptPassword(userPassword);
+
+        if(!DB.insertUser(email, encryptedPassword)) {
+            return false;
+        }
         User.updateUserList();
-        return null;
+        return  true;
     }
 
-    public static User validateUser(String email, String password) {
-
+    public static Boolean validateUser(String email, String inputPassword) {
+        //ensure the userlist is up to date
+        User.updateUserList();
         //get the user who matches the supplied email
         User user = getUserByEmail(email);
-        //if no user is returned the email is not in the database, return no user
+        //if no user is returned the email is not in the database, return false
         if( user == null) {
-            return null;
+            System.out.println("user not validated because user doesnt exist");
+            return false;
+    }
+
+
+        //compare the supplied password with the users encrypted password, return true if they match
+        StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
+        if (passwordEncryptor.checkPassword(inputPassword, user.getPassword())) {
+            return true;
+        } else {
+            System.out.println("passwords do not match");
+            return false;
         }
-        //if the password supplied matches the password of the email return the validated user
-        else if(user.getPassword().equals(password)) {
-            return user;
-        }
-        //otherwise return no user
-        return user;
     }
 
     // updates an existing user
