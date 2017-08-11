@@ -37,7 +37,7 @@ public class User {
                 ", lng=" + lng +
                 '}';
     }
-
+    //test
     public static void updateUserList() {
         userList = DB.fetchUsersFromDB();
     }
