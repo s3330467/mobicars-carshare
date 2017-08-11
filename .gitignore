@@ -1,0 +1,6 @@
+target
+target/*
+.idea/*
+.idea
+carshare.iml
+.idea/workspace.xml

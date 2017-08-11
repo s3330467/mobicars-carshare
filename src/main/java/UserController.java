@@ -1,19 +1,69 @@
 import java.util.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.ResultSet;
 
+import spark.ModelAndView;
+import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
 
 public class UserController {
     public UserController(final UserService userService) {
 
         staticFileLocation("/public");
+        String userEmail = "no user";
+        get("/", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("userEmail", request.session().attribute("session_email"));
+            model.put("template", "templates/map.vtl" );
+            return new ModelAndView(model, "templates/layout_main.vtl");
+        }, new VelocityTemplateEngine());
+
+        get("/register", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("template", "templates/register.vtl");
+            return new ModelAndView(model, "templates/layout_main.vtl");
+        }, new VelocityTemplateEngine());
+
+        get("/login", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("template", "templates/login.vtl");
+            return new ModelAndView(model, "templates/layout_main.vtl");
+        }, new VelocityTemplateEngine());
 
         get("/users", (request, response) -> {
-            return UserService.getAllUsers();
+            User.updateUserList();
+            return User.userList;
+        });
+
+        post("/process_register", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            String email = request.queryParams("email");
+            String password = request.queryParams("password");
+            if(UserService.createUser(email, password)) {
+                response.redirect("/login");
+            }
+            else {
+                response.redirect("/register");
+            }
+            return null;
+        });
+
+        post("/process_login", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            String email = request.queryParams("email");
+            String password = request.queryParams("password");
+            if(UserService.validateUser(email, password)) {
+                request.session().attribute("session_email", email);
+                response.redirect("/");
+                return null;
+            }
+            System.out.println("user validation failed");
+            response.redirect("/login");
+            return null;
+        });
+
+        get("/users/currentuser", (request, response) -> {
+            String currentUser = request.session().attribute("session_email");
+            return currentUser;
+
         });
 
         /*get("/users/:id", (request, response) -> {
@@ -22,26 +72,11 @@ public class UserController {
 
         });*/
 
-        get("/users/:username", (request, response) -> {
-            String username = request.params(":username");
-            return UserService.getUserByUsername(username);
+        get("/users/:email", (request, response) -> {
+            String email = request.params(":email");
+            return UserService.getUserByEmail(email);
 
         });
-        get("/favourite_photos", (request, response) ->
-                "<!DOCTYPE html>" +
-                        "<html>" +
-                        "<head>" +
-                        "<title>Hello Friend!</title>" +
-                        "<link rel='stylesheet'  href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>" +
-                        "</head>" +
-                        "<body>" +
-                        "<h1>Favorite Photos</h1>" +
-                        "<ul>" +
-                        "<li><img src='/images/star_citizen_vanguard_bulldog-HD.jpg' alt='A photo of a space ships.'/></li>" +
-                        "</ul>" +
-                        "</body>" +
-                        "</html>"
-        );
 
 
         // more routes
