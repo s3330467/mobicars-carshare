@@ -11,7 +11,12 @@ public class UserController {
         String userEmail = "no user";
         get("/", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            model.put("userEmail", request.session().attribute("session_email"));
+            request.session().attribute("session_email", "test@email.com");
+            String currentUserEmail = request.session().attribute("session_email");
+            User.updateUserList();
+            Car.updateCarList();
+            model.put("carList", Car.carList);
+            model.put("user", UserService.getUserByEmail(currentUserEmail));
             model.put("template", "templates/map.vtl" );
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
