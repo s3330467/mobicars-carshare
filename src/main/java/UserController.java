@@ -16,6 +16,10 @@ public class UserController {
             User.updateUserList();
             Car.updateCarList();
             model.put("carList", Car.carList);
+            
+            //test function, temporarily set user coords until getPos() function is implemented
+            DB.updateUserLatLng(currentUserEmail, -37.79394, 144.951112);
+            
             model.put("user", UserService.getUserByEmail(currentUserEmail));
             model.put("template", "templates/map.vtl" );
             return new ModelAndView(model, "templates/layout_main.vtl");

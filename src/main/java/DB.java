@@ -71,4 +71,17 @@ public class DB {
         }
         return true;
     }
+    
+    public static boolean updateUserLatLng(String email, double lat, double lng) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String updateSql = "update users set lat = :lat, lng = :lng where email = :email";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(updateSql)
+                .addParameter("email", email)
+                .addParameter("lat", lat)
+                .addParameter("lng", lng)
+                .executeUpdate();
+        }
+        return true;
+    }
 }

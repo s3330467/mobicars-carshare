@@ -1,20 +1,47 @@
 <div id="map" style="width:100%;height:80vh">
 <script>
     function initMap() {
-        var startCoords = {lat: $user.getLat(), lng: $user.getLng()};
+        var userCoords = {lat: $user.getLat(), lng: $user.getLng()};
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 14,
-          center: startCoords
+          center: userCoords
         });
-        #foreach($car in $carList)
-        var latLng = {lat: $car.lat, lng: $car.lng};
-        var marker = new google.maps.Marker({
-          position: latLng,
+        
+        //html content that displays when the user clicks on a car
+        var contentString = 'test text';
+        
+        //define the infowindow
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+            
+        //places the marker of the current user at their location
+        var userMarker = new google.maps.Marker({
+          position: userCoords,
+          title:"$user.email",
+          label:"user",
           map: map
         });
+        
+        //loop through the arrayList $carList and for each car add a marker at its location
+
+        #foreach($car in $carList)
+
+        var latLng = {lat: $car.lat, lng: $car.lng};
+        var carMarker = new google.maps.Marker({
+          position: latLng,
+          title:"$car.plate_no",
+          label: "car",
+          map: map
+        });
+        
+        //execute carclick function if a car marker is clicked
+        carMarker.addListener('click', function() {
+            //do something when you click the car here
+        });
         #end
-      }
-    </script>
+    }
+</script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaOP27igpRtFBPl94Skp2Jm2R5Dvk-AlI&callback=initMap">
 </script>
