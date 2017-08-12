@@ -31,6 +31,12 @@ public class UserController {
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
 
+        get("/home", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("template", "templates/home.vtl");
+            return new ModelAndView(model, "templates/layout_main.vtl");
+        }, new VelocityTemplateEngine());
+
         get("/login", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             model.put("template", "templates/login.vtl");
@@ -61,11 +67,11 @@ public class UserController {
             String password = request.queryParams("password");
             if(UserService.validateUser(email, password)) {
                 request.session().attribute("session_email", email);
-                response.redirect("/");
+                response.redirect("/register");
                 return null;
             }
             System.out.println("user validation failed");
-            response.redirect("/login");
+            response.redirect("/home");
             return null;
         });
 
