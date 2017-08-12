@@ -3,6 +3,8 @@ import java.util.*;
 import spark.ModelAndView;
 import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 
 public class UserController {
     public UserController(final UserService userService) {
@@ -54,7 +56,7 @@ public class UserController {
             }
             return null;
         });
-
+        
         post("/process_login", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String email = request.queryParams("email");
