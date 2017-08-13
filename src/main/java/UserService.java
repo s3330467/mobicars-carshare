@@ -49,7 +49,7 @@ public class UserService {
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(userPassword);
 
-        if(!DB.insertUser(email, encryptedPassword, f_name, l_name, license_no, phone_no)) {
+        if(!DB.insertUser(email, encryptedPassword, f_name, l_name, address, license_no, phone_no)) {
             return false;
         }
         User.updateUserList();

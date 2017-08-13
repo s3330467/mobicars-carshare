@@ -42,9 +42,9 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", f_name=" + f_name + ", l_name=" + l_name + ", email=" + email + ", password=" + password + ", license_no=" + license_no + ", phone_no=" + phone_no + ", lat=" + lat + ", lng=" + lng + '}';
+        return "User{" + "id=" + id + ", f_name=" + f_name + ", l_name=" + l_name + ", email=" + email + ", password=" + password + ", address=" + address + ", license_no=" + license_no + ", phone_no=" + phone_no + ", lat=" + lat + ", lng=" + lng + '}';
     }
-    
+
     public static void updateUserList() {
         userList = DB.fetchUsersFromDB();
     }
@@ -119,6 +119,14 @@ public class User {
 
     public void setPhone_no(String phone_no) {
         this.phone_no = phone_no;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
     
 }
