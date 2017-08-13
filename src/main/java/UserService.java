@@ -40,8 +40,6 @@ public class UserService {
             }
         }
         return null;
-
-
     }
     // creates a new user
     public static boolean createUser(String email, String userPassword) {

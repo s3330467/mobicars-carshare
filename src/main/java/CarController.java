@@ -11,5 +11,10 @@ public class CarController {
             Car.updateCarList();
             return Car.carList;
         });
+        
+        post("/process_get_car_details", (request, response) -> {
+            String plate_no = request.queryParams("plate_no");
+            return CarService.getCarWindow(CarService.getCarByPlate_no(plate_no));
+        });
     }
 }

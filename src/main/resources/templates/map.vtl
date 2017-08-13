@@ -2,12 +2,12 @@
 <script>
     function initMap() {
         var userCoords = {lat: $user.getLat(), lng: $user.getLng()};
+        
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 14,
           center: userCoords
         });
-        
-        {
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(success, error);
         } else {
@@ -34,33 +34,49 @@
         function error(msg) {
             alert(msg);
         }
-  // console.log(arguments);
-}
 
         function handleLocationError(browserHasGeolocation, infoWindow, pos) {
             infoWindow.setPosition(pos);
             infoWindow.setContent(browserHasGeolocation ?
-                                  'Error: The Geolocation service failed.' :
-                                  'Error: Your browser doesn\'t support geolocation.');
+                'Error: The Geolocation service failed.' :
+                'Error: Your browser doesn\'t support geolocation.');
         } 
-            
-        //loop through the arrayList $carList and for each car add a marker at its location
-
-        #foreach($car in $carList)
-
-        var latLng = {lat: $car.lat, lng: $car.lng};
-        var carMarker = new google.maps.Marker({
-          position: latLng,
-          title:"$car.plate_no",
-          label: "car",
-          map: map
-        });
         
-        //execute carclick function if a car marker is clicked
-        carMarker.addListener('click', function() {
-            alert('you clicked on a car');
-        });
+        //loop through the arrayList carList and for each car add a marker at its location    
+        var cars = [
+        #foreach($car in $carList)
+        ['$car.plate_no', '$car.lat', '$car.lng'],
         #end
+        ['test', 'test', 'test']
+        ];
+        var infowindow = new google.maps.InfoWindow;
+        var marker, i;
+        
+        for (i = 0; i < cars.length; i++) {  
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(cars[i][1], cars[i][2]),
+                title: cars[i][0],
+                label: "car",
+                map: map
+            });
+
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                return function() {
+                    $.post("/process_get_car_details",
+                    {
+                        plate_no: cars[i][0]
+                    },
+                    function(result)
+                    {
+                        infowindow.setContent(
+                            result
+                        );
+                        infowindow.open(map, marker);
+                    });
+                }
+            })(marker, i));
+        }
+        
     }
 </script>
 <script async defer

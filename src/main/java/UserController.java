@@ -92,6 +92,13 @@ public class UserController {
             response.redirect("/login");
             return null;
         });
+        
+        get("/process_logout", (request, response) -> {
+            request.session().attribute("session_email", null);
+            authenticated = false;
+            response.redirect("/login");
+            return null;
+        });
 
         get("/users/currentuser", (request, response) -> {
             String currentUser = request.session().attribute("session_email");
