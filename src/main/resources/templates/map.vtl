@@ -17,6 +17,14 @@
         function success(position) {
             var geopos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
             map.setCenter(geopos);
+            //places the marker of the current user at their location
+            var userMarker = new google.maps.Marker({
+              position: geopos,
+              title:"$user.email",
+              label:"user",
+              map: map
+            });
+        
             $.post("/process_update_user_location",{
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
@@ -36,14 +44,6 @@
                                   'Error: Your browser doesn\'t support geolocation.');
         } 
             
-        //places the marker of the current user at their location
-        var userMarker = new google.maps.Marker({
-          position: userCoords,
-          title:"$user.email",
-          label:"user",
-          map: map
-        });
-        
         //loop through the arrayList $carList and for each car add a marker at its location
 
         #foreach($car in $carList)

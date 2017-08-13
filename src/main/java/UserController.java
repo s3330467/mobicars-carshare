@@ -1,5 +1,5 @@
 import java.util.*;
-
+import java.lang.Number;
 import spark.ModelAndView;
 import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
@@ -7,10 +7,17 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
 public class UserController {
+    static boolean authenticated = false;
     public UserController(final UserService userService) {
-
         staticFileLocation("/public");
         String userEmail = "no user";
+        
+        before("/",(request, response) -> {
+            if (!authenticated) {
+                response.redirect("/register");
+            }
+        });
+        
         get("/", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String currentUserEmail = request.session().attribute("session_email");
@@ -44,7 +51,16 @@ public class UserController {
             User.updateUserList();
             return User.userList;
         });
-
+        
+        post("/process_update_user_location", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            double lat = Double.parseDouble(request.queryParams("lat"));
+            double lng = Double.parseDouble(request.queryParams("lng"));
+            DB.updateUserLatLng(request.session().attribute("session_email"), lat, lng);
+            return "";
+        });
+        
+        
         post("/process_register", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String email = request.queryParams("email");
@@ -68,6 +84,7 @@ public class UserController {
             System.out.println(email);
             if(UserService.validateUser(email, password)) {
                 request.session().attribute("session_email", email);
+                authenticated = true;
                 response.redirect("/");
                 return null;
             }
