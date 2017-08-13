@@ -13,15 +13,10 @@ public class UserController {
         String userEmail = "no user";
         get("/", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            request.session().attribute("session_email", "test@email.com");
             String currentUserEmail = request.session().attribute("session_email");
             User.updateUserList();
             Car.updateCarList();
-            model.put("carList", Car.carList);
-            
-            //test function, temporarily set user coords until getPos() function is implemented
-            DB.updateUserLatLng(currentUserEmail, -37.79394, 144.951112);
-            
+            model.put("carList", Car.carList);           
             model.put("user", UserService.getUserByEmail(currentUserEmail));
             model.put("template", "templates/map.vtl" );
             return new ModelAndView(model, "templates/layout_main.vtl");
@@ -33,9 +28,9 @@ public class UserController {
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
 
-        get("/home", (request, response) -> {
+        get("/about", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            model.put("template", "templates/home.vtl");
+            model.put("template", "templates/about.vtl");
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
 
@@ -54,6 +49,8 @@ public class UserController {
             Map<String, Object> model = new HashMap<String, Object>();
             String email = request.queryParams("email");
             String password = request.queryParams("password");
+            System.out.println(password);
+            System.out.println(email);
             if(UserService.createUser(email, password)) {
                 response.redirect("/login");
             }
@@ -67,13 +64,15 @@ public class UserController {
             Map<String, Object> model = new HashMap<String, Object>();
             String email = request.queryParams("email");
             String password = request.queryParams("password");
+            System.out.println(password);
+            System.out.println(email);
             if(UserService.validateUser(email, password)) {
                 request.session().attribute("session_email", email);
-                response.redirect("/register");
+                response.redirect("/");
                 return null;
             }
             System.out.println("user validation failed");
-            response.redirect("/home");
+            response.redirect("/login");
             return null;
         });
 

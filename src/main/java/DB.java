@@ -21,8 +21,9 @@ public class DB {
     public static boolean insertUser(String email, String password) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String sql = "insert into users ( email, password ) values ( :email, :password )";
-
-        if(email.length()<=0 || password.length() <= 0) {
+        
+        if(email == null || password == null) {
+            System.out.println("null registration fields");
             return false;
         }
         EmailValidator emailValidator = EmailValidator.getInstance();

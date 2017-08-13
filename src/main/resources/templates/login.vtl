@@ -1,8 +1,4 @@
-
-
-
-
-    <div class="container" class="modal" role="dialog">
+<div class="container" class="modal" role="dialog">
         <!--<div id="register" class="modal" role="dialog">-->
          <!--<button type="button" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow">Open Register</button>-->
             <div class="modal-dialog">
@@ -17,20 +13,21 @@
 
                     <!--body-->
                     <div class="modal-body">
-                        <form action="/process_login" method="post">
+                        <form action='/process_login' method='post'>
                         <div class="form-group">
                             <span id="errorEmail" class="text-center"></span>
-                            <input type="email" id="email" class="form-control" placeholder="Email">
+                            <input type="text" name="email" class="form-control" placeholder="Email">
                         </div>
                         <div class="form-group">
                             <span id="errorPassword" class="text-center"></span>
-                            <input type="password" id="password" class="form-control" placeholder="Password">
+                            <input type="password" name="password" class="form-control" placeholder="Password">
                         </div>
                          <div class="form-group">
                             <input type="submit" name="submit" id="sign_up" class="btn btn-primary btn-block" value="Login">
                         </div>
+                        </form>
                         <!--<form role="form">-->
-
+                        
                     </div>
                     <!--footer
                     <button class="btn btn-primary btn-block">Register</button>-->
