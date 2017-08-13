@@ -18,9 +18,10 @@ public class DB {
         }
     }
 
-    public static boolean insertUser(String email, String password) {
+    public static boolean insertUser(String email, String password, String f_name, String l_name, String license_no, String phone_no) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "insert into users ( email, password ) values ( :email, :password )";
+        String sql = "insert into users ( email, password, f_name, l_name, license_no, phone_no ) "
+                + "values ( :email, :password, :f_name, :l_name, :license_no, :phone_no)";
         
         if(email == null || password == null) {
             System.out.println("null registration fields");
@@ -35,6 +36,10 @@ public class DB {
             con.createQuery(sql)
                     .addParameter("email", email)
                     .addParameter("password", password)
+                    .addParameter("f_name", f_name)
+                    .addParameter("l_name", l_name)
+                    .addParameter("license_no", license_no)
+                    .addParameter("phone_no", phone_no)
                     .executeUpdate();
         }
         return true;

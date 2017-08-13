@@ -65,9 +65,11 @@ public class UserController {
             Map<String, Object> model = new HashMap<String, Object>();
             String email = request.queryParams("email");
             String password = request.queryParams("password");
-            System.out.println(password);
-            System.out.println(email);
-            if(UserService.createUser(email, password)) {
+            String f_name = request.queryParams("f_name");
+            String l_name = request.queryParams("l_name");
+            String license_no = request.queryParams("license_no");
+            String phone_no = request.queryParams("phone_no");
+            if(UserService.createUser(email, password, f_name, l_name, license_no, phone_no)) {
                 response.redirect("/login");
             }
             else {

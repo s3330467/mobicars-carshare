@@ -42,13 +42,14 @@ public class UserService {
         return null;
     }
     // creates a new user
-    public static boolean createUser(String email, String userPassword) {
+    public static boolean createUser(String email, String userPassword, 
+            String f_name, String l_name, String address, String license_no, String phone_no) {
 
         //create an encrypted password based off the supplied password string
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(userPassword);
 
-        if(!DB.insertUser(email, encryptedPassword)) {
+        if(!DB.insertUser(email, encryptedPassword, f_name, l_name, license_no, phone_no)) {
             return false;
         }
         User.updateUserList();
