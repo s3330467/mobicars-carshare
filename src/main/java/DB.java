@@ -8,7 +8,7 @@ public class DB {
     public static String sqlUser = "ubuntu";
     public static String sqlPass = "password";
 
-    public static List<User> fetchUsersFromDB() {
+    public static List<User> fetchUsers() {
         String sql = "SELECT *" +
                 "FROM users";
 
@@ -18,9 +18,9 @@ public class DB {
         }
     }
 
-    public static List<Booking> fetchBookingsFromDB() {
+    public static List<Booking> fetchBookings() {
         String sql = "SELECT *" +
-                "FROM users";
+                "FROM bookings";
         
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         try (Connection con = sql2o.open()) {
@@ -74,7 +74,7 @@ public class DB {
         return true;
     }
 
-    public static List<Car> fetchCarsFromDB() {
+    public static List<Car> fetchCars() {
         String sql = "SELECT *" +
                 "FROM cars";
 

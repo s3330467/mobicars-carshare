@@ -46,7 +46,7 @@ public class User {
     }
 
     public static void updateUserList() {
-        userList = DB.fetchUsersFromDB();
+        userList = DB.fetchUsers();
     }
 
     public String getId() {

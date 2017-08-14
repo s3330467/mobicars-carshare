@@ -43,7 +43,7 @@ public class Booking {
         }
         
         public static void updateBookingList() {
-        bookingList = DB.fetchBookingsFromDB();
+        bookingList = DB.fetchBookings();
     }
 
         public int getUser_id() {
