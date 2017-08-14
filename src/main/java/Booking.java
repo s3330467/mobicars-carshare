@@ -1,7 +1,6 @@
 import java.util.*;
 
 public class Booking {
-    public class Booking {
     private int user_id;
     private int car_id;
     private String start_date;
@@ -13,8 +12,18 @@ public class Booking {
     private double start_lng;
     private double end_lat;
     private double end_lng;
-
-        public Booking(int user_id, int car_id, String start_date, String end_date, String start_time, String end_time, double cost, double start_lat, double start_lng, double end_lat, double end_lng) {
+    public static List<Booking> bookingList = new ArrayList<Booking>();
+    
+        public Booking(int user_id, int car_id, String start_date, String start_time, double start_lat, double start_lng) {
+            this.user_id = user_id;
+            this.car_id = car_id;
+            this.start_date = start_date;
+            this.start_time = start_time;
+            this.start_lat = start_lat;
+            this.start_lng = start_lng;
+        }
+    
+    public Booking(int user_id, int car_id, String start_date, String end_date, String start_time, String end_time, double cost, double start_lat, double start_lng, double end_lat, double end_lng) {
             this.user_id = user_id;
             this.car_id = car_id;
             this.start_date = start_date;
@@ -127,4 +136,3 @@ public class Booking {
     
     
     }
-}

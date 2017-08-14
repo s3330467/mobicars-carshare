@@ -68,7 +68,7 @@ public class DB {
                     .addParameter("start_date", start_date)
                     .addParameter("start_time", start_time)
                     .addParameter("start_lat", start_lat)
-                    .addParameter("start_lng", license_no)
+                    .addParameter("start_lng", start_lng)
                     .executeUpdate();
         }
         return true;
