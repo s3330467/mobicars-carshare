@@ -18,6 +18,16 @@ public class DB {
         }
     }
 
+    public static List<Booking> fetchBookingsFromDB() {
+        String sql = "SELECT *" +
+                "FROM users";
+        
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        try (Connection con = sql2o.open()) {
+            return con.createQuery(sql).executeAndFetch(Booking.class);
+        }
+    }
+    
     public static boolean insertUser(String email, String password, String f_name, String l_name, String address, String license_no, String phone_no) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String sql = "insert into users ( email, password, f_name, l_name, address, license_no, phone_no ) "
@@ -41,6 +51,24 @@ public class DB {
                     .addParameter("address", address)
                     .addParameter("license_no", license_no)
                     .addParameter("phone_no", phone_no)
+                    .executeUpdate();
+        }
+        return true;
+    }
+    
+    public static boolean insertBooking(int user_id, int car_id, String start_date, String start_time, double start_lat, double start_lng) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String sql = "insert into bookings (user_id, car_id, start_date, start_time, start_lat, start_lng)"
+                + "values (:user_id, :car_id, :start_date, :start_time, :start_lat, :start_lng)";
+        
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("user_id", user_id)
+                    .addParameter("car_id", car_id)
+                    .addParameter("start_date", start_date)
+                    .addParameter("start_time", start_time)
+                    .addParameter("start_lat", start_lat)
+                    .addParameter("start_lng", license_no)
                     .executeUpdate();
         }
         return true;
