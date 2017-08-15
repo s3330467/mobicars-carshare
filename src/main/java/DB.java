@@ -18,8 +18,9 @@ public class DB {
         }
     }
 
-    public static List<Booking> fetchBookings() {
+    public static List<Booking> fetchBookingsByUserID() {
         String sql = "SELECT *" +
+                "WHERE user_id = :user_id" +
                 "FROM bookings";
         
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
@@ -30,8 +31,8 @@ public class DB {
     
     public static boolean insertUser(String email, String password, String f_name, String l_name, String address, String license_no, String phone_no) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "insert into users ( email, password, f_name, l_name, address, license_no, phone_no ) "
-                + "values ( :email, :password, :f_name, :l_name, :address, :license_no, :phone_no)";
+        String sql = "INSERT INTO users ( email, password, f_name, l_name, address, license_no, phone_no ) "
+                + "VALUES ( :email, :password, :f_name, :l_name, :address, :license_no, :phone_no)";
         
         if(email == null || password == null) {
             System.out.println("null registration fields");
@@ -58,8 +59,8 @@ public class DB {
     
     public static boolean insertBooking(int user_id, int car_id, String start_date, String start_time, double start_lat, double start_lng) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "insert into bookings (user_id, car_id, start_date, start_time, start_lat, start_lng)"
-                + "values (:user_id, :car_id, :start_date, :start_time, :start_lat, :start_lng)";
+        String sql = "INSERT INTO bookings (user_id, car_id, start_date, start_time, start_lat, start_lng)"
+                + "VALUES (:user_id, :car_id, :start_date, :start_time, :start_lat, :start_lng)";
         
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
@@ -69,6 +70,23 @@ public class DB {
                     .addParameter("start_time", start_time)
                     .addParameter("start_lat", start_lat)
                     .addParameter("start_lng", start_lng)
+                    .executeUpdate();
+        }
+        return true;
+    }
+    
+    public static boolean updateBooking(int booking_id,String end_date, String end_time, double end_lat, double end_lng) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String sql = "UPDATE bookings SET end_date = :end_date, end_time = :end_time, end_lat = :end_lat, end_lng = :end_lng)"
+                + "WHERE booking_id = :booking_id";
+                
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("booking_id", booking_id)
+                    .addParameter("end_date", end_date)
+                    .addParameter("end_time", end_time)
+                    .addParameter("end_lat", end_lat)
+                    .addParameter("end_lng", end_lng)
                     .executeUpdate();
         }
         return true;
@@ -92,7 +110,7 @@ public class DB {
         }
         //connect to DB and insert car values
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "insert into cars ( type, make, model, hourly_price, lat, lng ) values ( :type, :make, :model, :hourly_price, :lat, :lng )";
+        String sql = "INSERT INTO cars ( type, make, model, hourly_price, lat, lng ) VALUES ( :type, :make, :model, :hourly_price, :lat, :lng )";
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
                     .addParameter("type", type)
@@ -109,7 +127,7 @@ public class DB {
     
     public static boolean updateUserLatLng(String email, double lat, double lng) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String updateSql = "update users set lat = :lat, lng = :lng where email = :email";
+        String updateSql = "UPDATE users SET lat = :lat, lng = :lng WHERE email = :email";
         try (Connection con = sql2o.open()) {
             con.createQuery(updateSql)
                 .addParameter("email", email)
