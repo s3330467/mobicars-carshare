@@ -17,6 +17,16 @@ public class DB {
             return con.createQuery(sql).executeAndFetch(User.class);
         }
     }
+    
+    public static List<Booking> fetchBookings() {
+        String sql = "SELECT *" +
+                "FROM bookings";
+
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        try (Connection con = sql2o.open()) {
+            return con.createQuery(sql).executeAndFetch(Booking.class);
+        }
+    }
 
     public static List<Booking> fetchBookingsByUserID() {
         String sql = "SELECT *" +
@@ -133,6 +143,18 @@ public class DB {
                 .addParameter("email", email)
                 .addParameter("lat", lat)
                 .addParameter("lng", lng)
+                .executeUpdate();
+        }
+        return true;
+    }
+    
+    public static boolean updateCarAvailable(String plate_no, boolean available) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String updateSql = "UPDATE cars SET available = :available WHERE plate_no = :plate_no";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(updateSql)
+                .addParameter("plate_no", plate_no)
+                .addParameter("available", available)
                 .executeUpdate();
         }
         return true;

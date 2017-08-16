@@ -1,24 +1,17 @@
-
-
-<div class="container" class="modal" role="dialog">
-    <div id="Modal" class="modal fade">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Car Details</h4>
-            </div>
-            <div class="modal-body" id="car_detail">
-            
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
+<div>
+    <img src="images/1200-6.jpg" alt="$car.getMake $car.getModel()">
+    <p><b>$car.getMake() $car.getModel()</b></p>
+    <p>Type: $car.getType()</p>
+    <p>Registration #: $car.getPlate_no()</p>
+    <p>Hourly rate: $$car.getHourly_price()</p>
+    <div class="text-center">
+    <form action="/process_book_car" method="POST">
+        <input type="hidden" name="plate_no" value="$car.getPlate_no()">
+        <input type="submit" value="Book Car" />
+    </form>
     </div>
-
-
 </div>
-
+<!--
 <script>
 $(document).ready(function(){
     $('#cars').click(function(){
@@ -40,3 +33,4 @@ $(document).ready(function(){
 });
 });
 </script>
+-->

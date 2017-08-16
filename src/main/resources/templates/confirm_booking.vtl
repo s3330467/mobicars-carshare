@@ -1,0 +1,11 @@
+<div>
+    <img src="images/1200-6.jpg" alt="$car.getMake $car.getModel()">
+    <p><b>$car.getMake() $car.getModel()</b></p>
+    <p>Type: $car.getType()</p>
+    <p>Registration #: $car.getPlate_no()</p>
+    <p>Hourly rate: $$car.getHourly_price()</p>
+    <form action="/process_confirm_booking" method="POST">
+        <input type="hidden" name="plate_no" value="$car.getPlate_no()">
+        <input type="submit" value="Confirm Booking" />
+    </form>
+</div>
