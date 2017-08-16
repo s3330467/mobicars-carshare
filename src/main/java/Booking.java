@@ -1,9 +1,9 @@
 import java.util.*;
 
 public class Booking {
-    private int booking_id;
-    private int user_id;
-    private int car_id;
+    private String booking_id;
+    private String user_id;
+    private String car_id;
     private String start_date;
     private String end_date;
     private String start_time;
@@ -15,7 +15,7 @@ public class Booking {
     private double end_lng;
     public static List<Booking> bookingList = new ArrayList<Booking>();
     
-        public Booking(int booking_id, int user_id, int car_id, String start_date, String start_time, double start_lat, double start_lng) {
+        public Booking(String booking_id, String user_id, String car_id, String start_date, String start_time, double start_lat, double start_lng) {
             this.booking_id = booking_id;
             this.user_id = user_id;
             this.car_id = car_id;
@@ -25,7 +25,7 @@ public class Booking {
             this.start_lng = start_lng;
         }
     
-    public Booking(int booking_id, int user_id, int car_id, String start_date, String end_date, String start_time, String end_time, double cost, double start_lat, double start_lng, double end_lat, double end_lng) {
+    public Booking(String booking_id, String user_id, String car_id, String start_date, String end_date, String start_time, String end_time, double cost, double start_lat, double start_lng, double end_lat, double end_lng) {
             this.booking_id = booking_id;
             this.user_id = user_id;
             this.car_id = car_id;
@@ -49,27 +49,27 @@ public class Booking {
         bookingList = DB.fetchBookingsByUserID();
             }
         
-        public int getBooking_id() {
+        public String getBooking_id() {
         return booking_id;
         }
         
-        public void setBooking_id(int booking_id) {
+        public void setBooking_id(String booking_id) {
         this.booking_id = booking_id;
         }
 
-        public int getUser_id() {
+        public String getUser_id() {
             return user_id;
         }
 
-        public void setUser_id(int user_id) {
+        public void setUser_id(String user_id) {
             this.user_id = user_id;
         }
 
-        public int getCar_id() {
+        public String getCar_id() {
             return car_id;
         }
 
-        public void setCar_id(int car_id) {
+        public void setCar_id(String car_id) {
             this.car_id = car_id;
         }
 
