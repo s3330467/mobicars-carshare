@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Booking {
-    private int booking_id;
+    private int id;
     private int user_id;
     private int car_id;
     private String start_date;
@@ -16,7 +16,7 @@ public class Booking {
     public static List<Booking> bookingList = new ArrayList<Booking>();
     
         public Booking(int booking_id, int user_id, int car_id, String start_date, String start_time, double start_lat, double start_lng) {
-            this.booking_id = booking_id;
+            this.id = booking_id;
             this.user_id = user_id;
             this.car_id = car_id;
             this.start_date = start_date;
@@ -26,7 +26,7 @@ public class Booking {
         }
     
     public Booking(int booking_id, int user_id, int car_id, String start_date, String end_date, String start_time, String end_time, double cost, double start_lat, double start_lng, double end_lat, double end_lng) {
-            this.booking_id = booking_id;
+            this.id = booking_id;
             this.user_id = user_id;
             this.car_id = car_id;
             this.start_date = start_date;
@@ -42,19 +42,19 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "Booking{" + "booking_id=" + booking_id + ", user_id=" + user_id + ", car_id=" + car_id + ", start_date=" + start_date + ", end_date=" + end_date + ", start_time=" + start_time + ", end_time=" + end_time + ", cost=" + cost + ", start_lat=" + start_lat + ", start_lng=" + start_lng + ", end_lat=" + end_lat + ", end_lng=" + end_lng + '}';
+        return "Booking{" + "booking_id=" + id + ", user_id=" + user_id + ", car_id=" + car_id + ", start_date=" + start_date + ", end_date=" + end_date + ", start_time=" + start_time + ", end_time=" + end_time + ", cost=" + cost + ", start_lat=" + start_lat + ", start_lng=" + start_lng + ", end_lat=" + end_lat + ", end_lng=" + end_lng + '}';
     }
     
             public static void updateBookingList() {
-        bookingList = DB.fetchBookingsByUserID();
+        bookingList = DB.fetchBookings();
             }
         
         public int getBooking_id() {
-        return booking_id;
+        return id;
         }
         
         public void setBooking_id(int booking_id) {
-        this.booking_id = booking_id;
+        this.id = booking_id;
         }
 
         public int getUser_id() {

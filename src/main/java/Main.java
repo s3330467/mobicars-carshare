@@ -14,5 +14,6 @@ public class Main {
         User tempUser3 = new User("03","Greg Smith", "GS@somewhere.com");*/
         new UserController(new UserService());
         new CarController(new CarService());
+        new BookingController(new BookingService());
     }
 }

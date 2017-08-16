@@ -27,12 +27,4 @@ public class CarService {
         }
         return null;
     }
-    
-    public static String getCarWindow(Car car) {
-        return "<div>" +
-               "car ID: "+car.getId()+
-               "type: " + car.getType()+
-               "</div>"+
-               "<input type=\"submit\" name=\"submit\" id=\"sign_up\" class=\"btn btn-primary btn-block\" value=\""+car.getId()+"\">";
-    }
 }
