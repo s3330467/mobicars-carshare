@@ -232,7 +232,7 @@
         
         //create the vector art styling for a sedan
         var sedanIcon = {
-          url: 'images/sedan-car-model.png',
+          url: 'images/sedan-car-model.png'
         };
         
         //loop through the arrayList carList and for each car add a marker at its location    
@@ -247,7 +247,6 @@
         
         for (i = 0; i < cars.length; i++) {  
             if(cars[i][3] == "true") {
-            window.alert(cars[i][3]);
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(cars[i][1], cars[i][2]),
                 title: cars[i][0],
