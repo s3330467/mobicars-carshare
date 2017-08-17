@@ -1,0 +1,18 @@
+<div>
+    <h1>CAR IS BOOKED</h1>
+    <img src="images/1200-6.jpg" alt="$car.getMake $car.getModel()">
+    <p><b>$car.getMake() $car.getModel()</b></p>
+    <p>Type: $car.getType()</p>
+    <p>Registration #: $car.getPlate_no()</p>
+    <p>Hourly rate: $$car.getHourly_price()</p>
+    <div class="text-center">
+    <form action="/process_cancel_booking" method="POST">
+        <input type="hidden" name="plate_no" value="$car.getPlate_no()">
+        <input type="submit" value="Cancel Booking" />
+    </form>
+    <form action="/process_pickup_car" method="POST">
+        <input type="hidden" name="plate_no" value="$car.getPlate_no()">
+        <input type="submit" value="Collect Car" />
+    </form>
+    </div>
+</div>

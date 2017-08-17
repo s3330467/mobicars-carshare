@@ -1,0 +1,36 @@
+<div>
+    <img src="images/1200-6.jpg" alt="$car.getMake $car.getModel()">
+    <p><b>$car.getMake() $car.getModel()</b></p>
+    <p>Type: $car.getType()</p>
+    <p>Registration #: $car.getPlate_no()</p>
+    <p>Hourly rate: $$car.getHourly_price()</p>
+    <div class="text-center">
+    <form action="/process_book_car" method="POST">
+        <input type="hidden" name="plate_no" value="$car.getPlate_no()">
+        <input type="submit" value="Book Car" />
+    </form>
+    </div>
+</div>
+<!--
+<script>
+$(document).ready(function(){
+    $('#cars').click(function(){
+      var car_id =$(this).attr("id);
+      
+      $.ajax({
+        url:"/process_get_car_details",
+        method:"get",
+        data:{car_id: id},
+        success: function(data){
+            $('#car_detail').html(data);
+            $('#Modal').modal("show");
+        }
+
+      });
+
+       $('#Modal').modal("show");
+
+});
+});
+</script>
+-->

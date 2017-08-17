@@ -40,7 +40,7 @@ public class Car {
     }
 
     public static void updateCarList() {
-        carList = DB.fetchCarsFromDB();
+        carList = DB.fetchCars();
     }
 
     public String getType() { return type; }

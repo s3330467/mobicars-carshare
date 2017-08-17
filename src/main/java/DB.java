@@ -8,7 +8,7 @@ public class DB {
     public static String sqlUser = "ubuntu";
     public static String sqlPass = "password";
 
-    public static List<User> fetchUsersFromDB() {
+    public static List<User> fetchUsers() {
         String sql = "SELECT *" +
                 "FROM users";
 
@@ -17,12 +17,39 @@ public class DB {
             return con.createQuery(sql).executeAndFetch(User.class);
         }
     }
+    
+    public static List<Booking> fetchBookings() {
+        String sql = "SELECT *" +
+                "FROM bookings";
 
-    public static boolean insertUser(String email, String password) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "insert into users ( email, password ) values ( :email, :password )";
+        try (Connection con = sql2o.open()) {
+            return con.createQuery(sql).executeAndFetch(Booking.class);
+        }
+    }
+    
+    //fetches a booking that matches the supplied user_id and also has not been 
+    //concluded i.e a currently active booking
+    public static List<Booking> fetchCurrentBookingByUser_id(String user_id) {
+        String sql = "SELECT * " +
+                "FROM bookings " +
+                "WHERE user_id = :user_id AND end_date IS NULL AND end_time IS NULL";
 
-        if(email.length()<=0 || password.length() <= 0) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        try(Connection con = sql2o.open()) {
+            return con.createQuery(sql)
+                .addParameter("user_id", user_id)
+                .executeAndFetch(Booking.class);
+        }
+    }
+    
+    public static boolean insertUser(String email, String password, String f_name, String l_name, String address, String license_no, String phone_no) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String sql = "INSERT INTO users ( email, password, f_name, l_name, address, license_no, phone_no ) "
+                + "VALUES ( :email, :password, :f_name, :l_name, :address, :license_no, :phone_no)";
+        
+        if(email == null || password == null) {
+            System.out.println("null registration fields");
             return false;
         }
         EmailValidator emailValidator = EmailValidator.getInstance();
@@ -34,12 +61,53 @@ public class DB {
             con.createQuery(sql)
                     .addParameter("email", email)
                     .addParameter("password", password)
+                    .addParameter("f_name", f_name)
+                    .addParameter("l_name", l_name)
+                    .addParameter("address", address)
+                    .addParameter("license_no", license_no)
+                    .addParameter("phone_no", phone_no)
+                    .executeUpdate();
+        }
+        return true;
+    }
+    
+    public static boolean insertBooking(int user_id, int car_id, String start_date, String start_time, double start_lat, double start_lng) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String sql = "INSERT INTO bookings (user_id, car_id, start_date, start_time, start_lat, start_lng)"
+                + "VALUES (:user_id, :car_id, :start_date, :start_time, :start_lat, :start_lng)";
+        
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("user_id", user_id)
+                    .addParameter("car_id", car_id)
+                    .addParameter("start_date", start_date)
+                    .addParameter("start_time", start_time)
+                    .addParameter("start_lat", start_lat)
+                    .addParameter("start_lng", start_lng)
+                    .executeUpdate();
+        }
+        return true;
+    }
+    
+    public static boolean updateBooking(String booking_id, String end_date, String end_time, double end_lat, double end_lng) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String sql = "UPDATE bookings "
+                + "SET end_date = :end_date, end_time = :end_time, end_lat = :end_lat, end_lng = :end_lng "
+                + "WHERE id = :booking_id";
+                
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("booking_id", booking_id)
+                    .addParameter("end_date", end_date)
+                    .addParameter("end_time", end_time)
+                    .addParameter("end_lat", end_lat)
+                    .addParameter("end_lng", end_lng)
                     .executeUpdate();
         }
         return true;
     }
 
-    public static List<Car> fetchCarsFromDB() {
+    public static List<Car> fetchCars() {
         String sql = "SELECT *" +
                 "FROM cars";
 
@@ -57,7 +125,7 @@ public class DB {
         }
         //connect to DB and insert car values
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "insert into cars ( type, make, model, hourly_price, lat, lng ) values ( :type, :make, :model, :hourly_price, :lat, :lng )";
+        String sql = "INSERT INTO cars ( type, make, model, hourly_price, lat, lng ) VALUES ( :type, :make, :model, :hourly_price, :lat, :lng )";
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
                     .addParameter("type", type)
@@ -68,6 +136,31 @@ public class DB {
                     .addParameter("lat", lat)
                     .addParameter("lng", lng)
                     .executeUpdate();
+        }
+        return true;
+    }
+    
+    public static boolean updateUserLatLng(String email, double lat, double lng) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String updateSql = "UPDATE users SET lat = :lat, lng = :lng WHERE email = :email";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(updateSql)
+                .addParameter("email", email)
+                .addParameter("lat", lat)
+                .addParameter("lng", lng)
+                .executeUpdate();
+        }
+        return true;
+    }
+    
+    public static boolean updateCarAvailable(String plate_no, boolean available) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String updateSql = "UPDATE cars SET available = :available WHERE plate_no = :plate_no";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(updateSql)
+                .addParameter("plate_no", plate_no)
+                .addParameter("available", available)
+                .executeUpdate();
         }
         return true;
     }

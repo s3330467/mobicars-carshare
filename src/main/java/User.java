@@ -6,6 +6,9 @@ public class User {
     private String l_name;
     private String email;
     private String password;
+    private String address;
+    private String license_no;
+    private String phone_no;
     private double lat;
     private double lng;
     public static List<User> userList = new ArrayList<User>();
@@ -15,31 +18,35 @@ public class User {
         this.password = password;
     }
 
-    public User(String id, String f_name, String l_name, String email, String password, double lat, double lng) {
+    public User(String f_name, String l_name, String email, String password, String address, String license_no, String phone_no) {
+        this.f_name = f_name;
+        this.l_name = l_name;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.license_no = license_no;
+        this.phone_no = phone_no;
+    }
+    
+    public User(String id, String f_name, String l_name, String email, String password, String license_no, String phone_no, double lat, double lng) {
         this.id = id;
         this.f_name = f_name;
         this.l_name = l_name;
         this.email = email;
         this.password = password;
+        this.license_no = license_no;
+        this.phone_no = phone_no;
         this.lat = lat;
         this.lng = lng;
     }
 
     @Override
     public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", f_name='" + f_name + '\'' +
-                ", l_name='" + l_name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", lat=" + lat +
-                ", lng=" + lng +
-                '}';
+        return "User{" + "id=" + id + ", f_name=" + f_name + ", l_name=" + l_name + ", email=" + email + ", password=" + password + ", address=" + address + ", license_no=" + license_no + ", phone_no=" + phone_no + ", lat=" + lat + ", lng=" + lng + '}';
     }
-    //test
+
     public static void updateUserList() {
-        userList = DB.fetchUsersFromDB();
+        userList = DB.fetchUsers();
     }
 
     public String getId() {
@@ -97,4 +104,29 @@ public class User {
     public void setLng(double lng) {
         this.lng = lng;
     }
+
+    public String getLicense_no() {
+        return license_no;
+    }
+
+    public void setLicense_no(String license_no) {
+        this.license_no = license_no;
+    }
+
+    public String getPhone_no() {
+        return phone_no;
+    }
+
+    public void setPhone_no(String phone_no) {
+        this.phone_no = phone_no;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    
 }

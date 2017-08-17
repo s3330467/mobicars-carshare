@@ -3,16 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Mobicar-Share</title>
-    <!-- Latest compiled and minified CSS -->
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
-
-    <!-- Optional theme -->
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
-
-    <!-- Latest compiled and minified JavaScript -->
-    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
@@ -37,10 +30,14 @@
         <!--Menu Items-->
             <div class="collapse navbar-collapse" id="mainNavBar">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">How it Works </a></li>
+                    <li class="active"><a href="/">How it Works </a></li>
                     <li><a href="/">Locations </a></li>
                     <li><a href="/cars">Cars </a></li>
                     <li><a href="/">Rates </a></li>
+                
+                    <li><a href="/">Contact </a></li>
+                    <li><a href="/about">About Us </a></li>
+                    <li><a href="/">FAQ's </a></li>
                     <!--Drop Down Menu-->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Membership <span class="caret"></span> </a>
@@ -48,9 +45,7 @@
                             <li><a href="/register">Register</a></li>
                             <li><a href="/login">Login</a></li>
                         </ul>
-                    <li><a href="/">Contact </a></li>
-                    <li><a href="/">About Us </a></li>
-                    <li><a href="/">FAQ's </a></li>
+                    <li><a href="/process_logout">logout</a></li>
                 </ul>
 
                 <!--This will go once the login button is functional-->
@@ -61,8 +56,20 @@
              </div>
             </div>
         </nav>
-        <div class="container-fluid">
-            <p>current User: $userEmail</p>
+        <div class="container" class="modal" role="dialog">
+            <div id="Modal" class="modal fade">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Car Details</h4>
+                    </div>
+                    <div class="modal-body" id="car_detail">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="container-fluid">
              #parse( $template )
