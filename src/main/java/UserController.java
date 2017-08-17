@@ -7,14 +7,16 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
 public class UserController {
-    static boolean authenticated = false;
     public UserController(final UserService userService) {
         staticFileLocation("/public");
-        String userEmail = "no user";
-        
         before("/",(request, response) -> {
-            if (!authenticated) {
-                response.redirect("/register");
+            //if the user attempts to access the map while session email is 
+            //null the user is not logged in and is redirected to login
+            if (request.session().attribute("session_email") == null) {
+                response.redirect("/login");
+            }
+            if (request.session().attribute("session_booking") != null) {
+                response.redirect("/booking_details");
             }
         });
         
@@ -87,7 +89,11 @@ public class UserController {
             System.out.println(email);
             if(UserService.validateUser(email, password)) {
                 request.session().attribute("session_email", email);
-                authenticated = true;
+                User user = UserService.getUserByEmail(email);
+                Booking existing_booking = BookingService.getCurrentBookingByUser_id(user.getId());
+                if(existing_booking != null) {
+                    request.session().attribute("session_booking", existing_booking.getId());
+                }
                 response.redirect("/");
                 return null;
             }
@@ -97,8 +103,8 @@ public class UserController {
         });
         
         get("/process_logout", (request, response) -> {
-            request.session().attribute("session_email", null);
-            authenticated = false;
+            request.session().removeAttribute("session_email");
+            request.session().removeAttribute("session_booking");
             response.redirect("/login");
             return null;
         });

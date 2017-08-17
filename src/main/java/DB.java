@@ -27,15 +27,19 @@ public class DB {
             return con.createQuery(sql).executeAndFetch(Booking.class);
         }
     }
+    
+    //fetches a booking that matches the supplied user_id and also has not been 
+    //concluded i.e a currently active booking
+    public static List<Booking> fetchCurrentBookingByUser_id(String user_id) {
+        String sql = "SELECT * " +
+                "FROM bookings " +
+                "WHERE user_id = :user_id AND end_date IS NULL AND end_time IS NULL";
 
-    public static List<Booking> fetchBookingsByUserID() {
-        String sql = "SELECT *" +
-                "WHERE user_id = :user_id" +
-                "FROM bookings";
-        
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        try (Connection con = sql2o.open()) {
-            return con.createQuery(sql).executeAndFetch(Booking.class);
+        try(Connection con = sql2o.open()) {
+            return con.createQuery(sql)
+                .addParameter("user_id", user_id)
+                .executeAndFetch(Booking.class);
         }
     }
     
@@ -85,10 +89,11 @@ public class DB {
         return true;
     }
     
-    public static boolean updateBooking(int booking_id,String end_date, String end_time, double end_lat, double end_lng) {
+    public static boolean updateBooking(String booking_id, String end_date, String end_time, double end_lat, double end_lng) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "UPDATE bookings SET end_date = :end_date, end_time = :end_time, end_lat = :end_lat, end_lng = :end_lng)"
-                + "WHERE booking_id = :booking_id";
+        String sql = "UPDATE bookings "
+                + "SET end_date = :end_date, end_time = :end_time, end_lat = :end_lat, end_lng = :end_lng "
+                + "WHERE id = :booking_id";
                 
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)

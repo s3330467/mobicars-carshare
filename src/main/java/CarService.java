@@ -27,4 +27,16 @@ public class CarService {
         }
         return null;
     }
+    
+    public static Car getCarById(String id) {
+
+        int i;
+        Car.updateCarList();
+        for(i = 0; i <Car.carList.size(); i++) {
+            if(Car.carList.get(i).getId().equals(id)) {
+                return Car.carList.get(i);
+            }
+        }
+        return null;
+    }
 }

@@ -20,6 +20,33 @@ public class BookingService {
         return null;
     }
     
+    //this function returns a booking if the user has a booking with no end date
+    //this would mean they had started a booking but not finished it.
+    public static Booking getCurrentBookingByUser_id(String user_id) {
+        Booking.updateBookingList();
+        if(DB.fetchCurrentBookingByUser_id(user_id).size() == 1 ){
+            return DB.fetchCurrentBookingByUser_id(user_id).get(0);
+        }
+        return null;
+    }
+    
+    public static boolean cancelBooking(String booking_id) {
+        Date current_date = new Date();
+        Booking.updateBookingList();
+        Booking booking = getBooking(booking_id);
+        Car car = CarService.getCarById(booking.getCar_id());
+        String end_date = date.format(current_date);
+        String end_time = time.format(current_date);
+        double end_lat = car.getLat();
+        double end_lng = car.getLng();
+        if(DB.updateBooking(booking_id, end_date, end_time, end_lat, end_lng)) {
+            DB.updateCarAvailable(car.getPlate_no(), true);
+            Car.updateCarList();
+            Booking.updateBookingList();
+            return true;
+        }
+        return false;
+    }
     public static boolean createBooking(Car car, User user) {
         int user_id = Integer.parseInt(user.getId());
         int car_id = Integer.parseInt(car.getId());
@@ -31,10 +58,10 @@ public class BookingService {
         if(car.isAvailable());
         if(DB.insertBooking(user_id, car_id, start_date, start_time, start_lat, start_lng)) {
             DB.updateCarAvailable(car.getPlate_no(), false);
-            car.setAvailable(false);
+            Car.updateCarList();
             Booking.updateBookingList();
             return true;
         }
-            return false;
+        return false;
     }
 }

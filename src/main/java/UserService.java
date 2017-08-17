@@ -41,6 +41,18 @@ public class UserService {
         }
         return null;
     }
+    
+    public static User getUserById(String id) {
+
+        int i;
+        User.updateUserList();
+        for(i = 0; i <User.userList.size(); i++) {
+            if(User.userList.get(i).getId().equals(id)) {
+                return User.userList.get(i);
+            }
+        }
+        return null;
+    }
     // creates a new user
     public static boolean createUser(String email, String userPassword, 
             String f_name, String l_name, String address, String license_no, String phone_no) {
