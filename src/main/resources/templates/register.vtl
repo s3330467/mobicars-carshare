@@ -13,38 +13,39 @@
 
                     <!--body-->
                     <div class="modal-body">
-                        <form action='/process_register' method='POST'>
+                        <form action="/process_register" id="contactform" method="post">
                         <div class="form-group">
                             <span id="errorFirstname" class="text-center"></span>
-                            <input type="text" name="f_name" class="form-control" placeholder=" First Name">
+                            <input type="text" name="f_name" id="f_name" class="form-control" placeholder=" First Name">
                         </div>
                         <div class="form-group">
                             <span id="errorLastname" class="text-center"></span>
-                            <input type="text" name="l_name" class="form-control" placeholder="Last Name">
+                            <input type="text" name="l_name" id="l_name" class="form-control" placeholder="Last Name">
                         </div>
                         <div class="form-group">
                             <span id="errorAddress" class="text-center"></span>
-                            <input type="text" name="address" class="form-control" placeholder=" Address">
+                            <input type="text" name="address" id="address" class="form-control" placeholder=" Address">
                         </div>
                         <div class="form-group">
                             <span id="errorLicenseNumber" class="text-center"></span>
-                            <input type="text" name="license_no" class="form-control" placeholder=" License Number">
+                            <input type="text" name="license_no" id="license_no" class="form-control" placeholder=" License Number">
                         </div>
                         <div class="form-group">
                             <span id="errorPhoneNumber" class="text-center"></span>
-                            <input type="text" name="phone_no" class="form-control" placeholder=" Phone Number">
+                            <input type="text" name="phone_no" id="phone_no" class="form-control" placeholder=" Phone Number">
                         </div>
                         <div class="form-group">
                             <span id="errorEmail" class="text-center"></span>
-                            <input type="text" name="email" class="form-control" placeholder="Email">
+                            <input type="text" name="email" id="email" class="form-control" placeholder="Email">
                         </div>
                         <div class="form-group">
                             <span id="errorPassword" class="text-center"></span>
-                            <input type="password" name="password" class="form-control" placeholder="Password">
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Password">
                         </div>
-                        <div class="form-group">
-                            <input type="password" name="password" class="form-control" placeholder="confirm Password">
-                        </div>
+                        <!--<div class="form-group">
+                            <span id="errorPassword2" class="text-center"></span>
+                            <input type="password" name="password2" id="password2" class="form-control" placeholder="confirm Password">
+                        </div>-->
                          <div class="form-group">
                             <input type="submit" name="submit" id="sign_up" class="btn btn-primary btn-block" value="Register">
                         </div>
