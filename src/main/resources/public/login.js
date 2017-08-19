@@ -37,11 +37,6 @@ $(document).ready(function(){
             url: "/process_login",
             type: "POST",
             data:{
-//                f_name: f_name,
-//                l_name: l_name,
-//                address: address,
-//                license_no: license_no,
-//                phone_no: phone_no,
                 email: email,
                 password: password
             },
