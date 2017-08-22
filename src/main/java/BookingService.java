@@ -35,11 +35,9 @@ public class BookingService {
         Booking.updateBookingList();
         Booking booking = getBooking(booking_id);
         Car car = CarService.getCarById(booking.getCar_id());
-        String end_date = date.format(current_date);
-        String end_time = time.format(current_date);
-        double end_lat = car.getLat();
-        double end_lng = car.getLng();
-        if(DB.updateBooking(booking_id, end_date, end_time, end_lat, end_lng)) {
+        String start_date = date.format(current_date);
+        String start_time = time.format(current_date);
+        if(DB.cancelBooking(booking_id, start_date, start_time)) {
             DB.updateCarAvailable(car.getPlate_no(), true);
             Car.updateCarList();
             Booking.updateBookingList();
