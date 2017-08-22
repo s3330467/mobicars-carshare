@@ -136,23 +136,23 @@ public class DB {
         return true;
     }
     
-    public static boolean updateStartBooking(String booking_id, String start_date, String start_time){
+    public static boolean collectCar(String booking_id, String start_date, String start_time){
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String sql = "UPDATE bookings"
-                + "SET start_date = :start_date, start_time = :start_time"
+                + "SET collection_date = :collection_date, collection_time = :collection_time"
                 + "WHERE id = :booking_id";
         
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
                     .addParameter("booking_id", booking_id)
-                    .addParameter("start_date", start_date)
-                    .addParameter("start_time", start_time)
+                    .addParameter("collection_date", start_date)
+                    .addParameter("collection_time", start_time)
                     .executeUpdate();
         }
         return true;
     }
     
-    public static boolean endBooking(String booking_id, String end_date, String end_time, double end_lat, double end_lng){
+    public static boolean returnCar(String booking_id, String end_date, String end_time, double end_lat, double end_lng){
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String sql = "UPDATE bookings"
                 + "SET end_date = :end_date, end_time = :end_time, end_lat = :end_lat, end_lng = :end_lng"
