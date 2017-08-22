@@ -43,6 +43,19 @@ public class DB {
         }
     }
     
+    public static List<Booking> fetchAllBookingsByUser_id(String user_id) {
+        String sql = "SELECT * " +
+                "FROM bookings " +
+                "WHERE user_id = :user_id";
+        
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        try(Connection con = sql2o.open()) {
+            return con.createQuery(sql)
+                .addParameter("user_id", user_id)
+                .executeAndFetch(Booking.class);
+        }
+    }
+    
     public static boolean insertUser(String email, String password, String f_name, String l_name, String address, String license_no, String phone_no) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String sql = "INSERT INTO users ( email, password, f_name, l_name, address, license_no, phone_no ) "
@@ -91,10 +104,44 @@ public class DB {
     
     public static boolean updateBooking(String booking_id, String start_date, String start_time, String end_date, String end_time, double end_lat, double end_lng) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "UPDATE bookings "
+        String sql = "UPDATE bookings"
                 + "SET start_date = :start_date, start_time = :start_time, end_date = :end_date, end_time = :end_time, end_lat = :end_lat, end_lng = :end_lng "
                 + "WHERE id = :booking_id";
                 
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("booking_id", booking_id)
+                    .addParameter("end_date", end_date)
+                    .addParameter("end_time", end_time)
+                    .addParameter("end_lat", end_lat)
+                    .addParameter("end_lng", end_lng)
+                    .executeUpdate();
+        }
+        return true;
+    }
+    
+    public static boolean updateStartBooking(String booking_id, String start_date, String start_time){
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String sql = "UPDATE bookings"
+                + "SET start_date = :start_date, start_time = :start_time"
+                + "WHERE id = :booking_id";
+        
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("booking_id", booking_id)
+                    .addParameter("start_date", start_date)
+                    .addParameter("start_time", start_time)
+                    .executeUpdate();
+        }
+        return true;
+    }
+    
+    public static boolean endBooking(String booking_id, String end_date, String end_time, double end_lat, double end_lng){
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String sql = "UPDATE bookings"
+                + "SET end_date = :end_date, end_time = :end_time, end_lat = :end_lat, end_lng = :end_lng"
+                + "WHERE id = :booking_id";
+        
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
                     .addParameter("booking_id", booking_id)

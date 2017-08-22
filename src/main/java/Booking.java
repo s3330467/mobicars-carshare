@@ -15,14 +15,14 @@ public class Booking {
     private double end_lng;
     public static List<Booking> bookingList = new ArrayList<Booking>();
     
-        public Booking(String booking_id, String user_id, String car_id, String start_date, String start_time, double start_lat, double start_lng) {
-            this.id = booking_id;
-            this.user_id = user_id;
-            this.car_id = car_id;
-            this.start_date = start_date;
-            this.start_time = start_time;
-            this.start_lat = start_lat;
-            this.start_lng = start_lng;
+    public Booking(String booking_id, String user_id, String car_id, String start_date, String start_time, double start_lat, double start_lng) {
+        this.id = booking_id;
+        this.user_id = user_id;
+        this.car_id = car_id;
+        this.start_date = start_date;
+        this.start_time = start_time;
+        this.start_lat = start_lat;
+        this.start_lng = start_lng;
         }
 
     @Override
