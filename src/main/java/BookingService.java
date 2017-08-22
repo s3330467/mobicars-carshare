@@ -64,4 +64,41 @@ public class BookingService {
         }
         return false;
     }
+    
+    public static boolean collectCarInBooking(String booking_id) {
+        Date current_date = new Date();
+        String start_date = date.format(current_date);
+        String start_time = time.format(current_date);
+        int i;
+        Booking.updateBookingList();
+        for (i = 0; i < Booking.bookingList.size(); i++) {
+            if (Booking.bookingList.get(i).getId().equals(booking_id)) {
+                DB.updateBooking(start_date, start_time);
+                Car.updateCarList();
+                Booking.updateBookingList();
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static boolean returnCarInBooking(String booking_id) {
+        String end_date = date.format(current_date);
+        String end_time = time.format(current_date);
+        double end_lat = car.getLat();
+        double end_lng = car.getLng();
+        int i;
+        Booking.updateBookingList();
+        for (i = 0; i < Booking.bookingList.size(); i++) {
+            if (Booking.bookingList.get(i).getId().equals(booking_id)) {
+                DB.updateBooking(end_date, end_time, end_lat, end_lng);
+                DB.updateCarAvailable(car.getPlate_no(), true);
+                Car.updateCarList();
+                Booking.updateBookingList();
+                return true;
+            }
+        }
+        return false;
+    }
+    
 }
