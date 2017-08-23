@@ -13,3 +13,5 @@ function closeNav() {
 }
 
 var slider = new Slider('#ex2', {});
+
+
