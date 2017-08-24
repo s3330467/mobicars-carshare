@@ -8,9 +8,7 @@ import spark.template.velocity.VelocityTemplateEngine;
 
 public class Main {
     public static void main(String[] args) {
-
         secure("src/main/resources/public/keystore.jks", "mobicars", null, null);
-        port(443);
         
         /*User tempUser1 = new User("01","John Smith", "JS@somewhere.com");
         User tempUser2 = new User("02","Bob Smith", "BS@somewhere.com");
