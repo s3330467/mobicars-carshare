@@ -14,6 +14,8 @@
     <script src="login.js"></script>
     <script src="register.js"></script>
     <script src="search.js"></script>
+    <!--<script src="/jquery-2.2.4.min.js"></script>-->
+    <script src="advancesearch.js"></script>
 
 </head>
 <body>
@@ -84,43 +86,34 @@
             <form>            
                 <div class="form-group">
                     <label for="filter">Filter by</label>
-                    <select class="form-control">
-                        <option value="0" selected>Type</option>
-                        <option value="1">SUV</option>
-                        <option value="2">Sedan</option>
-                        <option value="3">Sports</option>
-                        <option value="4">HatchBack</option>
-                        <option value="5">Luxury</option>    
+                    <select name="type" id="type" class="form-control">
+                        <option value="">Select Type</option>   
                     </select>
                 </div>
                 <div class="form-group">
-                    <!--<label for="contain">Make</label>-->
-                    <select class="form-control">
-                        <option value="0" selected>All Make</option>
-                        <option value="1">Toyota</option>
-                        <option value="2">Ford</option>
-                        <option value="3">Holden</option>
-                        <option value="4">Mazda</option>
-                        <option value="5">BMW</option> 
-                    <!--<input class="form-control" type="text" />-->
+                    <!--<label for="contain">Select Make</label>-->
+                    <select name="make" id="make" class="form-control">
+                        <option value="">Select Make</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <!--<label for="contain">Model</label>-->
-                    <select class="form-control">
-                        <option value="0" selected>Model</option>
-                        <option value="1">Corolla</option>
-                        <option value="2">Falcon</option>
+                    <!--<label for="contain">Select Model</label>-->
+                    <select name="model" id="model" class="form-control">
+                        <option value="">Select Model</option>
+                        <!--<option value="1">Corolla</option>
+                        <option value="2" selected>Falcon</option>
                         <option value="3">Commodore</option>
                         <option value="4">Elantra</option>
-                        <option value="5">i30</option> 
+                        <option value="5">i30</option>--> 
                     <!--<input class="form-control" type="text" />-->
                     </select>
                 </div>
               
                   <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
             </form>
-            
+<script
+    
+</script>            
             
 
         </div>
