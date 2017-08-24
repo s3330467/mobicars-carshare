@@ -6,3 +6,4 @@ carshare.iml
 .idea/workspace.xml
 out/production/main/META-INF/MANIFEST.MF
 src/main/main.iml
+*.war

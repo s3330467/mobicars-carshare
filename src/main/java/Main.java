@@ -18,5 +18,9 @@ public class Main {
         new UserController(new UserService());
         new CarController(new CarService());
         new BookingController(new BookingService());
+        
+        String keyStoreLocation = "/usr/lib/jvm/java-1.8.0-openjdk-amd64/bin/.keystore";
+        String keyStorePassword = "mobicars";
+        secure(keyStoreLocation, keyStorePassword, null, null);
     }
 }

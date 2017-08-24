@@ -13,6 +13,7 @@ public class Car {
     private boolean available;
     public static List<Car> carList = new ArrayList<Car>();
 
+
     public Car(String image, String id, String type, String make, String model, String plate_no, double hourly_price, double lat, double lng, boolean available) {
         this.image = image;
         this.id = id;
@@ -54,7 +55,9 @@ public class Car {
         return image;
     }
 
-    public void setIimage(String image) {
+
+    public void setImage(String image) {
+
         this.image = image;
     }
     

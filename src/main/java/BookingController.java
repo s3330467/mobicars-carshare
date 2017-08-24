@@ -77,5 +77,18 @@ public class BookingController {
             model.put("template", "templates/booking_details.vtl");
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
+        
+        /* Can't figure this out:
+        post("/process_collect_car", (request, response) -> {
+            //Map<String, Object> model = new HashMap<String, Object>();
+            String plate_no = request.queryParams("plate_no");
+            Car.updateCarList();
+            User.updateUserList();
+            Car car = CarService.getCarByPlate_no(plate_no);
+            User user = UserService.getUserByEmail(request.session().attribute("session_email"));
+            Booking booking = BookingService.collectCarInBooking(booking.getId());
+            return new ModelAndView(model, "templates/car_collected.vtl");
+            */
     }
+        
 }
