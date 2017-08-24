@@ -9,6 +9,9 @@ import spark.template.velocity.VelocityTemplateEngine;
 public class Main {
     public static void main(String[] args) {
 
+        secure("src/main/resources/public/keystore.jks", "mobicars", null, null);
+        port(443);
+        
         /*User tempUser1 = new User("01","John Smith", "JS@somewhere.com");
         User tempUser2 = new User("02","Bob Smith", "BS@somewhere.com");
         User tempUser3 = new User("03","Greg Smith", "GS@somewhere.com");*/
@@ -19,8 +22,5 @@ public class Main {
         new CarController(new CarService());
         new BookingController(new BookingService());
         
-        String keyStoreLocation = "/usr/lib/jvm/java-1.8.0-openjdk-amd64/bin/.keystore";
-        String keyStorePassword = "mobicars";
-        secure(keyStoreLocation, keyStorePassword, null, null);
     }
 }
