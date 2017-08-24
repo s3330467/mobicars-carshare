@@ -6,10 +6,12 @@
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("navopenbtn").style.width = "0px";
 }
 
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("navopenbtn").style.width = "50px";
 }
 
 var slider = new Slider('#ex2', {});
