@@ -3,8 +3,8 @@
 $(document).ready(function(){
 
     $("#sign_in").click(function(){
-        var email = $("#login_email").val();
-        var password = $("#login_password").val();
+        var email = $("#email").val();
+        var password = $("#password").val();
 
 
         var isValid = true;
@@ -25,26 +25,28 @@ $(document).ready(function(){
             $("#error_Password").html("");
         }
         // will only work if the data base is updated..but since spark has auto php thing we might not need it as well
-//        if(isValid == true){
+//        if(isValid == false){
 //            $.ajax({
-//            url: "/process_register",
-//            type: "POST",
-//            data:{
-//                f_name: f_name,
-//                l_name: l_name,
-//                address: address,
-//                license_number: license_number,
-//                phone_number: phone_number,
-//                email: email,
-//                password: password
-//            },
-//            success: function(){
-//
-//            }
+//               url: "/register", 
+//               type: "POST",
 //            });
-//        }else{
-//            return false;
 //        }
+        
+        if(isValid == true){
+            $.ajax({
+            url: "/process_login",
+            type: "POST",
+            data:{
+                email: email,
+                password: password
+            },
+            success: function(){
+
+            }
+            });
+        }else{
+            return false;
+        }
 
     });
 

@@ -1,6 +1,7 @@
 import java.util.*;
 
 public class Car {
+    private String image;
     private String id;
     private String type;
     private String make;
@@ -12,7 +13,9 @@ public class Car {
     private boolean available;
     public static List<Car> carList = new ArrayList<Car>();
 
-    public Car(String id, String type, String make, String model, String plate_no, double hourly_price, double lat, double lng, boolean available) {
+
+    public Car(String image, String id, String type, String make, String model, String plate_no, double hourly_price, double lat, double lng, boolean available) {
+        this.image = image;
         this.id = id;
         this.type = type;
         this.make = make;
@@ -27,6 +30,7 @@ public class Car {
     @Override
     public String toString() {
         return "Car{" +
+                "image='" + image + '\'' +
                 "id='" + id + '\'' +
                 ", type='" + type + '\'' +
                 ", make='" + make + '\'' +
@@ -47,6 +51,16 @@ public class Car {
 
     public void setType(String type) { this.type = type; }
 
+    public String getImage() {
+        return image;
+    }
+
+
+    public void setImage(String image) {
+
+        this.image = image;
+    }
+    
     public String getId() {
         return id;
     }

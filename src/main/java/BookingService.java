@@ -37,9 +37,7 @@ public class BookingService {
         Car car = CarService.getCarById(booking.getCar_id());
         String end_date = date.format(current_date);
         String end_time = time.format(current_date);
-        double end_lat = car.getLat();
-        double end_lng = car.getLng();
-        if(DB.updateBooking(booking_id, end_date, end_time, end_lat, end_lng)) {
+        if(DB.cancelBooking(booking_id, end_date, end_time)) {
             DB.updateCarAvailable(car.getPlate_no(), true);
             Car.updateCarList();
             Booking.updateBookingList();
@@ -61,6 +59,56 @@ public class BookingService {
             Car.updateCarList();
             Booking.updateBookingList();
             return true;
+        }
+        return false;
+    }
+    
+    public static boolean collectCar(String booking_id) {
+        Date current_date = new Date();
+        String collection_date = date.format(current_date);
+        String collection_time = time.format(current_date);
+        int i;
+        Booking.updateBookingList();
+        for (i = 0; i < Booking.bookingList.size(); i++) {
+            if (Booking.bookingList.get(i).getId().equals(booking_id)) {
+                DB.collectCar(booking_id, collection_date, collection_time);
+                Car.updateCarList();
+                Booking.updateBookingList();
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static boolean returnCar(String booking_id) {
+        Date current_date = new Date();
+        String end_date = date.format(current_date);
+        String end_time = time.format(current_date);
+        Booking.updateBookingList();
+        Booking booking = getBooking(booking_id);
+        Car car = CarService.getCarById(booking.getCar_id());
+        double end_lat = car.getLat();
+        double end_lng = car.getLng();
+        int i;
+        for (i = 0; i < Booking.bookingList.size(); i++) {
+            if (Booking.bookingList.get(i).getId().equals(booking_id)) {
+                DB.returnCar(booking_id, end_date, end_time, end_lat, end_lng);
+                DB.updateCarAvailable(car.getPlate_no(), true);
+                Car.updateCarList();
+                Booking.updateBookingList();
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static boolean displayAllBookingsByUser_id(String user_id) {
+        int i;
+        Booking.updateBookingList();
+        for (i = 0; i < Booking.bookingList.size(); i++) {
+            if (Booking.bookingList.get(i).getId().equals(user_id)) {
+                DB.fetchAllBookingsByUser_id(user_id);
+            }
         }
         return false;
     }
