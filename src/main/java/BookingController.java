@@ -112,24 +112,6 @@ public class BookingController {
             return null;
         }, new VelocityTemplateEngine());
         
-        post("/process_collect_car", (request, response) -> {
-            Map<String, Object> model = new HashMap<String, Object>();
-            Car.updateCarList();
-            User.updateUserList();
-            Booking.updateBookingList();
-            User user = UserService.getUserByEmail(request.session().attribute("session_email"));
-            Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
-            Car car = CarService.getCarById(booking.getCar_id());
-            if(BookingService.collectCar(request.session().attribute("session_booking"))) {
-                model.put("car", car);
-                model.put("user", user);
-                model.put("booking", booking);
-                model.put("template", "templates/booked_car_info.vtl");
-                return new ModelAndView(model, "templates/layout_main.vtl");
-            }
-            return null;
-        }, new VelocityTemplateEngine());
-        
         post("/process_return_car", (request, response) -> {
             if(BookingService.returnCar(request.session().attribute("session_booking"))) {
             request.session().attribute("session_booking", null);
