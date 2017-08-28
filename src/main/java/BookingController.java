@@ -1,3 +1,15 @@
+/**
+ *
+ * @author Alexander
+ * Date: 
+ * Class: BookingController
+ * Description: Performs HTTP GET and POST requests using Spark routes.
+ *              Gathers data from forms using HashMap and inserts them into 
+ *              specified templates.
+ *              Uses Velocity Template Engine to reference .vtl files which
+ *              are templates containing HTML.
+ */
+
 import java.util.*;
 
 import spark.ModelAndView;
@@ -7,11 +19,14 @@ import static spark.Spark.*;
 public class BookingController {
     public BookingController(final BookingService bookingService) {
 
+//      GET request to return list of all bookings by calling updateBookingList
+//      method from Booking.java
         get("/bookings", (request, response) -> {
             Booking.updateBookingList();
             return Booking.bookingList;
         });
         
+//      POST request 
         post("/process_book_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String plate_no = request.queryParams("plate_no");

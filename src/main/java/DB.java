@@ -1,3 +1,12 @@
+/**
+ *
+ * @author Alexander
+ * Date: Alex, please fill this in
+ * Class: DB
+ * Description: sql2o framework methods that use JDBC to execute SQL statements
+ *              with Java
+ */
+
 import org.apache.commons.validator.routines.EmailValidator;
 import org.sql2o.*;
 import java.util.*;
@@ -8,8 +17,9 @@ public class DB {
     public static String sqlUser = "ubuntu";
     public static String sqlPass = "password";
 
+//    fetches all entries from users table
     public static List<User> fetchUsers() {
-        String sql = "SELECT *" +
+        String sql = "SELECT * " +
                 "FROM users";
 
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
@@ -17,9 +27,9 @@ public class DB {
             return con.createQuery(sql).executeAndFetch(User.class);
         }
     }
-    
+//    fetches all entries from bookings table
     public static List<Booking> fetchBookings() {
-        String sql = "SELECT *" +
+        String sql = "SELECT * " +
                 "FROM bookings";
 
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
@@ -28,8 +38,9 @@ public class DB {
         }
     }
     
-    //fetches a booking that matches the supplied user_id and also has not been 
-    //concluded i.e a currently active booking
+//    fetches a booking that matches the supplied user_id and also has not been 
+//    concluded i.e a currently active booking, as defined by the
+//    unpopulated end date and time fields
     public static List<Booking> fetchCurrentBookingByUser_id(String user_id) {
         String sql = "SELECT * " +
                 "FROM bookings " +
@@ -42,7 +53,7 @@ public class DB {
                 .executeAndFetch(Booking.class);
         }
     }
-    
+//    lists all bookings by user id from bookings table
     public static List<Booking> fetchAllBookingsByUser_id(String user_id) {
         String sql = "SELECT * " +
                 "FROM bookings " +
@@ -56,6 +67,8 @@ public class DB {
         }
     }
     
+//    new entry is created in users table and populates it with given values.
+//    returns false if email and password fields are blank or invalid email given
     public static boolean insertUser(String email, String password, String f_name, String l_name, String address, String license_no, String phone_no) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String sql = "INSERT INTO users ( email, password, f_name, l_name, address, license_no, phone_no ) "
@@ -84,9 +97,11 @@ public class DB {
         return true;
     }
     
+//    new entry is created in bookings table and is populated with the values
+//    start date and time, and start location.
     public static boolean insertBooking(int user_id, int car_id, String start_date, String start_time, double start_lat, double start_lng) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "INSERT INTO bookings (user_id, car_id, start_date, start_time, start_lat, start_lng)"
+        String sql = "INSERT INTO bookings (user_id, car_id, start_date, start_time, start_lat, start_lng) "
                 + "VALUES (:user_id, :car_id, :start_date, :start_time, :start_lat, :start_lng)";
         
         try (Connection con = sql2o.open()) {
@@ -102,6 +117,8 @@ public class DB {
         return true;
     }
     
+//    specified entry from bookings table is updated with the end date and time
+//    values
     public static boolean cancelBooking(String booking_id, String end_date, String end_time) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String sql = "UPDATE bookings "
@@ -118,6 +135,7 @@ public class DB {
         return true;
     }
     
+//    UNUNSED
     public static boolean updateBooking(String booking_id, String start_date, String start_time, String end_date, String end_time, double end_lat, double end_lng) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String sql = "UPDATE bookings "
@@ -136,7 +154,9 @@ public class DB {
         return true;
     }
     
-    public static boolean collectCar(String booking_id, String start_date, String start_time){
+//    specified entry from bookings table is updated with the collection date 
+//    and time values
+    public static boolean collectCar(String booking_id, String collection_date, String collection_time){
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String sql = "UPDATE bookings "
                 + "SET collection_date = :collection_date, collection_time = :collection_time "
@@ -145,13 +165,15 @@ public class DB {
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
                     .addParameter("booking_id", booking_id)
-                    .addParameter("collection_date", start_date)
-                    .addParameter("collection_time", start_time)
+                    .addParameter("collection_date", collection_date)
+                    .addParameter("collection_time", collection_time)
                     .executeUpdate();
         }
         return true;
     }
     
+//    specified entry from bookings table is updated with the end date and time
+//    and end location values
     public static boolean returnCar(String booking_id, String end_date, String end_time, double end_lat, double end_lng){
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String sql = "UPDATE bookings "
@@ -170,8 +192,9 @@ public class DB {
         return true;
     }
 
+//    fetches all entries from cars table
     public static List<Car> fetchCars() {
-        String sql = "SELECT *" +
+        String sql = "SELECT * " +
                 "FROM cars";
 
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
@@ -180,7 +203,7 @@ public class DB {
         }
     }
 
-
+//  creates new entry into cars table with all fields populated
     public static boolean insertCar(String type, String make, String model, String plate_no, double hourly_price, double lat, double lng) {
         //if type isn't supplied default to sedan
         if(type.length()<=0 || make.length() <= 0 || model.length() <= 0 || plate_no.length() <= 0) {
@@ -203,6 +226,7 @@ public class DB {
         return true;
     }
     
+//    specified entry by email from users table is updated with location
     public static boolean updateUserLatLng(String email, double lat, double lng) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String updateSql = "UPDATE users SET lat = :lat, lng = :lng WHERE email = :email";
@@ -216,6 +240,7 @@ public class DB {
         return true;
     }
     
+//    specified entry by plate number from cars table is updated with availability
     public static boolean updateCarAvailable(String plate_no, boolean available) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String updateSql = "UPDATE cars SET available = :available WHERE plate_no = :plate_no";

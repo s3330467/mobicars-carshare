@@ -1,3 +1,12 @@
+/**
+ *
+ * @author Rachel
+ * Date: 10.8.17
+ * Class: Car
+ * Description: Car object declaring the cars MySQL table fields as variables.
+ */
+
+
 import java.util.*;
 
 public class Car {
@@ -13,7 +22,7 @@ public class Car {
     private boolean available;
     public static List<Car> carList = new ArrayList<Car>();
 
-
+    //constructor
     public Car(String image, String id, String type, String make, String model, String plate_no, double hourly_price, double lat, double lng, boolean available) {
         this.image = image;
         this.id = id;
@@ -27,6 +36,7 @@ public class Car {
         this.available = available;
     }
 
+    //toString method
     @Override
     public String toString() {
         return "Car{" +
@@ -43,6 +53,7 @@ public class Car {
                 '}';
     }
 
+    //populates array named carList with all cars in database by calling fetchCars method from DB.java
     public static void updateCarList() {
         carList = DB.fetchCars();
     }
@@ -54,7 +65,6 @@ public class Car {
     public String getImage() {
         return image;
     }
-
 
     public void setImage(String image) {
 

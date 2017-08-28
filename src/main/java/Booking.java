@@ -1,3 +1,12 @@
+/**
+ *
+ * @author Rachel
+ * Date: 17.8.17
+ * Class: Booking
+ * Description: Booking object declaring the bookings MySQL table fields as variables
+ */
+
+
 import java.util.*;
 
 public class Booking {
@@ -17,6 +26,7 @@ public class Booking {
     private double end_lng;
     public static List<Booking> bookingList = new ArrayList<Booking>();
 
+    //constructor used when initiating a booking
     public Booking(String id, String user_id, String car_id, String start_date, String start_time) {
         this.id = id;
         this.user_id = user_id;
@@ -25,6 +35,7 @@ public class Booking {
         this.start_time = start_time;
     }
 
+    //constructor used when collecting a car
     public Booking(String id, String user_id, String car_id, String collection_date, String collection_time, double start_lat, double start_lng) {
         this.id = id;
         this.user_id = user_id;
@@ -35,6 +46,7 @@ public class Booking {
         this.start_lng = start_lng;
     }
 
+    //constructor used when ending a booking
     public Booking(String id, String user_id, String car_id, String end_date, double end_lat, double end_lng) {
         this.id = id;
         this.user_id = user_id;
@@ -49,6 +61,7 @@ public class Booking {
         return "Booking{" + "booking_id=" + id + ", user_id=" + user_id + ", car_id=" + car_id + ", start_date=" + start_date + ", end_date=" + end_date + ", start_time=" + start_time + ", end_time=" + end_time + ", cost=" + cost + ", start_lat=" + start_lat + ", start_lng=" + start_lng + ", end_lat=" + end_lat + ", end_lng=" + end_lng + '}';
     }
     
+    //populates array named bookingList with all bookings in database by calling fetchBookings method from DB.java
     public static void updateBookingList() {
         bookingList = DB.fetchBookings();
     }
