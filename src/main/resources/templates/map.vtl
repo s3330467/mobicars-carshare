@@ -37,9 +37,9 @@
         function initMap() {
 
             var userCoords = {lat: $user.getLat(), lng: $user.getLng()};
-
+            /*creates the styles the google map display */
             var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 14,
+                zoom: 17,
                 center: userCoords,
                 disableDefaultUI: true,
                 styles: [
@@ -240,7 +240,7 @@
              * functions such as navigation and tracking*/
             var bookingState = $bookingState;
             if(bookingState == false) {
-                loadAllCars(map);
+                loadNearbyCars(map);
             }
             if(bookingState == true) {
                 alert("user has a booking, you shouldnt see this screen");
@@ -306,7 +306,6 @@
             var sedanIcon = {
                 url: 'images/sedan-car-model.png'
             };
-
             //loop through the arrayList carList and for each car add it to var cars  
             var cars = [
                     #foreach($car in $carList)
@@ -348,8 +347,66 @@
                 }
             }
         }
+        /* load every car from the arraylist of cars stored in the car class
+         * loop through the list of cars and create a marker for each car if 
+         * the car is within 100km of the user
+         */
+        function loadNearbyCars(map) {
+            //create the vector art styling for a sedan
+            var sedanIcon = {
+                url: 'images/sedan-car-model.png'
+            };
+            //loop through the arrayList carList and for each car add it to var cars  
+            var cars = [
+                    #foreach($car in $carList)
+            ['$car.plate_no', '$car.lat', '$car.lng', '$car.available'],
+                    #end
+            ['test', 'test', 'test', 'test']
+            ];
+            var infowindow = new google.maps.InfoWindow;
+            var marker, i, distance, userPos, carPos;
+            for (i = 0; i < cars.length; i++) {
+                if (cars[i][3] == "true") {
+                    
+                    //get the distance between the userPos and the carPos in km
+                    userPos = new google.maps.LatLng($user.getLat(), $user.getLng());
+                    carPos = new google.maps.LatLng(cars[i][1], cars[i][2]);
+                    var distance =  google.maps.geometry.spherical.computeDistanceBetween(carPos, userPos)/1000;
+                    
+                    //if cars are further away than 100km, dont load them
+                    if(distance < 100) {
+                        marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(cars[i][1], cars[i][2]),
+                            title: cars[i][0],
+                            icon: sedanIcon,
+                            map: map
+                        });
+
+                        /* during the process of creating each marker, also create
+                         * the function that runs when that marker is clicked.
+                         * when clicked each car marker will display an info window 
+                         * which contains info about the car, as well as a button
+                         * that allows the user to book that car
+                         */
+                        google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                            return function () {
+                                $.post("/process_get_car_details",
+                                        {
+                                            plate_no: cars[i][0]
+                                        },
+                                        function (result)
+                                        {
+                                            infowindow.setContent(result);
+                                            infowindow.open(map, marker);
+                                        });
+                            }
+                        })(marker, i));
+                    }
+                }
+            }
+        }
     </script>
     <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaOP27igpRtFBPl94Skp2Jm2R5Dvk-AlI&callback=initMap">
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaOP27igpRtFBPl94Skp2Jm2R5Dvk-AlI&libraries=geometry&callback=initMap">
     </script>
 </div>
