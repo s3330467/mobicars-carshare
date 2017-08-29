@@ -1,6 +1,6 @@
 <!--test page for a booking in progress-->
 
-<div style="height:200px; width: 100%;">
+<div id="map">
     <script>
         function initMap() {
 
@@ -198,10 +198,14 @@
                 ]
             });
 
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(success, error);
+            if (navigator.geolocation)
+            {                var option = {
+                              timeout: Infinity,
+                              maximumAge:0
+                              };
+                navigator.geolocation.watchPosition(success, error, option);
             } else {
-                error('not supported');
+                error('Unable to get location.');
             }
 
             function success(position) {
@@ -232,7 +236,7 @@
                         'Error: The Geolocation service failed.' :
                         'Error: Your browser doesn\'t support geolocation.');
             }
-
+            }
 </script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaOP27igpRtFBPl94Skp2Jm2R5Dvk-AlI&callback=initMap">
