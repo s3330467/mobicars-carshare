@@ -55,13 +55,14 @@ public class UserService {
     }
     // creates a new user
     public static boolean createUser(String email, String userPassword, 
-            String f_name, String l_name, String address, String license_no, String phone_no) {
+            String f_name, String l_name, String address, String license_no, String phone_no, 
+            String card_name, String card_no, String expiry_month, String expiry_year, String cvv) {
 
         //create an encrypted password based off the supplied password string
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(userPassword);
 
-        if(!DB.insertUser(email, encryptedPassword, f_name, l_name, address, license_no, phone_no)) {
+        if(!DB.insertUser(email, encryptedPassword, f_name, l_name, address, license_no, phone_no, card_name, card_no, expiry_month, expiry_year, cvv)) {
             return false;
         }
         User.updateUserList();

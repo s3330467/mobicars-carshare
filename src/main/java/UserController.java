@@ -36,6 +36,12 @@ public class UserController {
             model.put("template", "templates/register.vtl");
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
+        
+        get("/card_detail", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("template", "templates/card_detail.vtl");
+            return new ModelAndView(model, "templates/layout_main.vtl");
+        }, new VelocityTemplateEngine());
 
         get("/about", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
@@ -62,6 +68,22 @@ public class UserController {
             return "";
         });
         
+//        post("/process_card", (request, response) -> {
+//            Map<String, Object> model = new HashMap<String, Object>();
+//            String name = request.queryParams("name");
+//            String card_no = request.queryParams("card_no");
+//            String expiry_month = request.queryParams("expiry_month");
+//            String expiry_year = request.queryParams("expiry_year");
+//            String cvv = request.queryParams("cvv");
+//                        
+//            if(UserService.createUser(name, card_no, expiry_month, expiry_year, cvv)) {
+//                response.redirect("/login");
+//            }
+//            else {
+//                response.redirect("/register");
+//            }
+//            return null;
+//        });
         
         post("/process_register", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
@@ -72,7 +94,13 @@ public class UserController {
             String l_name = request.queryParams("l_name");
             String license_no = request.queryParams("license_no");
             String phone_no = request.queryParams("phone_no");
-            if(UserService.createUser(email, password, f_name, l_name, address, license_no, phone_no)) {
+            String card_name = request.queryParams("card_name");
+            String card_no = request.queryParams("card_no");
+            String expiry_month = request.queryParams("expiry_month");
+            String expiry_year = request.queryParams("expiry_year");
+            String cvv = request.queryParams("cvv");
+            
+            if(UserService.createUser(email, password, f_name, l_name, address, license_no, phone_no, card_name, card_no, expiry_month, expiry_year, cvv)) {
                 response.redirect("/login");
             }
             else {

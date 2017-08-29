@@ -94,7 +94,7 @@ $(document).ready(function(){
         // will only work if the data base is updated..but since spark has auto php thing we might not need it as well
         if(isValid == true){
             $.ajax({
-            url: "/login",
+            url: "/card_detail",
             type: "POST",
             data:{
                 f_name: f_name,
