@@ -36,7 +36,7 @@
     <script>
         function initMap() {
 
-            var userCoords = {lat: $user.getLat(), lng: $user.getLng()};
+            var userCoords = new google.maps.LatLng($user.getLat(), $user.getLng());
             /*creates the styles the google map display */
             var map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 17,
@@ -269,23 +269,29 @@
              /*if geolocation can successfully find the users location this function is run
               * it collects the users current information and posts it to the database, 
               * for debugging purposes it also creates a marker every time for debugging, this is not final.
+              * now checks to see if the user has moved at least 15 metres, if not, it does not update their position
+              * this is to stop update spam/elimate inaccurate data when standing still 
+              * and might need to be fine tuned.
               */
             function locationSuccess(position) {
-                var geopos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                
+                var geoPos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                var difference = google.maps.geometry.spherical.computeDistanceBetween(userCoords, geoPos);
                 //places the marker of the current user at their location for debugging
-                var userMarker = new google.maps.Marker({
-                    position: geopos,
-                    title: "$user.email",
-                    label: "user",
-                    map: map
-                });
+                if(difference > 15) {
+                    alert(difference);
+                    var userMarker = new google.maps.Marker({
+                        position: geoPos,
+                        title: "$user.email",
+                        label: "user",
+                        map: map
+                    });
 
-                $.post("/process_update_user_location", {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
+                    $.post("/process_update_user_location", {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    });
+                    userCoords = geoPos;
                 }
-                );
             }
             
             /* if the users location cannot be found for any reason, 
@@ -371,7 +377,7 @@
                     //get the distance between the userPos and the carPos in km
                     userPos = new google.maps.LatLng($user.getLat(), $user.getLng());
                     carPos = new google.maps.LatLng(cars[i][1], cars[i][2]);
-                    var distance =  google.maps.geometry.spherical.computeDistanceBetween(carPos, userPos)/1000;
+                    distance =  google.maps.geometry.spherical.computeDistanceBetween(carPos, userPos)/1000;
                     
                     //if cars are further away than 100km, dont load them
                     if(distance < 100) {
