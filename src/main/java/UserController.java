@@ -25,8 +25,17 @@ public class UserController {
             String currentUserEmail = request.session().attribute("session_email");
             User.updateUserList();
             Car.updateCarList();
+            boolean bookingState;
+            if(request.session().attribute("session_booking") !=null) {
+                bookingState = true;
+            }
+            else {
+                bookingState = false;
+            }
+            System.out.println(bookingState);
             model.put("carList", Car.carList);           
             model.put("user", UserService.getUserByEmail(currentUserEmail));
+            model.put("bookingState", bookingState);
             model.put("template", "templates/map.vtl" );
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());

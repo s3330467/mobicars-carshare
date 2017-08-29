@@ -229,17 +229,51 @@
                     }
                 ]
             });
-
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(success, error);
-            } else {
-                error('not supported');
+            
+            /* bookingstate is set to true if the user currently has a booking in progress
+             * 
+             * if the is no booking in progress the map loads all the cars from the database
+             * so that the user may pick a car
+             * 
+             * insert functions into the "true" if statement that should only
+             * run if the user DOES currently have a booking,
+             * functions such as navigation and tracking*/
+            var bookingState = $bookingState;
+            if(bookingState == false) {
+                loadAllCars(map);
             }
-
-            function success(position) {
-                var geopos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            if(bookingState == true) {
+                alert("user has a booking, you shouldnt see this screen");
+            }
+            
+            
+            //functions below will execute regardless of booking state
+            /* if the user has geolocation capabilites, proceed to attempt to 
+             * gather their location, and constantly update it if it changes.
+             */
+            if ("geolocation" in navigator) {
+                var locationOptions = {
+                    enableHighAccuracy: true,
+                    timeout: Infinity,
+                    maximumAge: 0
+                };
+                navigator.geolocation.watchPosition(locationSuccess, locationError, locationOptions);
                 map.setCenter(geopos);
-                //places the marker of the current user at their location
+                
+            //if geolocation is not supported, show this error and log the user out
+            } else {
+                error('Geolocation is not supported by this browser');
+                window.location.replace("/process_logout");
+            }
+            
+             /*if geolocation can successfully find the users location this function is run
+              * it collects the users current information and posts it to the database, 
+              * for debugging purposes it also creates a marker every time for debugging, this is not final.
+              */
+            function locationSuccess(position) {
+                var geopos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                
+                //places the marker of the current user at their location for debugging
                 var userMarker = new google.maps.Marker({
                     position: geopos,
                     title: "$user.email",
@@ -253,24 +287,27 @@
                 }
                 );
             }
-
-            function error(msg) {
-                alert(msg);
+            
+            /* if the users location cannot be found for any reason, 
+             * presume location is disabled and log out the user, this app
+             * cannot function without accurate location data.
+             */
+            function locationError(err) {
+                alert("location services not enabled, please turn on to use this app");
+                window.location.replace("/process_logout");
             }
-
-            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-                infoWindow.setPosition(pos);
-                infoWindow.setContent(browserHasGeolocation ?
-                        'Error: The Geolocation service failed.' :
-                        'Error: Your browser doesn\'t support geolocation.');
-            }
-
+        }
+        
+        /* load every car from the arraylist of cars stored in the car class
+         * loop through the list of cars and create a marker for each car
+         */
+        function loadAllCars(map) {
             //create the vector art styling for a sedan
             var sedanIcon = {
                 url: 'images/sedan-car-model.png'
             };
 
-            //loop through the arrayList carList and for each car add a marker at its location    
+            //loop through the arrayList carList and for each car add it to var cars  
             var cars = [
                     #foreach($car in $carList)
             ['$car.plate_no', '$car.lat', '$car.lng', '$car.available'],
@@ -288,7 +325,13 @@
                         icon: sedanIcon,
                         map: map
                     });
-
+                    
+                    /* during the process of creating each marker, also create
+                     * the function that runs when that marker is clicked.
+                     * when clicked each car marker will display an info window 
+                     * which contains info about the car, as well as a button
+                     * that allows the user to book that car
+                     */
                     google.maps.event.addListener(marker, 'click', (function (marker, i) {
                         return function () {
                             $.post("/process_get_car_details",
@@ -297,16 +340,13 @@
                                     },
                                     function (result)
                                     {
-                                        infowindow.setContent(
-                                                result
-                                                );
+                                        infowindow.setContent(result);
                                         infowindow.open(map, marker);
                                     });
                         }
                     })(marker, i));
                 }
             }
-
         }
     </script>
     <script async defer
