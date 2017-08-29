@@ -26,7 +26,9 @@ public class BookingController {
             return Booking.bookingList;
         });
         
-//      POST request 
+//      gets user by session. Fetches plate number of the user's selected car
+//      and inserts both objects into confirm_booking.vtl, which is then
+//      inserted into layout_main.vtl.
         post("/process_book_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String plate_no = request.queryParams("plate_no");
@@ -130,17 +132,7 @@ public class BookingController {
             return null;
         });
         
-        /* Can't figure this out:
-        post("/process_collect_car", (request, response) -> {
-            //Map<String, Object> model = new HashMap<String, Object>();
-            String plate_no = request.queryParams("plate_no");
-            Car.updateCarList();
-            User.updateUserList();
-            Car car = CarService.getCarByPlate_no(plate_no);
-            User user = UserService.getUserByEmail(request.session().attribute("session_email"));
-            Booking booking = BookingService.collectCarInBooking(booking.getId());
-            return new ModelAndView(model, "templates/car_collected.vtl");
-            */
+      
     }
         
 }
