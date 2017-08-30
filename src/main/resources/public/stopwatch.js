@@ -75,6 +75,3 @@ function stop() {
 	x.stop();
 	clearInterval(clocktimer);
 }
-
-start();
-show();
