@@ -69,21 +69,40 @@ jQuery().ready(function() {
       $(".frm").hide("fast");
       $("#sf1").show("slow");
     });
+    
+    $("form.contactform").on('submit', function(){
+       var that =$(this),
+            url = that.attribute('action'),
+            method = that.attribute('method'),
+            data ={};
+            
+        that.name('[name]').each(function(index, value){
+            var that =($this),
+                name = that.attribute('name'),
+                value = that.val();
+                
+            data[name]= value;
+        });
+        
+        console.log(data);
+       return false;
+        
+    });
  
  
-    $(".open3").click(function() {
-      if (v.form()) {
-     
+//    $(".open3").click(function() {
+//      if (v.form()) {
+//     
          //optional
          //used delay form submission for a second and show a loader image
-        $("#loader").show();
-         setTimeout(function(){
-           $("#contactform").html('<h2>Thanks.</h2>');
-         }, 1000);
-        // Remove this if you are not using ajax method for submitting values
-        return false;
-      }
-    });
+//        $("#loader").show();
+//         setTimeout(function(){
+//           $("#contactform").html('<h2>Thanks.</h2>');
+//         }, 1000);
+//        // Remove this if you are not using ajax method for submitting values
+//        return false;
+//      }
+//    });
  
 });
 
