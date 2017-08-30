@@ -71,8 +71,8 @@ public class DB {
 //    returns false if email and password fields are blank or invalid email given
     public static boolean insertUser(String email, String password, String f_name, String l_name, String address, String license_no, String phone_no, String card_name, String card_no, String expiry_month, String expiry_year, String cvv) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "INSERT INTO users ( email, password1, f_name, l_name, address, license_no, phone_no, name, card_no, expiry_month, expiry_year, cvv ) "
-                + "VALUES ( :email, :password1, :f_name, :l_name, :address, :license_no, :phone_no, :card_name, :card_no, :expiry_month, :expiry_year, :cvv)";
+        String sql = "INSERT INTO users ( email, password, f_name, l_name, address, license_no, phone_no, card_name, card_no, expiry_month, expiry_year, cvv ) "
+                + "VALUES ( :email, :password, :f_name, :l_name, :address, :license_no, :phone_no, :card_name, :card_no, :expiry_month, :expiry_year, :cvv)";
         
         if(email == null || password == null) {
             System.out.println("null registration fields");
@@ -86,7 +86,7 @@ public class DB {
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
                     .addParameter("email", email)
-                    .addParameter("password1", password)
+                    .addParameter("password", password)
                     .addParameter("f_name", f_name)
                     .addParameter("l_name", l_name)
                     .addParameter("address", address)
