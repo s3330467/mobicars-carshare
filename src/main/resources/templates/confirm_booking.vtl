@@ -1,11 +1,20 @@
-<div>
-    <img src="images/1200-6.jpg" alt="$car.getMake $car.getModel()">
-    <p><b>$car.getMake() $car.getModel()</b></p>
-    <p>Type: $car.getType()</p>
-    <p>Registration #: $car.getPlate_no()</p>
-    <p>Hourly rate: $$car.getHourly_price()</p>
-    <form action="/process_confirm_booking" method="POST">
-        <input type="hidden" name="plate_no" value="$car.getPlate_no()">
-        <input type="submit" class ="btn btn-default" value="Confirm Booking" />
-    </form>
+<div class="col-md-10 col-md-offset-2">
+    <div class="well" style="width: 400px; height: 300px;">
+        <img src="images/1200-6.jpg" alt="$car.getMake $car.getModel() $car.getImage()">
+        <p><b>$car.getMake() $car.getModel()</b></p>
+        <p>Type: $car.getType()</p>
+        <p>Registration #: $car.getPlate_no()</p>
+        <p>Hourly rate: $$car.getHourly_price()</p>
+        <div class="text-center">
+            <form action="/process_cancel_booking" method="POST">
+                <input type="hidden" name="plate_no" value="$car.getPlate_no()">
+                <input type="submit" class ="btn btn-warning btn-sm " style="float: left" value="Previous" />
+            </form>
+            <form action="/process_confirm_booking" method="POST">
+                <input type="hidden" name="plate_no" value="$car.getPlate_no()">
+                <input type="submit" class ="btn btn-success btn-sm" style="float: left" value="Confirm Booking" />
+            </form>
+    
+        </div>
+    </div>
 </div>

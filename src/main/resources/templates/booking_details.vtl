@@ -1,18 +1,50 @@
-<div>
-    <h1>CAR IS BOOKED</h1>
-    <img src="images/1200-6.jpg" alt="$car.getMake $car.getModel()">
-    <p><b>$car.getMake() $car.getModel()</b></p>
-    <p>Type: $car.getType()</p>
-    <p>Registration #: $car.getPlate_no()</p>
-    <p>Hourly rate: $$car.getHourly_price()</p>
-    <div class="text-center">
-    <form action="/process_cancel_booking" method="POST">
-        <input type="hidden" name="plate_no" value="$car.getPlate_no()">
-        <input type="submit" class ="btn btn-primary btn-block" value="Cancel Booking" />
-    </form>
-    <form action="/process_collect_car" method="POST">
-        <input type="hidden" name="booking_id" value="$booking.getId()">
-        <input type="submit" class ="btn btn-primary btn-block" value="Collect Car" />
-    </form>
+
+    <div class="col-md-10 col-md-offset-2">
+        <div class="well" style="width: 400px; height: 450px;"><h2>CAR IS BOOKED</h2>
+            <img src="images/1200-6.jpg" alt="$car.getMake $car.getModel()">
+            <p><b>$car.getMake() $car.getModel()</b></p>
+            <p>Type: $car.getType()</p>
+            <p>Registration #: $car.getPlate_no()</p>
+            <p>Hourly rate: $$car.getHourly_price()</p>
+            <p>Please collect your car in: <div id="clockdiv"></div> </p>
+            <div class="text-center">
+                <form action="/process_cancel_booking" method="POST">
+                    <input type="hidden" name="plate_no" value="$car.getPlate_no()">
+                    <input type="submit" class ="btn btn-warning btn-sm" style="float: left" value="Cancel Booking" />
+                </form>
+                <form action="/process_collect_car" method="POST">
+                    <input type="hidden" name="booking_id" value="$booking.getId()">
+                    <input type="submit" class="btn btn-success btn-sm" style="float: left" value="Collect Car" />
+                </form>
+            </div>
+        </div>
+  
     </div>
-</div>
+
+<script>
+    // 10 minutes from now
+        var time_in_minutes = 10;
+        var current_time = Date.parse(new Date());
+        var deadline = new Date(current_time + time_in_minutes*60*1000);
+
+
+    function time_remaining(endtime){
+	var t = Date.parse(endtime) - Date.parse(new Date());
+	var seconds = Math.floor( (t/1000) % 60 );
+	var minutes = Math.floor( (t/1000/60) % 60 );
+	var hours = Math.floor( (t/(1000*60*60)) % 24 );
+	var days = Math.floor( t/(1000*60*60*24) );
+	return {'total':t, 'days':days, 'hours':hours, 'minutes':minutes, 'seconds':seconds};
+}
+function run_clock(id,endtime){
+	var clock = document.getElementById(id);
+	function update_clock(){
+		var t = time_remaining(endtime);
+		clock.innerHTML = 'minutes: '+t.minutes+'<br>seconds: '+t.seconds;
+		if(t.total<=0){ clearInterval(timeinterval); }
+	}
+	update_clock(); // run function once at first to avoid delay
+	var timeinterval = setInterval(update_clock,1000);
+}
+run_clock('clockdiv',deadline);
+</script>
