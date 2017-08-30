@@ -116,11 +116,14 @@ public class BookingController {
         
         post("/process_return_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            Booking.updateBookingList();
+            Car.updateCarList();
             User.updateUserList();
-            User user = UserService.getUserByEmail(request.session().attribute("session_email"));
+            Booking.updateBookingList();
+            User user = UserService.getUserByEmail(request.session().attribute("session_email"));               
             Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
+            Car car = CarService.getCarById(booking.getCar_id());
             if(BookingService.returnCar(request.session().attribute("session_booking"))) {
+                model.put("car", car);
                 model.put("booking", booking);
                 model.put("template", "templates/returned_car.vtl");
                 return new ModelAndView(model, "templates/layout_main.vtl");
