@@ -31,8 +31,9 @@ public class BookingService {
         return null;
     }
     
-//    when user cancels booking, the ending date and time values are inserted 
-//    into the bookings table entry and car availability is set to true.
+//    when user cancels booking, the cancelBooking method from DB.java is called,
+//    the ending date and time values are inserted into the bookings table entry,
+//    and car availability is set to true.
     public static boolean cancelBooking(String booking_id) {
         Date current_date = new Date();
         Booking.updateBookingList();

@@ -27,7 +27,11 @@ public class BookingController {
             return Booking.bookingList;
         });
 
-//      POST request 
+//      POST request  
+//      gets user by session. Fetches plate number of the user's selected car
+//      and inserts both objects into confirm_booking.vtl, which is then
+//      inserted into layout_main.vtl.
+
         post("/process_book_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String plate_no = request.queryParams("plate_no");
@@ -136,21 +140,32 @@ public class BookingController {
                 model.put("car", car);
                 model.put("user", user);
                 model.put("booking", booking);
-                model.put("template", "templates/booked_car_info.vtl");
+                model.put("template", "templates/booking_in_progress.vtl");
                 return new ModelAndView(model, "templates/layout_main.vtl");
             }
             return null;
         }, new VelocityTemplateEngine());
 
         post("/process_return_car", (request, response) -> {
-            if (BookingService.returnCar(request.session().attribute("session_booking"))) {
-                request.session().attribute("session_booking", null);
-                response.redirect("/");
-                return null;
+            Map<String, Object> model = new HashMap<String, Object>();
+            Car.updateCarList();
+            User.updateUserList();
+            Booking.updateBookingList();
+            User user = UserService.getUserByEmail(request.session().attribute("session_email"));               
+            Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
+            Car car = CarService.getCarById(booking.getCar_id());
+            if(BookingService.returnCar(request.session().attribute("session_booking"))) {
+                model.put("car", car);
+                model.put("booking", booking);
+                model.put("template", "templates/returned_car.vtl");
+                return new ModelAndView(model, "templates/layout_main.vtl");
+//            request.session().attribute("session_booking", null);
+//            response.redirect("/");
+//            return null;
             }
             return null;
-        });
-
+        }, new VelocityTemplateEngine());
+        
         post("/process_cancel_booking", (request, response) -> {
             if (BookingService.cancelBooking(request.session().attribute("session_booking"))) {
                 request.session().attribute("session_booking", null);
@@ -159,18 +174,6 @@ public class BookingController {
             }
             return null;
         });
-
-        /* Can't figure this out:
-        post("/process_collect_car", (request, response) -> {
-            //Map<String, Object> model = new HashMap<String, Object>();
-            String plate_no = request.queryParams("plate_no");
-            Car.updateCarList();
-            User.updateUserList();
-            Car car = CarService.getCarByPlate_no(plate_no);
-            User user = UserService.getUserByEmail(request.session().attribute("session_email"));
-            Booking booking = BookingService.collectCarInBooking(booking.getId());
-            return new ModelAndView(model, "templates/car_collected.vtl");
-         */
     }
 
 }
