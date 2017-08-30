@@ -2,3 +2,8 @@
 <p>Collection time: $booking.getCollection_time()</p>
 
 <div>Time elapsed: <span id="time">15:00</span></div>
+
+<form action="/process_return_car" method="POST">
+        <input type="hidden" name="booking_id" value="$booking.getId()">
+        <input type="submit" class ="btn btn-primary btn-block" value="Return car and finish booking" />
+</form>
