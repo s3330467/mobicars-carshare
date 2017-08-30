@@ -64,10 +64,10 @@ public class UserController {
         
         post("/process_register", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            String f_name = request.queryParams("f_name");
-            String l_name = request.queryParams("l_name");
             String email = request.queryParams("email");
             String password = request.queryParams("password");
+            String f_name = request.queryParams("f_name");
+            String l_name = request.queryParams("l_name");
             String address = request.queryParams("address");
             String license_no = request.queryParams("license_no");
             String phone_no = request.queryParams("phone_no");
@@ -77,7 +77,7 @@ public class UserController {
             String expiry_year = request.queryParams("expiry_year");
             String cvv = request.queryParams("cvv");
             
-            if(UserService.createUser(f_name, l_name, email, password, address, license_no, phone_no, card_name, card_no, expiry_month, expiry_year, cvv)) {
+            if(UserService.createUser(email, password, f_name, l_name, address, license_no, phone_no, card_name, card_no, expiry_month, expiry_year, cvv)) {
                 response.redirect("/login");
             }
             else {

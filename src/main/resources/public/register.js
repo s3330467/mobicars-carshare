@@ -37,7 +37,7 @@ jQuery().ready(function() {
         email: {
           required: true,
           minlength: 2,
-          email: true,
+          //email: true,
           maxlength: 100,
         },
         password1: {
@@ -70,24 +70,87 @@ jQuery().ready(function() {
       $("#sf1").show("slow");
     });
     
-    $("form.contactform").on('submit', function(){
-       var that =$(this),
-            url = that.attribute('action'),
-            method = that.attribute('method'),
-            data ={};
-            
-        that.name('[name]').each(function(index, value){
-            var that =($this),
-                name = that.attribute('name'),
-                value = that.val();
-                
-            data[name]= value;
+    $(document).ready(function(){
+       $('#submit').click(function(){
+          var f_name = $("#f_name").val();
+          var l_name = $("#l_name").val();
+          var address = $("#address").val();
+          var license_no = $("#license_no").val();
+          var phone_no = $("#phone_no").val();
+          var email = $("#email").val();
+          var password1 = $("#password1").val();
+          var password2 =$("#password2").val();
+          var card_name =$("#card_name").val();
+          var card_no =$("#card_no").val();
+          var expiry_month =$("#expiry_month").val();
+          var expiry_year =$("#expiry_year").val();
+          var cvv =$("#cvv").val();
+          var isvalid= true;
+          
+          if(card_name == "" || card_no == "" || expiry_month == "" || expiry_year == "" || cvv =="")
+          {
+              isvalid = false;
+              alert("Field entry is required")
+          }
+             if(isValid == true){
+                $.ajax({
+                url: "/process_register",
+                type: "POST",
+                data:{
+                    f_name: f_name,
+                    l_name: l_name,
+                    address: address,
+                    license_no: license_no,
+                    phone_no: phone_no,
+                    email: email,
+                    password: password,
+                    card_name: card_name,
+                    card_no: card_no,
+                    expiry_month: expiry_month,
+                    expiry_year: expiy_year,
+                    cvv: cvv
+                },
+                success: function(){
+                    alert("Data was successfully stored");
+                }
+                });
+            }else{
+                return false;
+            }
+
         });
+          
+       }); 
         
-        console.log(data);
-       return false;
         
     });
+//    $("form.contactform").on('submit', function(){
+//       var that =$(this),
+//            url = that.attribute('action'),
+//            type = that.attribute('method'),
+//            data ={};
+//            
+//        that.name('[name]').each(function(index, value){
+//            var that =($this),
+//                name = that.attribute('name'),
+//                value = that.val();
+//                
+//            data[name]= value;
+//        });
+//        
+//        $.ajax({
+//            url: url,
+//            type: type,
+//            data: data,
+//            success: function(response){
+//            console.log(response);
+//            }
+//           
+//        });
+//       
+//       return false;
+//        
+//    });
  
  
 //    $(".open3").click(function() {
@@ -104,7 +167,7 @@ jQuery().ready(function() {
 //      }
 //    });
  
-});
+//});
 
 
 
