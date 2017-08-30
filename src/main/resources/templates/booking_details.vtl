@@ -10,7 +10,7 @@
         <input type="hidden" name="plate_no" value="$car.getPlate_no()">
         <input type="submit" class ="btn btn-primary btn-block" value="Cancel Booking" />
     </form>
-    <form action="/process_collect_car" method="POST">
+    <form action="/process_collect_car" method="POST" onsubmit="start();">
         <input type="hidden" name="booking_id" value="$booking.getId()">
         <input type="submit" class ="btn btn-primary btn-block" value="Collect Car" />
     </form>

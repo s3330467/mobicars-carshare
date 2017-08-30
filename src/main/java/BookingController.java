@@ -108,7 +108,7 @@ public class BookingController {
                 model.put("car", car);
                 model.put("user", user);
                 model.put("booking", booking);
-                model.put("template", "templates/booked_car_info.vtl");
+                model.put("template", "templates/booking_in_progress.vtl");
                 return new ModelAndView(model, "templates/layout_main.vtl");
             }
             return null;
