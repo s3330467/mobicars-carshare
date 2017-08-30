@@ -1,4 +1,13 @@
 test page for a booking in progress
+
+<div>
+    <p> Your booking is now active...</p>
+    <p>Car id: $car.getId()</p>
+    <p>Car Makae: $car.getMake()</p>
+    <p>Car Type: $car.getType()</p>
+    <p>Hourly Price: $car.getHourly_price()</p>
+    
+</div>
 <form action="/process_return_car" method="POST">
         <input type="hidden" name="booking_id" value="$booking.getId()">
         <input type="submit" class ="btn btn-primary btn-block" value="finish booking" />
