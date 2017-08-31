@@ -54,6 +54,12 @@ public class UserController {
             return User.userList;
         });
         
+         get("/booking_history", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("template", "templates/booking_history.vtl");
+            return new ModelAndView(model, "templates/layout_main.vtl");
+        }, new VelocityTemplateEngine());
+        
         post("/process_update_user_location", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             double lat = Double.parseDouble(request.queryParams("lat"));
