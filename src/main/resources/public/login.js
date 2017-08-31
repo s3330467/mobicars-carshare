@@ -1,3 +1,5 @@
+
+
 $(document).ready(function(){
 
     $("#sign_in").click(function(){
@@ -9,7 +11,7 @@ $(document).ready(function(){
 
         if(email == ""){
             isValid = false;
-            $("#error_Email").html("This field is required");
+            $("#error_Email").html("Email cannot be empty");
 
         }else{
             $("#error_Email").html("");
@@ -17,26 +19,26 @@ $(document).ready(function(){
 
         if(password == ""){
             isValid = false;
-            $("#error_Password").html("This field is required");
+            $("#error_Password").html("Password cannot be empty");
 
         }else{
             $("#error_Password").html("");
         }
         // will only work if the data base is updated..but since spark has auto php thing we might not need it as well
-        if(isValid == false){
-            $.ajax({
-              url: "/register", 
-               type: "POST",
-            });
-        }
+//        if(isValid == false){
+//            $.ajax({
+//               url: "/register", 
+//               type: "POST",
+//            });
+//        }
         
         if(isValid == true){
             $.ajax({
             url: "/process_login",
             type: "POST",
             data:{
-            email: email,
-            password: password
+                email: email,
+                password: password
             },
             success: function(){
 

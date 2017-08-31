@@ -9,11 +9,6 @@ public class User {
     private String address;
     private String license_no;
     private String phone_no;
-    private String card_name;
-    private String card_no;
-    private String expiry_month;
-    private String expiry_year;
-    private String cvv;
     private double lat;
     private double lng;
     public static List<User> userList = new ArrayList<User>();
@@ -23,8 +18,7 @@ public class User {
         this.password = password;
     }
 
-    public User(String f_name, String l_name, String email, String password, String address, String license_no, String phone_no, String card_name,
-            String card_no, String expiry_month, String expiry_year, String cvv) {
+    public User(String f_name, String l_name, String email, String password, String address, String license_no, String phone_no) {
         this.f_name = f_name;
         this.l_name = l_name;
         this.email = email;
@@ -32,11 +26,6 @@ public class User {
         this.address = address;
         this.license_no = license_no;
         this.phone_no = phone_no;
-        this.card_name = card_name;
-        this.card_no = card_no;
-        this.expiry_month = expiry_month;
-        this.expiry_year = expiry_year;
-        this.cvv = cvv;
     }
     
     public User(String id, String f_name, String l_name, String email, String password, String license_no, String phone_no, double lat, double lng) {
@@ -53,8 +42,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", f_name=" + f_name + ", l_name=" + l_name + ", email=" + email + ", password=" + password + ", address=" + address + ", license_no=" + license_no + ", phone_no=" + phone_no + 
-                ",card_name="+ card_name + ",card_no=" + card_no + ",expiry_month=" + expiry_month + ",expiry_year=" + expiry_year + ",cvv=" + cvv + ", lat=" + lat + ", lng=" + lng + '}';
+        return "User{" + "id=" + id + ", f_name=" + f_name + ", l_name=" + l_name + ", email=" + email + ", password=" + password + ", address=" + address + ", license_no=" + license_no + ", phone_no=" + phone_no + ", lat=" + lat + ", lng=" + lng + '}';
     }
 
     public static void updateUserList() {
@@ -139,46 +127,6 @@ public class User {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-    
-    public String getCard_name() {
-        return card_name;
-    }
-
-    public void setCard_name(String card_name) {
-        this.card_name = card_name;
-    }
-    
-    public String getCard_no() {
-        return card_no;
-    }
-
-    public void setCard_no(String card_no) {
-        this.card_no = card_no;
-    }
-    
-    public String getExpiry_month() {
-        return expiry_month;
-    }
-
-    public void setExpiry_month(String expiry_month) {
-        this.expiry_month = expiry_month;
-    }
-    
-     public String getExpiry_year() {
-        return expiry_year;
-    }
-
-    public void setExpiry_year(String expiry_year) {
-        this.expiry_year = expiry_year;
-    }
-    
-     public String getCvv() {
-        return cvv;
-    }
-
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
     }
     
 }
