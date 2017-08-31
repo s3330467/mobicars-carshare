@@ -9,8 +9,8 @@ public class CarService {
     }
     //test
 
-    public static void createCar(String type, String make, String model, String plate_no , double hourly_price, double lat, double lng) {
-        DB.insertCar(type, make, model, plate_no, hourly_price, lat, lng);
+    public static void createCar(String image, String type, String make, String model, String plate_no , double hourly_price, double lat, double lng) {
+        DB.insertCar(image, type, make, model, plate_no, hourly_price, lat, lng);
         Car.updateCarList();
         return;
     }

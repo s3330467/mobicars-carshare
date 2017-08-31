@@ -1,6 +1,7 @@
 <div>
-    <img src="images/1200-6.jpg" alt="$car.getMake $car.getModel()">
+    <img src="$car.getImage()">
     <p><b>$car.getMake() $car.getModel()</b></p>
+    <p><b>$car.getImage()</b></p>
     <p>Type: $car.getType()</p>
     <p>Registration #: $car.getPlate_no()</p>
     <p>Hourly rate: $$car.getHourly_price()</p>
@@ -12,6 +13,8 @@
     </div>
 </div>
 <!--
+alt="$car.getMake $car.getModel()"
+images/1200-6.jpg
 <script>
 $(document).ready(function(){
     $('#cars').click(function(){
