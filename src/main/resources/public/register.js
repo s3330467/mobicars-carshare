@@ -103,11 +103,11 @@ jQuery().ready(function() {
                     license_no: license_no,
                     phone_no: phone_no,
                     email: email,
-                    password: password,
+                    password: password1,
                     card_name: card_name,
                     card_no: card_no,
                     expiry_month: expiry_month,
-                    expiry_year: expiy_year,
+                    expiry_year: expiry_year,
                     cvv: cvv
                 },
                 success: function(){
