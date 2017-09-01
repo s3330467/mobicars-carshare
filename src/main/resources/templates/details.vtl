@@ -1,10 +1,9 @@
 <div>
-    <img src="$car.getImage()">
+    <img src="images/$car.getImage()" style="width: 200px; height: 100px;">
     <p><b>$car.getMake() $car.getModel()</b></p>
-    <p><b>$car.getImage()</b></p>
-    <p>Type: $car.getType()</p>
-    <p>Registration #: $car.getPlate_no()</p>
-    <p>Hourly rate: $$car.getHourly_price()</p>
+    <p><b>Type:</b> $car.getType()</p>
+    <p><b>Registration No:</b> $car.getPlate_no()</p>
+    <p><b>Hourly rate:</b> $$car.getHourly_price()</p>
     <div class="text-center">
     <form action="/process_book_car" method="POST">
         <input type="hidden" name="plate_no" value="$car.getPlate_no()">

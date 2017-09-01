@@ -1,16 +1,13 @@
 <div class="col-md-10 col-md-offset-2">
-    <div class="well" style="width: 400px; height: 300px;">
-        <img src="images/1200-6.jpg" alt="$car.getMake $car.getModel() $car.getImage()">
+    <div class="well" style="width: 500px; height: 400px;">
+        <img src="images/$car.getImage()" style="width: 400px; height: 200px;" alt="$car.getMake $car.getModel() $car.getImage()">
         <p><b>$car.getMake() $car.getModel()</b></p>
-        <p>Type: $car.getType()</p>
-        <p>Registration #: $car.getPlate_no()</p>
-        <p>Hourly rate: $$car.getHourly_price()</p>
+        <p><b>Type:</b> $car.getType()</p>
+        <p><b>Registration No:</b> $car.getPlate_no()</p>
+        <p><b>Hourly rate:</b> $$car.getHourly_price()</p>
         <div class="text-center">
-<<<<<<< HEAD
-            <form action="/process_cancel_booking" method="POST">
-=======
-            <form action="map.vtl" method="POST">
->>>>>>> sprint4-vishal
+
+            <form action="/" method="POST">
                 <input type="hidden" name="plate_no" value="$car.getPlate_no()">
                 <input type="submit" class ="btn btn-warning btn-sm " style="float: left" value="Previous" />
             </form>
@@ -21,13 +18,10 @@
     
         </div>
     </div>
-<<<<<<< HEAD
-</div>
-=======
 </div>
 
 
 
 
 
->>>>>>> sprint4-vishal
+

@@ -1,14 +1,18 @@
-<div>
-<p>$car.getMake() $car.getModel()</p>
-<p>$car.getType()</p>
-<p>Plate number: $car.getPlate_no()</p>
-<p>Hourly price: $car.getHourly_price()</p>
-<p>Collection date: $booking.getCollection_date()</p>
-<p>Collection time: $booking.getCollection_time()</p>
-<p>Return date: $booking.getEnd_date()</p>
-<p>Return time: $booking.getEnd_time()</p>
-<p>Total cost: </p>
+<div class="col-md-10 col-md-offset-2">
+    <div class="well" style="width: 400px; height: 500px;">
+            <img src="images/$car.getImage()" style="width: 200px; height: 100px;">
+            <p><b>$car.getMake() $car.getModel()</b></p>
+            <p><b>$car.getType()</b></p>
+            <p><b>Plate number:</b> $car.getPlate_no()</p>
+            <p><b>Hourly price:</b> $car.getHourly_price()</p>
+            <p><b>Collection date:</b> $booking.getCollection_date()</p>
+            <p><b>Collection time:</b> $booking.getCollection_time()</p>
+            <p><b>Return date:</b> $booking.getEnd_date()</p>
+            <p><b>Return time:</b> $booking.getEnd_time()</p>
+            <p><b>Total cost:</b> $booking.getCost()</p>
 
-<form action="/">
-<input type="submit" value="Done">
+            <form action="/booking_history" method="POST">
+            <input type="submit" class ="btn btn-success btn-sm" style="float: left" value="Done">
+            </form>
+    </div>
 </div>

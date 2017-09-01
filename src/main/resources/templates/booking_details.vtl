@@ -1,13 +1,13 @@
 
 <div class="col-md-10 col-md-offset-2">
-    <div class="well" style="width: 400px; height: 450px;">
+    <div class="well" style="width: 500px; height: 550px;">
         <h1>CAR IS BOOKED</h1>
-        <img src="images/1200-6.jpg" alt="$car.getMake $car.getModel()"></img>
+        <img src="images/$car.getImage()" style="width: 400px; height: 200px;" alt="$car.getMake $car.getModel()"></img>
         <p><b>$car.getMake() $car.getModel()</b></p>
-        <p>Type: $car.getType()</p>
-        <p>Registration #: $car.getPlate_no()</p>
-        <p>Hourly rate: $$car.getHourly_price()</p>
-        <p>Please collect your car in: <div id="clockdiv"></div></P>
+        <p><b>Type:</b> $car.getType()</p>
+        <p><b>Registration No:</b> $car.getPlate_no()</p>
+        <p><b>Hourly rate:</b> $$car.getHourly_price()</p>
+        <p><b>Please collect your car in:</b> <div id="clockdiv"></div></P>
         <div class="text-center">
         <form action="/process_cancel_booking" method="POST">
             <input type="hidden" name="plate_no" value="$car.getPlate_no()">

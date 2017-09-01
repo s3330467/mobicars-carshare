@@ -69,10 +69,10 @@ public class DB {
     
 //    new entry is created in users table and populates it with given values.
 //    returns false if email and password fields are blank or invalid email given
-    public static boolean insertUser(String email, String password, String f_name, String l_name, String address, String license_no, String phone_no) {
+    public static boolean insertUser(String email, String password, String f_name, String l_name, String address, String license_no, String phone_no, String card_name, String card_no, String expiry_month, String expiry_year, String cvv) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "INSERT INTO users ( email, password, f_name, l_name, address, license_no, phone_no ) "
-                + "VALUES ( :email, :password, :f_name, :l_name, :address, :license_no, :phone_no)";
+        String sql = "INSERT INTO users ( email, password, f_name, l_name, address, license_no, phone_no, card_name, card_no, expiry_month, expiry_year, cvv ) "
+                + "VALUES ( :email, :password, :f_name, :l_name, :address, :license_no, :phone_no, :card_name, :card_no, :expiry_month, :expiry_year, :cvv)";
         
         if(email == null || password == null) {
             System.out.println("null registration fields");
@@ -204,16 +204,17 @@ public class DB {
     }
 
 //  creates new entry into cars table with all fields populated
-    public static boolean insertCar(String type, String make, String model, String plate_no, double hourly_price, double lat, double lng) {
+    public static boolean insertCar(String image, String type, String make, String model, String plate_no, double hourly_price, double lat, double lng) {
         //if type isn't supplied default to sedan
         if(type.length()<=0 || make.length() <= 0 || model.length() <= 0 || plate_no.length() <= 0) {
             return false;
         }
         //connect to DB and insert car values
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "INSERT INTO cars ( type, make, model, hourly_price, lat, lng ) VALUES ( :type, :make, :model, :hourly_price, :lat, :lng )";
+        String sql = "INSERT INTO cars ( image, type, make, model, hourly_price, lat, lng ) VALUES ( :type, :make, :model, :hourly_price, :lat, :lng )";
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
+                    .addParameter("image", image)
                     .addParameter("type", type)
                     .addParameter("make", make)
                     .addParameter("model", model)

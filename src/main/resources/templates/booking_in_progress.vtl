@@ -1,12 +1,19 @@
-<div>
-<p>Collection date: $booking.getCollection_date()</p>
-<p>Collection time: $booking.getCollection_time()</p>
-</div>
+<div class="col-md-10 col-md-offset-2">
+    <div class="well" style="width: 400px; height: 400px;">
+        <p><h3>The Car you have booked is-</h3></p>
+        <img src="images/$car.getImage()" style="width: 200px; height: 100px;">
+        <p><b>$car.getMake() $car.getModel() - $car.getType()</b></p>
+        <p><b></b></p>
+        <p><b>Plate number:</b> $car.getPlate_no()</p>
+        <p><b>Collection date:</b> $booking.getCollection_date()</p>
+        <p><b>Collection time:</b> $booking.getCollection_time()</p>
 
-<div>Time elapsed: <span id="time">15:00</span></div>
-<div class="text-center">
-<form action="/process_return_car" method="POST">
-        <input type="hidden" name="booking_id" value="$booking.getId()">
-        <input type="submit" class ="btn btn-primary btn-block" value="Return car and finish booking" />
-</form>
+        <div><b>Time elapsed:</b> <span id="time">15:00</span></div>
+        <br></br>
+        <div class="text-center">
+            <form action="/process_return_car" method="POST">
+                <input type="hidden" name="booking_id" value="$booking.getId()">
+                <input type="submit" class ="btn btn-success btn-sm" style="float: left" value="Return car and finish booking" />
+            </form>
+    </div>
 </div>
