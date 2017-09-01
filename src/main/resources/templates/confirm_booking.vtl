@@ -6,7 +6,7 @@
         <p>Registration #: $car.getPlate_no()</p>
         <p>Hourly rate: $$car.getHourly_price()</p>
         <div class="text-center">
-            <form action="/process_cancel_booking" method="POST">
+            <form action="map.vtl" method="POST">
                 <input type="hidden" name="plate_no" value="$car.getPlate_no()">
                 <input type="submit" class ="btn btn-warning btn-sm " style="float: left" value="Previous" />
             </form>
