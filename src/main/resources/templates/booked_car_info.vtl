@@ -1,3 +1,4 @@
+
 <!--test page for a booking in progress-->
 
 <div id="map">
@@ -249,3 +250,18 @@
         <input type="hidden" name="booking_id" value="$booking.getId()">
         <input type="submit" class ="btn btn-primary btn-block" value="Return car and finish booking" />
 </form>
+
+<div class="col-md-10 col-md-offset-2">
+    <div class="well" style="width: 400px; height: 300px;">
+            <p> Your booking is now active...</p>
+            <P><img src="$car.getImage()"></img></P>
+            <p>Car id: $car.getId()</p>
+            <p>Car Make: $car.getMake()</p>
+            <p>Car Type: $car.getType()</p>
+            <p>Hourly Price: $car.getHourly_price()</p>
+        <form action="/process_return_car" method="POST">
+                <input type="hidden" name="booking_id" value="$booking.getId()">
+                <input type="submit" class ="btn btn-success btn-sm" style="float: left" value="finish booking" />
+        </form>
+    </div>
+</div>
