@@ -1,3 +1,4 @@
+
     // Binding next button on first step
     $(".open1").click(function() {
       if (v.form()) {
@@ -59,5 +60,6 @@
             }else{
                 return false;
             }
-       });
+
+    });
 });
