@@ -10,8 +10,8 @@ public class CarController {
         get("/cars", (request, response) -> {
             Car.updateCarList();
             return Car.carList;
-        });
-        
+        },JsonUtil.json());
+             
         post("/process_get_car_details", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String plate_no = request.queryParams("plate_no");
