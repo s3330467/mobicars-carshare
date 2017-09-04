@@ -81,7 +81,7 @@ public class UserController {
         post("/process_register", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String email = request.queryParams("email");
-            String password = request.queryParams("password");
+            String password = request.queryParams("password1");
             String address = request.queryParams("address");
             String f_name = request.queryParams("f_name");
             String l_name = request.queryParams("l_name");

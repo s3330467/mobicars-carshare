@@ -92,6 +92,11 @@ public class DB {
                     .addParameter("address", address)
                     .addParameter("license_no", license_no)
                     .addParameter("phone_no", phone_no)
+                    .addParameter("card_name", card_name)
+                    .addParameter("card_no", card_no)
+                    .addParameter("expiry_month", expiry_month)
+                    .addParameter("expiry_year", expiry_year)
+                    .addParameter("cvv", cvv)
                     .executeUpdate();
         }
         return true;

@@ -1,3 +1,60 @@
+//new validation procedure for inputs
+//@author- vishal pradhan
+//
+jQuery().ready(function() {
+ 
+  var v = jQuery("#contactform").validate({
+      rules: {
+        f_name: {
+          required: true,
+          minlength: 2,
+          maxlength: 16
+        },
+
+        l_name: {
+          required: true,
+          minlength: 2,
+          maxlength: 16
+        },
+
+        address: {
+          required: true,
+          minlength: 2,
+          maxlength: 16
+        },
+
+        license_no: {
+          required: true,
+          minlength: 2,
+          maxlength: 16
+        },
+
+        phone_no: {
+          required: true,
+          minlength: 2,
+          maxlength: 16
+        },
+        email: {
+          required: true,
+          minlength: 2,
+          //email: true,
+          maxlength: 100,
+        },
+        password1: {
+          required: true,
+          minlength: 6,
+          maxlength: 15,
+        },
+        password2: {
+          required: true,
+          minlength: 6,
+          equalTo: "#password1",
+        }
+ 
+      },
+      errorElement: "span",
+      errorClass: "help-inline",
+    });
 
     // Binding next button on first step
     $(".open1").click(function() {
@@ -61,5 +118,10 @@
                 return false;
             }
 
+        });
+          
+       }); 
+        
+        
     });
-});
+//    
