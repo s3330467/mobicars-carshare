@@ -11,7 +11,11 @@ public class CarController {
             Car.updateCarList();
             return Car.carList;
         },JsonUtil.json());
-             
+        
+        after("/cars", (req, res) -> {
+            res.type("application/json");
+	});
+                
         post("/process_get_car_details", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String plate_no = request.queryParams("plate_no");
