@@ -1,3 +1,4 @@
+
 /**
  *
  * @author Alexander
@@ -18,6 +19,7 @@ import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
 
 public class BookingController {
+
     public BookingController(final BookingService bookingService) {
 
 //      GET request to return list of all bookings by calling updateBookingList
@@ -31,7 +33,6 @@ public class BookingController {
 //      gets user by session. Fetches plate number of the user's selected car
 //      and inserts both objects into confirm_booking.vtl, which is then
 //      inserted into layout_main.vtl.
-
         post("/process_book_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String plate_no = request.queryParams("plate_no");
@@ -46,23 +47,27 @@ public class BookingController {
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
 
-
         post("/process_confirm_booking", (request, response) -> {
             String plate_no = request.queryParams("plate_no");
             Car.updateCarList();
             User.updateUserList();
+            Booking.updateBookingList();
             System.out.println("confirm booking plate no: " + plate_no);
             Car car = CarService.getCarByPlate_no(plate_no);
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             if (BookingService.createBooking(car, user)) {
                 Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
                 request.session().attribute("session_booking", booking.getId());
-                
+
                 /*
                   30-8-17 edited by Alexander Young
                     added a time check for bookings, bookings will expire 15 minutes
                     (900000 milliseconds) after a booking is created
-                */
+                
+                  05-09-17 edited by Alexander Young
+                    added a check to only cancel bookings that haven't been
+                    collected when the 15 minutes expire
+                 */
                 Date current_date = new Date();
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date booking_date = df.parse(booking.getStart_date() + " " + booking.getStart_time());
@@ -72,19 +77,30 @@ public class BookingController {
                 timer.schedule(new TimerTask() {
                     public void run() {
                         System.out.println("\n\n\n\nattempting to cancel booking");
-                        if (BookingService.cancelBooking(request.session().attribute("session_booking"))) {
-                            request.session().attribute("session_booking", null);
-                            response.redirect("/");
+                        Booking.updateBookingList();
+                        Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
+                        if (booking.getCollection_date() == null) {
+                            if (BookingService.cancelBooking(request.session().attribute("session_booking"))) {
+                                System.out.println("and it was cancelled.");
+                                request.session().attribute("session_booking", null);
+                                response.redirect("/");
+                            }
+                            else {
+                                System.out.println("but something unexpected happened.");
+                            }
                         }
+                        else {
+                            System.out.println("but it was collected so no need.");
+                        }
+
                     }
-                },expireTime);
+                }, expireTime);
                 response.redirect("/booking_details");
                 return null;
             } else {
                 return "temporary booking failure page";
             }
         });
-
 
         get("/booking_details", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
@@ -136,10 +152,10 @@ public class BookingController {
             Car.updateCarList();
             User.updateUserList();
             Booking.updateBookingList();
-            User user = UserService.getUserByEmail(request.session().attribute("session_email"));               
+            User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
             Car car = CarService.getCarById(booking.getCar_id());
-            if(BookingService.returnCar(request.session().attribute("session_booking"))) {
+            if (BookingService.returnCar(request.session().attribute("session_booking"))) {
                 model.put("car", car);
                 model.put("booking", booking);
                 model.put("template", "templates/returned_car.vtl");
@@ -150,7 +166,7 @@ public class BookingController {
             }
             return null;
         }, new VelocityTemplateEngine());
-        
+
         post("/process_cancel_booking", (request, response) -> {
             if (BookingService.cancelBooking(request.session().attribute("session_booking"))) {
                 request.session().attribute("session_booking", null);
