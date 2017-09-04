@@ -13,7 +13,7 @@ import java.util.*;
 import org.apache.commons.validator.*;
 
 public class DB {
-    public static String sqlDB = "jdbc:mysql://localhost:3306/mobicars";
+    public static String sqlDB = "jdbc:mysql://localhost:3306/mobicars?useSSL=false";
     public static String sqlUser = "ubuntu";
     public static String sqlPass = "password";
 

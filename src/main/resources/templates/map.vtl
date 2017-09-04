@@ -229,7 +229,7 @@
                     }
                 ]
             });
-            
+
             /* bookingstate is set to true if the user currently has a booking in progress
              * 
              * if the is no booking in progress the map loads all the cars from the database
@@ -239,14 +239,14 @@
              * run if the user DOES currently have a booking,
              * functions such as navigation and tracking*/
             var bookingState = $bookingState;
-            if(bookingState == false) {
+            if (bookingState == false) {
                 loadNearbyCars(map);
             }
-            if(bookingState == true) {
+            if (bookingState == true) {
                 alert("user has a booking, you shouldnt see this screen");
             }
-            
-            
+
+
             //functions below will execute regardless of booking state
             /* if the user has geolocation capabilites, proceed to attempt to 
              * gather their location, and constantly update it if it changes.
@@ -259,25 +259,25 @@
                 };
                 navigator.geolocation.watchPosition(locationSuccess, locationError, locationOptions);
                 map.setCenter(geopos);
-                
-            //if geolocation is not supported, show this error and log the user out
+
+                //if geolocation is not supported, show this error and log the user out
             } else {
                 error('Geolocation is not supported by this browser');
                 window.location.replace("/process_logout");
             }
-            
-             /*if geolocation can successfully find the users location this function is run
-              * it collects the users current information and posts it to the database, 
-              * for debugging purposes it also creates a marker every time for debugging, this is not final.
-              * now checks to see if the user has moved at least 15 metres, if not, it does not update their position
-              * this is to stop update spam/elimate inaccurate data when standing still 
-              * and might need to be fine tuned.
-              */
+
+            /*if geolocation can successfully find the users location this function is run
+             * it collects the users current information and posts it to the database, 
+             * for debugging purposes it also creates a marker every time for debugging, this is not final.
+             * now checks to see if the user has moved at least 15 metres, if not, it does not update their position
+             * this is to stop update spam/elimate inaccurate data when standing still 
+             * and might need to be fine tuned.
+             */
             function locationSuccess(position) {
                 var geoPos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 var difference = google.maps.geometry.spherical.computeDistanceBetween(userCoords, geoPos);
                 //places the marker of the current user at their location for debugging
-                if(difference > 15) {
+                if (difference > 15) {
                     alert(difference);
                     var userMarker = new google.maps.Marker({
                         position: geoPos,
@@ -293,7 +293,7 @@
                     userCoords = geoPos;
                 }
             }
-            
+
             /* if the users location cannot be found for any reason, 
              * presume location is disabled and log out the user, this app
              * cannot function without accurate location data.
@@ -303,7 +303,7 @@
                 window.location.replace("/process_logout");
             }
         }
-        
+
         /* load every car from the arraylist of cars stored in the car class
          * loop through the list of cars and create a marker for each car
          */
@@ -330,7 +330,7 @@
                         icon: sedanIcon,
                         map: map
                     });
-                    
+
                     /* during the process of creating each marker, also create
                      * the function that runs when that marker is clicked.
                      * when clicked each car marker will display an info window 
@@ -362,54 +362,52 @@
             var sedanIcon = {
                 url: 'images/sedan-car-model.png'
             };
-            //loop through the arrayList carList and for each car add it to var cars  
-            var cars = [
-                    #foreach($car in $carList)
-            ['$car.plate_no', '$car.lat', '$car.lng', '$car.available'],
-                    #end
-            ['test', 'test', 'test', 'test']
-            ];
+            
+            //create the empty infowindow that will be filled with car specific info
             var infowindow = new google.maps.InfoWindow;
-            var marker, i, distance, userPos, carPos;
-            for (i = 0; i < cars.length; i++) {
-                if (cars[i][3] == "true") {
-                    
-                    //get the distance between the userPos and the carPos in km
-                    userPos = new google.maps.LatLng($user.getLat(), $user.getLng());
-                    carPos = new google.maps.LatLng(cars[i][1], cars[i][2]);
-                    distance =  google.maps.geometry.spherical.computeDistanceBetween(carPos, userPos)/1000;
-                    
-                    //if cars are further away than 100km, dont load them
-                    if(distance < 100) {
-                        marker = new google.maps.Marker({
-                            position: new google.maps.LatLng(cars[i][1], cars[i][2]),
-                            title: cars[i][0],
-                            icon: sedanIcon,
-                            map: map
-                        });
+            //loop through the json object carList and operate on each car
+            $.getJSON("/cars", function (cars) {
+                //for each data object(car) in the Json retrieved, create a map marker, 
+                //the variable i is the incrementing count, it must be present but is not ever used
+                $.each(cars, function (i, car) {
+                    if (car.available == true) {
+                        //get the distance between the userPos and the carPos in km
+                        userPos = new google.maps.LatLng($user.getLat(), $user.getLng());
+                        carPos = new google.maps.LatLng(car.lat, car.lng);
+                        distance = google.maps.geometry.spherical.computeDistanceBetween(carPos, userPos) / 1000;
 
-                        /* during the process of creating each marker, also create
-                         * the function that runs when that marker is clicked.
-                         * when clicked each car marker will display an info window 
-                         * which contains info about the car, as well as a button
-                         * that allows the user to book that car
-                         */
-                        google.maps.event.addListener(marker, 'click', (function (marker, i) {
-                            return function () {
-                                $.post("/process_get_car_details",
-                                        {
-                                            plate_no: cars[i][0]
-                                        },
-                                        function (result)
-                                        {
-                                            infowindow.setContent(result);
-                                            infowindow.open(map, marker);
-                                        });
-                            }
-                        })(marker, i));
+                        //if cars are further away than 100km, dont load them
+                        if (distance < 100) {
+                            marker = new google.maps.Marker({
+                                position: carPos,
+                                title: car.plate_no,
+                                icon: sedanIcon,
+                                map: map
+                            });
+
+                            /* during the process of creating each marker, also create
+                             * the function that runs when that marker is clicked.
+                             * when clicked each car marker will display an info window 
+                             * which contains info about the car, as well as a button
+                             * that allows the user to book that car
+                             */
+                            google.maps.event.addListener(marker, 'click', (function (marker) {
+                                return function () {
+                                    $.post("/process_get_car_details",
+                                            {
+                                                plate_no: marker.title
+                                            },
+                                            function (result)
+                                            {
+                                                infowindow.setContent(result);
+                                                infowindow.open(map, marker);
+                                            });
+                                }
+                            })(marker));
+                        }
                     }
-                }
-            }
+                });
+            });
         }
     </script>
     <script async defer

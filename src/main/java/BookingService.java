@@ -95,7 +95,7 @@ public class BookingService {
         return false;
     }
     
-//    whne user returns their booked car, the array bookingList is looped
+//    when user returns their booked car, the array bookingList is looped
 //    to locate their booking and the returnCar method from DB.java is called,
 //    which inserts the end date and time and end location values in the bookings
 //    table on the database. The car availability is set to true.
