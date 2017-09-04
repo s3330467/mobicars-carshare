@@ -146,7 +146,16 @@ public class UserController {
             return UserService.getUserByEmail(email);
 
         });
-
+        
+        /*9/5/2017 Edited by Alexander Young
+          this route returns true is a user session exists and false if it does not
+        */
+        get("/user_login_status", (request, response) -> {
+            if(request.session().attribute("session_email") != null) {
+                return true;
+            }
+            else return false;
+        });
 
         // more routes
 

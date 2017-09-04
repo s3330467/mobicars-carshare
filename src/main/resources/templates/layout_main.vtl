@@ -42,34 +42,28 @@
         <!--Menu Items-->
             <div class="collapse navbar-collapse" id="mainNavBar">
                 <ul class="nav navbar-nav">
-                    
                     <li class="active"><a href="#"><span class="glyphicon glyphicon-search" onclick="openNav()"></a></span></li>
-                        
-                    <li><a href="/">Locations </a></li>
-                    <li><a href="/cars">Cars </a></li>
-                    <li><a href="/">Rates </a></li>
-                
                     <li><a href="/">Contact </a></li>
                     <li><a href="/about">About Us </a></li>
                     <li><a href="/booking_history">History </a></li>
-                    <!--Drop Down Menu-->
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Membership <span class="caret"></span> </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/register">Register</a></li>
-                            <li><a href="/login">Login</a></li>
-                        </ul>
-                    <li><a href="/process_logout">logout</a></li>
+                    <li id="register-btn" style="display:none"><a href="/register">Register</a></li>
+                    <li id="login-btn" style="display:none"><a href="/login">Login</a></li>
+                    <li id="logout-btn" style="display:none"><a href="/process_logout">logout</a></li>
                 </ul>
-
-                <!--This will go once the login button is functional-->
-                <!--Right logout menu-->
-                <!--<ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Logout</a></li>
-                </ul>-->
              </div>
             </div>
         </nav>
+        <script>
+            $.get("/user_login_status", function(data){
+                if(data == "true") {
+                    document.getElementById('logout-btn').style.display = 'list-item';
+                }
+                else {
+                    document.getElementById('register-btn').style.display = 'list-item';
+                    document.getElementById('login-btn').style.display = 'list-item';
+                }
+            });
+        </script>
         <div class="container" class="modal" role="dialog">
             <div id="Modal" class="modal fade">
                 <div class="modal-content">
