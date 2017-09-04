@@ -1,4 +1,3 @@
-
 <div class="col-md-10 col-md-offset-2">
     <div class="well" style="width: 500px; height: 550px;">
         <h1>CAR IS BOOKED</h1>
@@ -7,7 +6,7 @@
         <p><b>Type:</b> $car.getType()</p>
         <p><b>Registration No:</b> $car.getPlate_no()</p>
         <p><b>Hourly rate:</b> $$car.getHourly_price()</p>
-        <p><b>Please collect your car in:</b> <div id="clockdiv"></div></P>
+        <p><b>Time remaining to collect car:</b> <h2 style="color:green"><div id="time"></div></h2></p>
         <div class="text-center">
         <form action="/process_cancel_booking" method="POST">
             <input type="hidden" name="plate_no" value="$car.getPlate_no()">
@@ -21,29 +20,37 @@
     </div>
 </div>
 <script>
-    // 10 minutes from now
-        var time_in_minutes = 10;
-        var current_time = Date.parse(new Date());
-        var deadline = new Date(current_time + time_in_minutes*60*1000);
+    /*
+    @author Rachel Tan
+    
+    05/09/17 Edited by Alexander Young
+    timer now subtracts time already elapsed to accurately display the time remaining
+    when timer expires the user is given an error and redirected back to the map
+*/
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
 
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
 
-    function time_remaining(endtime){
-	var t = Date.parse(endtime) - Date.parse(new Date());
-	var seconds = Math.floor( (t/1000) % 60 );
-	var minutes = Math.floor( (t/1000/60) % 60 );
-	var hours = Math.floor( (t/(1000*60*60)) % 24 );
-	var days = Math.floor( t/(1000*60*60*24) );
-	return {'total':t, 'days':days, 'hours':hours, 'minutes':minutes, 'seconds':seconds};
+        display.textContent = minutes + ":" + seconds;
+        
+        if (timer < 180) {
+            display.style.color = 'red';
+        }
+        if (--timer < 0) {
+            alert("Your booking has been canceled because you did not collect your car within 15 minutes");
+            window.location = "/";
+        }
+    }, 1000);
 }
-function run_clock(id,endtime){
-	var clock = document.getElementById(id);
-	function update_clock(){
-		var t = time_remaining(endtime);
-		clock.innerHTML = 'minutes: '+t.minutes+'<br>seconds: '+t.seconds;
-		if(t.total<=0){ clearInterval(timeinterval); }
-	}
-	update_clock(); // run function once at first to avoid delay
-	var timeinterval = setInterval(update_clock,1000);
-}
-run_clock('clockdiv',deadline);
+
+window.onload = function () {
+    var timeRemaining = (60 * 15) - $timeSinceBooking,
+        display = document.querySelector('#time');
+    startTimer(timeRemaining, display);
+};
 </script>

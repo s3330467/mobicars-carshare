@@ -305,55 +305,6 @@
         }
 
         /* load every car from the arraylist of cars stored in the car class
-         * loop through the list of cars and create a marker for each car
-         */
-        function loadAllCars(map) {
-            //create the vector art styling for a sedan
-            var sedanIcon = {
-                url: 'images/sedan-car-model.png'
-            };
-            //loop through the arrayList carList and for each car add it to var cars  
-            var cars = [
-                    #foreach($car in $carList)
-            ['$car.plate_no', '$car.lat', '$car.lng', '$car.available'],
-                    #end
-            ['test', 'test', 'test', 'test']
-            ];
-            var infowindow = new google.maps.InfoWindow;
-            var marker, i;
-
-            for (i = 0; i < cars.length; i++) {
-                if (cars[i][3] == "true") {
-                    marker = new google.maps.Marker({
-                        position: new google.maps.LatLng(cars[i][1], cars[i][2]),
-                        title: cars[i][0],
-                        icon: sedanIcon,
-                        map: map
-                    });
-
-                    /* during the process of creating each marker, also create
-                     * the function that runs when that marker is clicked.
-                     * when clicked each car marker will display an info window 
-                     * which contains info about the car, as well as a button
-                     * that allows the user to book that car
-                     */
-                    google.maps.event.addListener(marker, 'click', (function (marker, i) {
-                        return function () {
-                            $.post("/process_get_car_details",
-                                    {
-                                        plate_no: cars[i][0]
-                                    },
-                                    function (result)
-                                    {
-                                        infowindow.setContent(result);
-                                        infowindow.open(map, marker);
-                                    });
-                        }
-                    })(marker, i));
-                }
-            }
-        }
-        /* load every car from the arraylist of cars stored in the car class
          * loop through the list of cars and create a marker for each car if 
          * the car is within 100km of the user
          */

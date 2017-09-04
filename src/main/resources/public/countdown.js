@@ -1,7 +1,14 @@
+/*
+    @author Rachel Tan
+    
+    05/09/17 Edited by Alexander Young
+    timer now subtracts time already elapsed to accurately display the time remaining
+    when timer expires the user is given an error and redirected back to the map
+*/
 function startTimer(duration, display) {
     var timer = duration, minutes, seconds;
     setInterval(function () {
-        minutes = parseInt(timer / 60, 10)
+        minutes = parseInt(timer / 60, 10);
         seconds = parseInt(timer % 60, 10);
 
         minutes = minutes < 10 ? "0" + minutes : minutes;
@@ -10,13 +17,14 @@ function startTimer(duration, display) {
         display.textContent = minutes + ":" + seconds;
 
         if (--timer < 0) {
-            timer = duration;
+            alert("Your booking has been canceled because you did not collect your car within 15 minutes");
+            window.location = "/";
         }
     }, 1000);
 }
 
 window.onload = function () {
-    var fifteenMinutes = 60 * 15,
+    var timeRemaining = (60 * 15) - $timeSinceBooking,
         display = document.querySelector('#time');
-    startTimer(fifteenMinutes, display);
+    startTimer(timeRemaining, display);
 };
