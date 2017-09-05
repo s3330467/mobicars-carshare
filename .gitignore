@@ -7,3 +7,4 @@ carshare.iml
 out/production/main/META-INF/MANIFEST.MF
 src/main/main.iml
 *.war
+/nbproject/
