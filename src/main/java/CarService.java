@@ -21,7 +21,7 @@ public class CarService {
         Car.updateCarList();
         for(i = 0; i <Car.carList.size(); i++) {
             if(Car.carList.get(i).getPlate_no().equals(plate_no)) {
-                System.out.print("checking plate_no: " + Car.carList.get(i).getPlate_no());
+                System.out.println("checking plate_no: " + Car.carList.get(i).getPlate_no());
                 return Car.carList.get(i);
             }
         }

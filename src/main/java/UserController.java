@@ -32,7 +32,7 @@ public class UserController {
             else {
                 bookingState = false;
             }
-            System.out.println(bookingState);
+            System.out.println("users booking state: " + bookingState);
             model.put("carList", Car.carList);           
             model.put("user", UserService.getUserByEmail(currentUserEmail));
             model.put("bookingState", bookingState);
@@ -105,8 +105,8 @@ public class UserController {
             Map<String, Object> model = new HashMap<String, Object>();
             String email = request.queryParams("email");
             String password = request.queryParams("password");
-            System.out.println(password);
-            System.out.println(email);
+            System.out.println("logging in with password: " + password);
+            System.out.println("logging in with email: " + email);
             if(UserService.validateUser(email, password)) {
                 request.session().attribute("session_email", email);
                 User user = UserService.getUserByEmail(email);
@@ -117,7 +117,7 @@ public class UserController {
                 response.redirect("/");
                 return null;
             }
-            System.out.println("user validation failed");
+            System.out.println("user login validation failed");
             response.redirect("/login");
             return null;
         });

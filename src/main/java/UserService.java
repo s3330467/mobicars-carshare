@@ -35,7 +35,7 @@ public class UserService {
         User.updateUserList();
         for(i = 0; i <User.userList.size(); i++) {
             if(User.userList.get(i).getEmail().equals(email)) {
-                System.out.print("checking email: " + User.userList.get(i).getEmail());
+                System.out.println("fetching user with the email: " + User.userList.get(i).getEmail());
                 return User.userList.get(i);
             }
         }
