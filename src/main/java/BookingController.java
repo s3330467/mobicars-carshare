@@ -184,7 +184,7 @@ public class BookingController {
                 model.put("car", car);
                 model.put("booking", booking);
 //                model.put("template", "templates/returned_car.vtl");
-//                request.session().attribute("session_booking", null);
+                request.session().attribute("session_booking", null);
 //                return new ModelAndView(model, "templates/layout_main.vtl");
                 response.redirect("/booking_summary");
 //            return null;
