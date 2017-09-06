@@ -12,12 +12,12 @@ $(document).ready(function(){
   $.getJSON('/cars', function(cars){
 
    html_code +='<option value="">Select '+id+'</option>';
-   $.each(cars, function(key, car){
+   $.each(cars, function(i, car){
     if(id === 'type')
     {
      if(car.type === car.type)
      {
-      html_code += '<option value="'+car.type+'">'+car.type+'</option>';
+      html_code += '<option value="'+car.id+'">'+car.type+'</option>';
      }
     }
     
@@ -25,14 +25,14 @@ $(document).ready(function(){
     {
      if(car.type === car.type )
      {
-      html_code += '<option value="'+car.make+'">'+car.make+'</option>';
+      html_code += '<option value="'+car.id+'">'+car.make+'</option>';
      }
     }
 //    else // just made this to see because the model section is also populating the make output so basically its not working
 //    {
-//      if (car.make === car.make)
+//      if (car.id === car.model)
 //      {
-//        html_code += '<option value="'+car.model+'">'+car.model+'</option>';
+//        html_code += '<option value="'+car.id+'">'+car.model+'</option>';
 //      }
 //    }
    });
@@ -41,24 +41,23 @@ $(document).ready(function(){
 
  }
  $(document).on('change', '#type', function(){
-  var car_type = $(this).val();
+  var type = $(this).val();
  
-  if(car_type !== '')
+  if(type !== '')
   {
    load_json_data('make');
     alert('second function');
   }
   else
   {
-//   $('#'+id).html(html_code);
    $('#make').html('<option value="">Select Make</option>');
    $('#model').html('<option value="">Select Model</option>');
   }
  });
  $(document).on('change', '#make', function(){
      
-  var car_make = $(this).val();
-  if(car_make !== '')
+  var make = $(this).val();
+  if(make !== '')
   {
    load_json_data('model');
    alert('third part');
