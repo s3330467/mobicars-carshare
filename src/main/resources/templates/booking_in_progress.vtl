@@ -8,7 +8,7 @@
         <p><b>Collection date:</b> $booking.getCollection_date()</p>
         <p><b>Collection time:</b> $booking.getCollection_time()</p>
 
-        <div><b>Time elapsed:</b> <span id="time">15:00</span></div>
+        <div><b>Time elapsed:</b> <div id="time"></div></div>
         <br></br>
         <div class="text-center">
             <form action="/process_return_car" method="POST">
@@ -17,3 +17,29 @@
             </form>
     </div>
 </div>
+
+<script>
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (++timer < 0) {
+            alert("Your booking has been canceled because you did not collect your car within 15 minutes");
+            window.location = "/";
+        }
+    }, 1000);
+}
+
+window.onload = function () {
+    var timeElapsed = 0 + $timeSinceCollection,
+        display = document.querySelector('#time');
+    startTimer(timeElapsed, display);
+};
+</script>
