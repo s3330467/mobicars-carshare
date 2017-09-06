@@ -20,25 +20,26 @@
 
 <script>
 function startTimer(duration, display) {
-    var timer = duration, minutes, seconds;
+    var timer = duration, hours, minutes, seconds;
     setInterval(function () {
+        hours = parseInt (timer / 3600, 10);
         minutes = parseInt(timer / 60, 10);
         seconds = parseInt(timer % 60, 10);
 
+        hours = hours < 10 ? "0" + hours : hours;
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
-        display.textContent = minutes + ":" + seconds;
+        display.textContent = hours + " hours " + minutes + " minutes " + seconds + " seconds";
 
         if (++timer < 0) {
-            alert("Your booking has been canceled because you did not collect your car within 15 minutes");
-            window.location = "/";
+            timer = duration;
         }
     }, 1000);
 }
 
 window.onload = function () {
-    var timeElapsed = 0 + $timeSinceCollection,
+    var timeElapsed = 0,
         display = document.querySelector('#time');
     startTimer(timeElapsed, display);
 };
