@@ -69,10 +69,12 @@ public class DB {
     
 //    author: Rachel, 6.9.17
 //    Fetches the last completed booking of a user
-    public static List<Booking> fetchLastBookingOfUser(String user_id) {
+    public static List<Booking> fetchLastCompleteBookingOfUser(String user_id) {
         String sql = "SELECT * " +
                 "FROM bookings " +
-                "WHERE user_id = :user_id AND ;
+                "WHERE user_id = :user_id AND " +
+                "end_date IN (SELECT max(end_date) FROM bookings) " +
+                "AND end_time = (select max(end_time) from bookings);";
         
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         try(Connection con = sql2o.open()) {

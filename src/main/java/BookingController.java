@@ -199,7 +199,8 @@ public class BookingController {
             User.updateUserList();
             Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
-            Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
+            Booking booking = BookingService.getLastCompleteBookingOfUser(user.getId());
+            System.out.println("GET BOOKING SUMMARY: " + booking);
             Car car = CarService.getCarById(booking.getCar_id());
             
             model.put("car", car);
