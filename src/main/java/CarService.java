@@ -45,11 +45,11 @@ public class CarService {
         Car.updateCarList();
         List<Car> carList = Car.carList;
         List<Car> searchResults = new ArrayList<Car>();
-        if (make == null && model == null && type == null) {
+        if (make.equals("empty") && model.equals("empty") && type.equals("empty")) {
             //user submitted no search criteria, the search will fail
             return searchResults;
         }
-        if (make == null && model == null) {
+        if (make.equals("empty") && model.equals("empty")) {
             //user is searching for type
             System.out.println(type);
             for (int i = 0; i < carList.size(); i++) {
@@ -59,7 +59,7 @@ public class CarService {
                 }
             }
         }
-        if (type == null && model == null) {
+        if (type.equals("empty") && model.equals("empty")) {
             //user is searching for make
             System.out.println(make);
             for (int i = 0; i < carList.size(); i++) {
@@ -69,7 +69,7 @@ public class CarService {
                 }
             }
         }
-        if (model == null) {
+        if (model.equals("empty")) {
             //user is searching for type and make
             System.out.println(type + make);
             for (int i = 0; i < carList.size(); i++) {

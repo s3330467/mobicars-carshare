@@ -79,39 +79,6 @@
                 </div>
             </div>
         </div>
-        <div id="mySidenav" class="sidenav">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <form>            
-                <div class="form-group">
-                    <label for="filter">Filter by</label>
-                    <select name="type" id="type" class="form-control">
-                        <option value="">Select Type</option>   
-                    </select>
-                </div>
-                <div class="form-group">
-                    <!--<label for="contain">Select Make</label>-->
-                    <select name="make" id="make" class="form-control">
-                        <option value="">Select Make</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <!--<label for="contain">Select Model</label>-->
-                    <select name="model" id="model" class="form-control">
-                        <option value="">Select Model</option>
-                        <!--<option value="1">Corolla</option>
-                        <option value="2" selected>Falcon</option>
-                        <option value="3">Commodore</option>
-                        <option value="4">Elantra</option>
-                        <option value="5">i30</option>--> 
-                    <!--<input class="form-control" type="text" />-->
-                    </select>
-                </div>
-              
-                  <button type="submit" method="post" action="/search_for_cars" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-            </form>           
-            
-
-        </div>
         <div>
              #parse( $template )
         </div>
