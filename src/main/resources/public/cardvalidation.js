@@ -58,7 +58,7 @@ function whatCard(){
     
 }
 
-document.getElementById("card_no").addEventListener("click", function(){
+document.getElementById("sign_up").addEventListener("click", function(){
    document.getElementById("resultDiv").innerHTML = luhnCheck();
 }, false);
 
