@@ -95,14 +95,14 @@ public class BookingController {
 
                     }
                 }, expireTime);
-                response.redirect("/booking_details");
+                response.redirect("/booking_made");
                 return null;
             } else {
                 return "temporary booking failure page";
             }
         });
 
-        get("/booking_details", (request, response) -> {
+        get("/booking_made", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             Car.updateCarList();
             User.updateUserList();
@@ -112,7 +112,7 @@ public class BookingController {
 
             /*30-8-17 edited by Alexander Young
             added time related checks, puts into velocity templates the number 
-            of seconds until the booking should expire. on the booking_details.vtl 
+            of seconds until the booking should expire. on the booking_made.vtl 
             this value is used to display an accurate javascript countdown timer*/
             Date current_date = new Date();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -125,7 +125,7 @@ public class BookingController {
             model.put("car", car);
             model.put("user", user);
             model.put("booking", booking);
-            model.put("template", "templates/booking_details.vtl");
+            model.put("template", "templates/booking_made.vtl");
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
 
@@ -204,7 +204,7 @@ public class BookingController {
             
             model.put("car", car);
             model.put("booking", booking);
-            model.put("template", "templates/returned_car.vtl");
+            model.put("template", "templates/booking_summary.vtl");
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
         
