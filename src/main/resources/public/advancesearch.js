@@ -11,11 +11,12 @@ $(document).ready(function(){
     var typeOption = '';
     var makeOption = '';
     var modelOption = '';
+//    var selected_make ='';
     
     $.getJSON("/get_all_types", function(data){
         typeOption += '<option value="">Select Type</option>';
-            $.each(data, function(type, car_type){
-                typeOption+="<option value='"+type+"'>"+car_type+"</option>";
+            $.each(data, function(i, car_type){
+                typeOption+="<option value='"+car_type+"'>"+car_type+"</option>";
             });
        
          $('#type').html(typeOption);
@@ -31,26 +32,30 @@ $(document).ready(function(){
                $.getJSON("/get_all_makes", function(data){
                 makeOption += '<option value="">Select Make</option>';
                     $.each(data, function(make, car_make){
-                        makeOption+="<option value='"+make+"'>"+car_make+"</option>";
+                        makeOption+="<option value='"+car_make+"'>"+car_make+"</option>";
+                        
                 });
             $('#make').html(makeOption);
+            
             });
           };
           break ;
          }
          });
-//         alert('car_make');
+            
          $('#make').change(function(){
+            
+
           var model = $(this).val();
           var k;
           for(k = 0; k < model.length; k++)
           {
-          if(type === "sports" || model === "Nissan"){
+          if(model !== ''){
               load_json_data('model');
-               $.getJSON("/get_models_by_make", function(data){
+               $.getJSON("/get_models_by_make",{make: $(this).val()}, function(data){
                 modelOption += '<option value="">Select Model</option>';
                     $.each(data, function(model, car_model){
-                        modelOption+="<option value='"+model+"'>"+car_model+"</option>";
+                        modelOption+="<option value='"+car_model+"'>"+car_model+"</option>";
                });
             $('#model').html(modelOption);
             });
