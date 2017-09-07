@@ -31,7 +31,7 @@ public class CarController {
         /*  05-09-17 Edited By Alexander Young 
             added routes that return search results based on the parameters they receieve
         */
-        post("/search_for_cars", (request, response) -> {
+        get("/search_for_cars", (request, response) -> {
             Map<String, Object> velocityModel = new HashMap<String, Object>();
             String type = request.queryParams("type");
             String make = request.queryParams("make");
@@ -77,6 +77,19 @@ public class CarController {
         after("/get_all_makes", (req, res) -> {
             res.type("application/json");
 	});
+        
+        get("/get_make_by_type", (request, response) -> {
+            Car.updateCarList();
+            String type = request.queryParams("type");
+            Set<String> results = new HashSet<String>();
+            for(int i = 0; i < Car.carList.size(); i++) {
+                if(type.equals(Car.carList.get(i).getType())) {
+                    results.add(Car.carList.get(i).getMake());
+                }
+            }
+            System.out.print(results);
+            return results;
+        },JsonUtil.json());
         
         get("/get_models_by_make", (request, response) -> {
             Car.updateCarList();

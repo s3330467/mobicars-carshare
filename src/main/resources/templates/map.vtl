@@ -8,37 +8,40 @@
         <div class="form-group">
             <label for="filter">Filter by</label>
             <select name="type" id="type" class="form-control">
-                <option value="">Select Type</option>   
+                <option value="empty">Select Type</option>   
             </select>
         </div>
         <div class="form-group">
             <!--<label for="contain">Select Make</label>-->
             <select name="make" id="make" class="form-control">
-                <option value="">Select Make</option>
+                <option value="empty">Select Make</option>
             </select>
         </div>
         <div class="form-group">
             <!--<label for="contain">Select Model</label>-->
             <select name="model" id="model" class="form-control">
-                <option value="">Select Model</option>
-                <!--<option value="1">Corolla</option>
-                <option value="2" selected>Falcon</option>
-                <option value="3">Commodore</option>
-                <option value="4">Elantra</option>
-                <option value="5">i30</option>--> 
-                <!--<input class="form-control" type="text" />-->
+                <option value="empty">Select Model</option>
             </select>
         </div>
+        <button id="search-btn" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+        <button id="find-nearest-btn" type="button" class="btn btn-primary">find nearest car</button>
+        <button id="reset-map-btn" type="button" class="btn btn-primary">reset</button>
     </form>           
 </div>
 
 <div id="map">
     <script>
+        //this global variable keeps track of all the map markers so they can be deleted at will
+        var global_markers = [];
+        //this global variable is a reference to the main map
+        var map;
+        //this global variable is the current users most up to date coordinates
+        var userCoords
         function initMap() {
 
-            var userCoords = new google.maps.LatLng($user.getLat(), $user.getLng());
+            userCoords = new google.maps.LatLng($user.getLat(), $user.getLng());
             /*creates the styles the google map display */
-            var map = new google.maps.Map(document.getElementById('map'), {
+            map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 17,
                 center: userCoords,
                 disableDefaultUI: true,
@@ -308,12 +311,12 @@
          * loop through the list of cars and create a marker for each car if 
          * the car is within 100km of the user
          */
-        function loadNearbyCars(map) {
+        function loadNearbyCars() {
             //create the vector art styling for a sedan
             var sedanIcon = {
                 url: 'images/sedan-car-model.png'
             };
-            
+
             //create the empty infowindow that will be filled with car specific info
             var infowindow = new google.maps.InfoWindow;
             //loop through the json object carList and operate on each car
@@ -335,6 +338,9 @@
                                 icon: sedanIcon,
                                 map: map
                             });
+
+                            //add marker to the global marker array
+                            global_markers.push(marker);
 
                             /* during the process of creating each marker, also create
                              * the function that runs when that marker is clicked.
@@ -359,6 +365,73 @@
                     }
                 });
             });
+        }
+
+        /* @author Alexander Young
+         * 07-09-17
+         * this function removes all map markers from the map
+         */
+        function unloadAllCars() {
+            for (i = 0; i < global_markers.length; i++) {
+                global_markers[i].setMap(null);
+            }
+            global_markers.length = 0;
+        }
+        
+        /* Load a specific subset of cars that are a JSON result from the search function
+         */
+        function loadSearchResults(searchResults) {
+            //create the vector art styling for a sedan
+            var sedanIcon = {
+                url: 'images/sedan-car-model.png'
+            };
+
+            //create the empty infowindow that will be filled with car specific info
+            var infowindow = new google.maps.InfoWindow;
+            //loop through the json object carList and operate on each car
+                //for each data object(car) in the Json retrieved, create a map marker, 
+                //the variable i is the incrementing count, it must be present but is not ever used
+                $.each(searchResults, function (i, car) {
+                    if (car.available == true) {
+                        //get the distance between the userPos and the carPos in km
+                        userPos = new google.maps.LatLng($user.getLat(), $user.getLng());
+                        carPos = new google.maps.LatLng(car.lat, car.lng);
+                        distance = google.maps.geometry.spherical.computeDistanceBetween(carPos, userPos) / 1000;
+
+                        //if cars are further away than 100km, dont load them
+                        if (distance < 100) {
+                            marker = new google.maps.Marker({
+                                position: carPos,
+                                title: car.plate_no,
+                                icon: sedanIcon,
+                                map: map
+                            });
+
+                            //add marker to the global marker array
+                            global_markers.push(marker);
+
+                            /* during the process of creating each marker, also create
+                             * the function that runs when that marker is clicked.
+                             * when clicked each car marker will display an info window 
+                             * which contains info about the car, as well as a button
+                             * that allows the user to book that car
+                             */
+                            google.maps.event.addListener(marker, 'click', (function (marker) {
+                                return function () {
+                                    $.post("/process_get_car_details",
+                                            {
+                                                plate_no: marker.title
+                                            },
+                                            function (result)
+                                            {
+                                                infowindow.setContent(result);
+                                                infowindow.open(map, marker);
+                                            });
+                                }
+                            })(marker));
+                        }
+                    }
+                });
         }
     </script>
     <script async defer
