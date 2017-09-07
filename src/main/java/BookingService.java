@@ -135,10 +135,9 @@ public class BookingService {
     }
     
     public static Booking getLastCompleteBookingOfUser(String user_id) {
-//        Booking.updateBookingList();
-//        if (DB.fetchLastCompleteBookingOfUser(user_id)) {
-         DB.fetchLastCompleteBookingOfUser(user_id);
-//        }
-        return ;
+        if(DB.fetchLastCompleteBookingOfUser(user_id).size() == 1 ){
+            return DB.fetchLastCompleteBookingOfUser(user_id).get(0);
+        }
+        return null;
         }
     }
