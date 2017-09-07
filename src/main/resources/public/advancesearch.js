@@ -6,28 +6,94 @@ $(document).ready(function(){
 
  load_json_data('type');
 
- function load_json_data(id)
+ function load_json_data()
  {
-  var html_code = '';
-  $.getJSON('/cars', function(cars){
-
-   html_code +='<option value="">Select '+id+'</option>';
-   $.each(cars, function(i, car){
-    if(id === 'type')
-    {
-     if(car.type === car.type)
-     {
-      html_code += '<option value="'+car.id+'">'+car.type+'</option>';
-     }
-    }
+    var typeOption = '';
+    var makeOption = '';
+    var modelOption = '';
     
-    else//this is what populates the other two dropdown below the type... 
-    {
-     if(car.type === car.type )
-     {
-      html_code += '<option value="'+car.id+'">'+car.make+'</option>';
-     }
-    }
+    $.getJSON("/get_all_types", function(data){
+        typeOption += '<option value="">Select Type</option>';
+            $.each(data, function(type, car_type){
+                typeOption+="<option value='"+type+"'>"+car_type+"</option>";
+            });
+       
+         $('#type').html(typeOption);
+      });
+      $('#type').change(function(){
+          var make = $(this).val();
+          for(var j = 0; j < make.length; j++)
+          {
+          if(make !== ''){
+              load_json_data('make');
+               $.getJSON("/get_all_makes",{type:type}, function(data){
+                makeOption += '<option value="">Select Make</option>';
+                    $.each(data, function(make, car_make){
+                        makeOption+="<option value='"+make+"'>"+car_make+"</option>";
+                });
+            $('#make').html(makeOption);
+            });
+          };
+          break ;
+         }
+         });
+         
+         $('#make').change(function(){
+          var model = $(this).val();
+          for(var k = 0; k < model.length; k++)
+          {
+          if(model !== ''){
+              load_json_data('model');
+               $.getJSON("/get_models_by_make",{make:make}, function(data){
+                modelOption += '<option value="">Select Model</option>';
+                    $.each(data, function(model, car_model){
+                        modelOption+="<option value='"+model+"'>"+car_model+"</option>";
+                });
+            $('#model').html(modelOption);
+            });
+          };
+          break ;
+         }
+         });
+         
+     };
+});
+ 
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+//    if(id === 'type')
+//    {
+//     if(car.type === car.type)
+//     {
+//      html_code += '<option value="'+car.id+'">'+car.type+'</option>';
+//     }
+//    }
+//    
+//    else//this is what populates the other two dropdown below the type... 
+//    {
+//     if(car.type === car.type )
+//     {
+//      html_code += '<option value="'+car.id+'">'+car.make+'</option>';
+//     }
+//    }
 //    else // just made this to see because the model section is also populating the make output so basically its not working
 //    {
 //      if (car.id === car.model)
@@ -35,39 +101,39 @@ $(document).ready(function(){
 //        html_code += '<option value="'+car.id+'">'+car.model+'</option>';
 //      }
 //    }
-   });
-   $('#'+id).html(html_code);
-  });
-
- }
- $(document).on('change', '#type', function(){
-  var type = $(this).val();
- 
-  if(type !== '')
-  {
-   load_json_data('make');
-    alert('second function');
-  }
-  else
-  {
-   $('#make').html('<option value="">Select Make</option>');
-   $('#model').html('<option value="">Select Model</option>');
-  }
- });
- $(document).on('change', '#make', function(){
-     
-  var make = $(this).val();
-  if(make !== '')
-  {
-   load_json_data('model');
-   alert('third part');
-  }
-  else
-  {
-   $('#model').html('<option value="">Select Model</option>');
-  }
- });
-});
+//   });
+//   $('#'+id).html(html_code);
+//  });
+//
+// }
+// $(document).on('change', '#type', function(){
+//  var type = $(this).val();
+// 
+//  if(type !== '')
+//  {
+//   load_json_data('make');
+//    alert('second function');
+//  }
+//  else
+//  {
+//   $('#make').html('<option value="">Select Make</option>');
+//   $('#model').html('<option value="">Select Model</option>');
+//  }
+// });
+// $(document).on('change', '#make', function(){
+//     
+//  var make = $(this).val();
+//  if(make !== '')
+//  {
+//   load_json_data('model');
+//   alert('third part');
+//  }
+//  else
+//  {
+//   $('#model').html('<option value="">Select Model</option>');
+//  }
+// });
+//});
 
 
 
