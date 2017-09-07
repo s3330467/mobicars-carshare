@@ -43,5 +43,56 @@ public class CarController {
             List<Car> searchResults = CarService.carSearch(type, make, model);
             return searchResults;
         },JsonUtil.json());
+        
+        after("/search_for_cars", (req, res) -> {
+            res.type("application/json");
+	});
+        /*  07-09-17 Edited By Alexander Young 
+            added routes that return a json list of makes models or types
+        */
+        get("/get_all_types", (request, response) -> {
+            Car.updateCarList();
+            Set<String> results = new HashSet<String>();
+            for(int i = 0; i < Car.carList.size(); i++) {
+                results.add(Car.carList.get(i).getType());
+            }
+            System.out.print(results);
+            return results;
+        },JsonUtil.json());
+        
+        after("/get_all_types", (req, res) -> {
+            res.type("application/json");
+	});
+        
+        get("/get_all_makes", (request, response) -> {
+            Car.updateCarList();
+            Set<String> results = new HashSet<String>();
+            for(int i = 0; i < Car.carList.size(); i++) {
+                results.add(Car.carList.get(i).getMake());
+            }
+            System.out.print(results);
+            return results;
+        },JsonUtil.json());
+        
+        after("/get_all_makes", (req, res) -> {
+            res.type("application/json");
+	});
+        
+        get("/get_models_by_make", (request, response) -> {
+            Car.updateCarList();
+            String make = request.queryParams("make");
+            Set<String> results = new HashSet<String>();
+            for(int i = 0; i < Car.carList.size(); i++) {
+                if(make.equals(Car.carList.get(i).getMake())) {
+                    results.add(Car.carList.get(i).getModel());
+                }
+            }
+            System.out.print(results);
+            return results;
+        },JsonUtil.json());
+        
+        after("/get_models_by_make", (req, res) -> {
+            res.type("application/json");
+	});
     }
 }
