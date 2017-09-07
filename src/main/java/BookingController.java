@@ -139,13 +139,38 @@ public class BookingController {
             Car car = CarService.getCarById(booking.getCar_id());
             if (BookingService.collectCar(request.session().attribute("session_booking"))) {
                 model.put("car", car);
-                model.put("user", user);
+//                model.put("user", user);
                 model.put("booking", booking);
-                model.put("template", "templates/booking_in_progress.vtl");
-                return new ModelAndView(model, "templates/layout_main.vtl");
+                response.redirect("/booking_in_progress");
+//                model.put("template", "templates/booking_in_progress.vtl");
+//                return new ModelAndView(model, "templates/layout_main.vtl");
             }
             return null;
+        });
+//        }, new VelocityTemplateEngine());
+        
+        get("/booking_in_progress", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            Car.updateCarList();
+            User.updateUserList();
+            Booking.updateBookingList();
+            User user = UserService.getUserByEmail(request.session().attribute("session_email"));
+            Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
+            Car car = CarService.getCarById(booking.getCar_id());
+            
+            Date current_date = new Date();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date collection_date = df.parse(booking.getCollection_date() + " " + booking.getCollection_time());
+            long timeSinceCollection = (current_date.getTime() - collection_date.getTime()) / 1000;
+            System.out.println(timeSinceCollection);
+            model.put("car", car);
+            model.put("booking", booking);
+            model.put("timeSinceCollection", timeSinceCollection);
+            model.put("template", "templates/booking_in_progress.vtl");
+            return new ModelAndView(model, "templates/layout_main.vtl");
+            //            return null;
         }, new VelocityTemplateEngine());
+        
 
         post("/process_return_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
@@ -158,15 +183,33 @@ public class BookingController {
             if (BookingService.returnCar(request.session().attribute("session_booking"))) {
                 model.put("car", car);
                 model.put("booking", booking);
-                model.put("template", "templates/returned_car.vtl");
+//                model.put("template", "templates/returned_car.vtl");
                 request.session().attribute("session_booking", null);
-                return new ModelAndView(model, "templates/layout_main.vtl");
-//            response.redirect("/");
+//                return new ModelAndView(model, "templates/layout_main.vtl");
+                response.redirect("/booking_summary");
 //            return null;
             }
             return null;
+        });
+//        }, new VelocityTemplateEngine());
+        
+        get("/booking_summary", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            Car.updateCarList();
+            User.updateUserList();
+            Booking.updateBookingList();
+            User user = UserService.getUserByEmail(request.session().attribute("session_email"));
+            Booking booking = BookingService.getLastCompleteBookingOfUser(user.getId());
+//            Booking booking = BookingService.getLastCompleteBookingOfUser(user.getId());
+            System.out.println("GET BOOKING SUMMARY: " + booking);
+            Car car = CarService.getCarById(booking.getCar_id());
+            
+            model.put("car", car);
+            model.put("booking", booking);
+            model.put("template", "templates/returned_car.vtl");
+            return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
-
+        
         post("/process_cancel_booking", (request, response) -> {
             if (BookingService.cancelBooking(request.session().attribute("session_booking"))) {
                 request.session().attribute("session_booking", null);

@@ -67,6 +67,23 @@ public class DB {
         }
     }
     
+//    author: Rachel, 6.9.17
+//    Fetches the last completed booking of a user
+    public static List<Booking> fetchLastCompleteBookingOfUser(String user_id) {
+        String sql = "SELECT * " +
+                "FROM bookings " +
+                "WHERE user_id = :user_id AND " +
+                "end_date IN (SELECT max(end_date) FROM bookings) " +
+                "AND end_time = (select max(end_time) from bookings);";
+        
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        try(Connection con = sql2o.open()) {
+            return con.createQuery(sql)
+                .addParameter("user_id", user_id)
+                .executeAndFetch(Booking.class);
+        }
+    }
+    
 //    new entry is created in users table and populates it with given values.
 //    returns false if email and password fields are blank or invalid email given
     public static boolean insertUser(String email, String password, String f_name, String l_name, String address, String license_no, String phone_no, String card_name, String card_no, String expiry_month, String expiry_year, String cvv) {

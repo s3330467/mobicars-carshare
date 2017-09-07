@@ -133,4 +133,11 @@ public class BookingService {
         }
         return false;
     }
-}
+    
+    public static Booking getLastCompleteBookingOfUser(String user_id) {
+        if(DB.fetchLastCompleteBookingOfUser(user_id).size() == 1 ){
+            return DB.fetchLastCompleteBookingOfUser(user_id).get(0);
+        }
+        return null;
+        }
+    }
