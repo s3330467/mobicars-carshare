@@ -73,6 +73,7 @@ public class DB {
         String sql = "SELECT * " +
                 "FROM bookings " +
                 "WHERE user_id = :user_id AND " +
+                "collection_date IS NOT NULL AND " +
                 "end_date IN (SELECT max(end_date) FROM bookings) " +
                 "AND end_time = (select max(end_time) from bookings);";
         
