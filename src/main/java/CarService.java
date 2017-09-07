@@ -39,4 +39,24 @@ public class CarService {
         }
         return null;
     }
+    
+    public static List<Car> carSearch(String type, String make, String model) {
+        Car.updateCarList();
+        List<Car> carList = Car.carList;
+        List<Car> searchResults = new ArrayList<Car>();
+        System.out.println(type+make+model);
+        for(int i = 0; i < carList.size(); i++) {
+            if(carList.get(i).getType().toLowerCase().equals(type.toLowerCase())) {
+                System.out.println("1 criteria met");
+                if(carList.get(i).getMake().toLowerCase().equals(make.toLowerCase())) {
+                    System.out.println("2 criteria met");
+                    if(carList.get(i).getModel().toLowerCase().equals(model.toLowerCase())) {
+                        System.out.println("all criteria met");
+                        searchResults.add(carList.get(i));
+                    }
+                }
+            }
+        }
+        return searchResults;
+    }
 }
