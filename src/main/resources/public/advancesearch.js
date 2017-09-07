@@ -19,14 +19,16 @@ $(document).ready(function(){
             });
        
          $('#type').html(typeOption);
+         
       });
       $('#type').change(function(){
           var make = $(this).val();
-          for(var j = 0; j < make.length; j++)
+          var j;
+          for(j = 0; j < make.length; j++)
           {
           if(make !== ''){
               load_json_data('make');
-               $.getJSON("/get_all_makes",{type:type}, function(data){
+               $.getJSON("/get_all_makes", function(data){
                 makeOption += '<option value="">Select Make</option>';
                     $.each(data, function(make, car_make){
                         makeOption+="<option value='"+make+"'>"+car_make+"</option>";
@@ -37,18 +39,19 @@ $(document).ready(function(){
           break ;
          }
          });
-         
+//         alert('car_make');
          $('#make').change(function(){
           var model = $(this).val();
-          for(var k = 0; k < model.length; k++)
+          var k;
+          for(k = 0; k < model.length; k++)
           {
-          if(model !== ''){
+          if(type === "sports" || model === "Nissan"){
               load_json_data('model');
-               $.getJSON("/get_models_by_make",{make:make}, function(data){
+               $.getJSON("/get_models_by_make", function(data){
                 modelOption += '<option value="">Select Model</option>';
                     $.each(data, function(model, car_model){
                         modelOption+="<option value='"+model+"'>"+car_model+"</option>";
-                });
+               });
             $('#model').html(modelOption);
             });
           };
