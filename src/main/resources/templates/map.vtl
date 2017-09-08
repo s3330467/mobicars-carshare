@@ -233,6 +233,11 @@
                 ]
             });
 
+map.addListener('dragend', function () {
+            loadNearbyCars();
+            //alert("center changed");
+        });
+
             /* bookingstate is set to true if the user currently has a booking in progress
              * 
              * if the is no booking in progress the map loads all the cars from the database
@@ -305,8 +310,7 @@
                 alert("location services not enabled, please turn on to use this app");
                 window.location.replace("/process_logout");
             }
-        }
-
+}
         /* load every car from the arraylist of cars stored in the car class
          * loop through the list of cars and create a marker for each car if 
          * the car is within 100km of the user
@@ -326,12 +330,11 @@
                 $.each(cars, function (i, car) {
                     if (car.available == true) {
                         //get the distance between the userPos and the carPos in km
-                        userPos = new google.maps.LatLng($user.getLat(), $user.getLng());
                         carPos = new google.maps.LatLng(car.lat, car.lng);
-                        distance = google.maps.geometry.spherical.computeDistanceBetween(carPos, userPos) / 1000;
+                        distance = google.maps.geometry.spherical.computeDistanceBetween(carPos, map.getCenter()) / 1000;
 
                         //if cars are further away than 100km, dont load them
-                        if (distance < 100) {
+                        if (distance < 20) {
                             marker = new google.maps.Marker({
                                 position: carPos,
                                 title: car.plate_no,
