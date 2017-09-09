@@ -7,48 +7,75 @@ jQuery().ready(function() {
       rules: {
         f_name: {
           required: true,
-          minlength: 2,
           maxlength: 16
         },
 
         l_name: {
           required: true,
-          minlength: 2,
+          
           maxlength: 16
         },
 
         address: {
           required: true,
-          minlength: 2,
+//          accept:"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}",
           maxlength: 16
         },
 
         license_no: {
           required: true,
-          minlength: 2,
+          minlength: 6,
           maxlength: 16
         },
 
         phone_no: {
           required: true,
-          minlength: 2,
-          maxlength: 16
+          minlength: 8,
+          maxlength: 10
         },
         email: {
           required: true,
-          minlength: 2,
-          //email: true,
-          maxlength: 100,
+          email: true,
+          maxlength: 20,
+//          accept:"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}"
         },
         password1: {
           required: true,
-          minlength: 6,
-          maxlength: 15,
+          minlength: 8,
+//          minUpperCase: 1,
+//          minDigits: 1,
+//          minSpecial: 1,
+          maxlength: 15
         },
         password2: {
           required: true,
-          minlength: 6,
-          equalTo: "#password1",
+          minlength: 8,
+          equalTo: "#password1"
+        },
+        card_name: {
+          required: true,
+          minlength: 2,
+          maxlength: 16
+        },
+        card_no: {
+          required: true,
+          minlength: 13,
+          maxlength: 16
+        },
+        expiry_month: {
+          required: true,
+//          minlength: 2,
+//          maxlength: 16
+        },
+        expiry_year: {
+          required: true,
+//          minlength: 2,
+//          maxlength: 16
+        },
+        cvv: {
+          required: true,
+          minlength: 3,
+          maxlength: 3
         }
  
       },
