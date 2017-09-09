@@ -12,7 +12,8 @@ function luhnCheck(){
   var validCard = false;
   
   if((!/\d{15,16}(~\W[a-zA-Z])*$/g.test(ccNum)) || (ccNum.length > 16)){
-     return false;  
+//     return false;
+     alert('not a valid card');
   }
 
   if(ccNum.length === 15){  //american express 
@@ -50,15 +51,25 @@ function luhnCheck(){
   
   console.log(sum);
 return validCard;
+alert(validCard);
 }
 
 function whatCard(){
+     var ccNum = getUserInput();
+     var ccObj = {
+         "visa": /^4[0-9]{6,}$/g,
+         "mastercard": /^5[1-5][0-9]{5,}$/g,
+         "american express": /^3[47][0-9]{5,}$/g,
+         "discover": /^6(?:011|5[0-9]{2})[0-9]{3,}$/g,
+         "jcb": /^(?:2131|1800|35[0-9]{3})[0-9]{3,}$/g
+         
+     };
     
     
     
 }
 
-document.getElementById("sign_up").addEventListener("click", function(){
+document.getElementById("submit").addEventListener("click", function(){
    document.getElementById("resultDiv").innerHTML = luhnCheck();
 }, false);
 
