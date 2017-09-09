@@ -19,7 +19,7 @@ jQuery().ready(function() {
         address: {
           required: true,
 //          accept:"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}",
-          maxlength: 16
+          maxlength: 50
         },
 
         license_no: {
@@ -49,7 +49,6 @@ jQuery().ready(function() {
         },
         password2: {
           required: true,
-          minlength: 8,
           equalTo: "#password1"
         },
         card_name: {
@@ -59,18 +58,14 @@ jQuery().ready(function() {
         },
         card_no: {
           required: true,
-          minlength: 13,
-          maxlength: 16
+//          minlength: 13,
+//          maxlength: 16
         },
         expiry_month: {
-          required: true,
-//          minlength: 2,
-//          maxlength: 16
+          required: true
         },
         expiry_year: {
-          required: true,
-//          minlength: 2,
-//          maxlength: 16
+          required: true
         },
         cvv: {
           required: true,
@@ -80,7 +75,7 @@ jQuery().ready(function() {
  
       },
       errorElement: "span",
-      errorClass: "help-inline",
+      errorClass: "help-inline"
     });
 
     // Binding next button on first step
