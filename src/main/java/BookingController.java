@@ -13,21 +13,49 @@
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import com.google.gson.Gson;
 
 import spark.ModelAndView;
 import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
 
+
 public class BookingController {
-
     public BookingController(final BookingService bookingService) {
-
-//      GET request to return list of all bookings by calling updateBookingList
-//      method from Booking.java
-        get("/bookings", (request, response) -> {
+        
+/*      GET request to return list of all bookings by calling updateBookingList
+        method from Booking.java
+        
+        updated 10-9-17 Alexander Young
+        added data field to the JSON output of this route to make it easier to 
+        parse it into DataTable()
+*/      
+        get("/get_booking_history", (request, response) -> {
+            Gson gson = new Gson();
             Booking.updateBookingList();
-            return Booking.bookingList;
+            String jsonObject = gson.toJson(Booking.bookingList);
+            return "{\"data\":" + jsonObject + "}";
         });
+        
+        after("/get_booking_history", (req, res) -> {
+            res.type("application/json");
+	});
+        
+        get("/get_booking_history_for_current_user", (request, response) -> {
+            Gson gson = new Gson();
+            Booking.updateBookingList();
+            User.updateUserList();
+            User currentUser = UserService.getUserByEmail(request.session().attribute("session_email"));
+            System.out.println(currentUser.getId());
+            List<Booking> usersBookings = BookingService.getAllBookingsByUser_id(currentUser.getId());
+            Booking.updateBookingList();
+            String jsonObject = gson.toJson(usersBookings);
+            return "{\"data\":" + jsonObject + "}";
+        });
+        
+        after("/get_booking_history_for_current_user", (req, res) -> {
+            res.type("application/json");
+	});
 
 //      POST request  
 //      gets user by session. Fetches plate number of the user's selected car

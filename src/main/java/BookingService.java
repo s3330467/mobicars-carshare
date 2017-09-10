@@ -123,15 +123,9 @@ public class BookingService {
     
 //    displays all bookings made by a user according to their id, by calling
 //    the fetchAllBookingsByUser_id method from DB.java
-    public static boolean displayAllBookingsByUser_id(String user_id) {
-        int i;
+    public static List<Booking> getAllBookingsByUser_id(String user_id) {
         Booking.updateBookingList();
-        for (i = 0; i < Booking.bookingList.size(); i++) {
-            if (Booking.bookingList.get(i).getId().equals(user_id)) {
-                DB.fetchAllBookingsByUser_id(user_id);
-            }
-        }
-        return false;
+        return DB.fetchAllBookingsByUser_id(user_id);
     }
     
     public static Booking getLastCompleteBookingOfUser(String user_id) {
