@@ -1,6 +1,7 @@
 /*
     @author Rachel Tan
-    
+    Date: 30.8.17
+    A timer than counts down from a specified time, every second
     05/09/17 Edited by Alexander Young
     timer now subtracts time already elapsed to accurately display the time remaining
     when timer expires the user is given an error and redirected back to the map

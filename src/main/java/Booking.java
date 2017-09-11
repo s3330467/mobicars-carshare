@@ -1,7 +1,7 @@
 /**
  *
  * @author Rachel
- * Date: 17.8.17
+ * Date: 14.8.17
  * Class: Booking
  * Description: Booking object declaring the bookings MySQL table fields as variables
  */
@@ -9,6 +9,8 @@
 
 import java.util.*;
 
+//Edited 22.8.17 by Rachel: Added the variables: collection_date, collection_time
+//and end_date
 public class Booking {
     private String id;
     private String user_id;
@@ -35,7 +37,8 @@ public class Booking {
         this.start_time = start_time;
     }
 
-    //constructor used when collecting a car
+//    Edited: 22.8.17 by Rachel: Added parameters: collection_date, collection_time,
+        //constructor used when collecting a car
     public Booking(String id, String user_id, String car_id, String collection_date, String collection_time, double start_lat, double start_lng) {
         this.id = id;
         this.user_id = user_id;
@@ -45,7 +48,8 @@ public class Booking {
         this.start_lat = start_lat;
         this.start_lng = start_lng;
     }
-
+    
+//Edited: 22.8.17 by Rachel: Added parameters: end_date
     //constructor used when ending a booking
     public Booking(String id, String user_id, String car_id, String end_date, double end_lat, double end_lng) {
         this.id = id;

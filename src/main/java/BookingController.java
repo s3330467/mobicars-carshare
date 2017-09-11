@@ -157,6 +157,14 @@ public class BookingController {
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
 
+        /* @author: Rachel
+        Date: 22.8.17
+        Edited: 30.8.17 by Rachel: Changed the template put from booked_car_info.vtl
+        to booking_in_progress.vtl
+        POST request that gets the user's session, calls the collectCar()
+        method from BookingService and redirects to /booking_in_progress
+        */
+        
         post("/process_collect_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             Car.updateCarList();
@@ -167,17 +175,19 @@ public class BookingController {
             Car car = CarService.getCarById(booking.getCar_id());
             if (BookingService.collectCar(request.session().attribute("session_booking"))) {
                 model.put("car", car);
-//                model.put("user", user);
                 model.put("booking", booking);
                 response.redirect("/booking_in_progress");
-//                model.put("template", "templates/booking_in_progress.vtl");
-//                return new ModelAndView(model, "templates/layout_main.vtl");
             }
             return null;
         });
-//        }, new VelocityTemplateEngine());
         
-        get("/booking_in_progress", (request, response) -> {
+        /* @author: Rachel
+        Date: 6.9.17
+        Gets booking details including collection_date from user's session and 
+        puts them on the template booking_in_progress.vtl.
+        */
+        
+            get("/booking_in_progress", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             Car.updateCarList();
             User.updateUserList();
@@ -196,10 +206,18 @@ public class BookingController {
             model.put("timeSinceCollection", timeSinceCollection);
             model.put("template", "templates/booking_in_progress.vtl");
             return new ModelAndView(model, "templates/layout_main.vtl");
-            //            return null;
         }, new VelocityTemplateEngine());
         
-
+/*
+        Edited 30.8.17 by Rachel: Added redirect to returned_car.vtl instead of
+        back to home page.
+        Edited 30.8.17 by Rachel: Fixed post not working by rearranging order
+        of code, added car put to be able to call car variables in redirected
+        page.
+        Edited 6.9.17 by Rachel: Removed put template, added redirect to GET method.
+        This is to ensure the POST process is completed before displaying booking
+        details on redirect.
+        */
         post("/process_return_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             Car.updateCarList();
@@ -221,6 +239,14 @@ public class BookingController {
         });
 //        }, new VelocityTemplateEngine());
         
+/*      @author: Rachel
+        Date: 6.9.17
+        Gets booking details by user's session and puts them on the template
+        booking_summary.vtl.
+        Edited: 7.9.17 by Rachel: Changed booking to call getLastCompleteBookingOfUser()
+        instead of getCurrentBookingOfUser(), because after POST /process_return_car,
+        there is no current booking.
+*/
         get("/booking_summary", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             Car.updateCarList();

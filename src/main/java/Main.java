@@ -8,11 +8,13 @@ import spark.template.velocity.VelocityTemplateEngine;
 
 public class Main {
     public static void main(String[] args) {
+        
+        /* @author: Rachel
+        Date: 24.8.17
+        Runs the program using SSL with the specified keystore location
+        */
         secure("src/main/resources/public/keystore.jks", "mobicars", null, null);
         
-        /*User tempUser1 = new User("01","John Smith", "JS@somewhere.com");
-        User tempUser2 = new User("02","Bob Smith", "BS@somewhere.com");
-        User tempUser3 = new User("03","Greg Smith", "GS@somewhere.com");*/
         Car.updateCarList();
         Booking.updateBookingList();
         User.updateUserList();

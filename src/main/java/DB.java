@@ -53,8 +53,12 @@ public class DB {
                 .executeAndFetch(Booking.class);
         }
     }
-//    lists all bookings by user id from bookings table
-    public static List<Booking> fetchAllBookingsByUser_id(String user_id) {
+    
+    /* @author: Rachel
+    Date: 22.8.17
+    Lists all bookings by user id from bookings table
+    */
+        public static List<Booking> fetchAllBookingsByUser_id(String user_id) {
         String sql = "SELECT * " +
                 "FROM bookings " +
                 "WHERE user_id = :user_id";
@@ -67,8 +71,14 @@ public class DB {
         }
     }
     
-//    author: Rachel, 6.9.17
-//    Fetches the last completed booking of a user
+    /*@author: Rachel
+    Date: 6.9.17
+    Fetches the last booking of a user. Incomplete at the moment.
+    Edited: 7.9.17 by Rachel: Added working SQL commands.
+    Edited: 7.9.17 by Rachel: Added command to display only bookings that do not
+    have a null collection date as those are cancelled bookings.
+    */
+        
     public static List<Booking> fetchLastCompleteBookingOfUser(String user_id) {
         String sql = "SELECT * " +
                 "FROM bookings " +
@@ -119,8 +129,9 @@ public class DB {
         }
         return true;
     }
-    
-//    new entry is created in bookings table and is populated with the values
+//    @author: Rachel
+//    Date: 14.8.17
+//    New entry is created in bookings table and is populated with the values
 //    start date and time, and start location.
     public static boolean insertBooking(int user_id, int car_id, String start_date, String start_time, double start_lat, double start_lng) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
@@ -140,6 +151,10 @@ public class DB {
         return true;
     }
     
+    /* @author: Rachel
+    Date: 22.8.17
+    Start date and time are set to NULL
+    */
 //    specified entry from bookings table is updated with the end date and time
 //    values
     public static boolean cancelBooking(String booking_id, String end_date, String end_time) {
@@ -159,6 +174,10 @@ public class DB {
     }
     
 //    UNUNSED
+//    @author: Rachel
+//    Date: 15.8.17
+//    Sets end date, end time and end location for when user finishes their
+//    booking
     public static boolean updateBooking(String booking_id, String start_date, String start_time, String end_date, String end_time, double end_lat, double end_lng) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String sql = "UPDATE bookings "
@@ -177,8 +196,12 @@ public class DB {
         return true;
     }
     
-//    specified entry from bookings table is updated with the collection date 
-//    and time values
+    /*
+    Edited: 22.8.17 by Rachel: Populates booking entry with collection time and date
+    instead of overwriting start time and date
+    Specified entry from bookings table is updated with the collection date 
+    and time values
+*/
     public static boolean collectCar(String booking_id, String collection_date, String collection_time){
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String sql = "UPDATE bookings "

@@ -1,3 +1,11 @@
+/**
+ *
+ * @author Rachel
+ * Date: 17.8.17
+ * Class: BookingService
+ * Description: Contains a list of methods that call methods from DB.java
+ */
+
 import org.sql2o.*;
 import java.util.*;
 import java.text.*;
@@ -30,7 +38,10 @@ public class BookingService {
         }
         return null;
     }
-    
+    /* 
+    Edited: 22.8.17 by Rachel: updates start time and date instead of end time
+    and date
+    */
 //    when user cancels booking, the cancelBooking method from DB.java is called,
 //    the ending date and time values are inserted into the bookings table entry,
 //    and car availability is set to true.
@@ -73,10 +84,17 @@ public class BookingService {
         return false;
     }
     
-//    when user collects a car they have booked, the array bookingList is looped
-//    to locate their booking and the collectCar method from DB.java
-//    is called, which inserts the collection date and time values into the bookings
-//    table on the database
+    /*@author: Rachel
+    Date: 22.8.17
+    Overwrites the start time and date when the user collects their car
+    Edited: 22.8.17 by Rachel: Now inserts the values collection time and date
+    instead of overwriting start time and date.
+    Edited: 24.8.17 by Rachel: Corrected String end_time typo.
+    When user collects a car they have booked, the array bookingList is looped
+    to locate their booking and the collectCar method from DB.java
+    is called, which inserts the collection date and time values into the bookings
+    table on the database
+*/
     public static boolean collectCar(String booking_id) {
         Date current_date = new Date();
         String end_time = time.format(current_date);
@@ -95,6 +113,8 @@ public class BookingService {
         return false;
     }
     
+//    @author: Rachel
+//    Date: 22.8.17
 //    when user returns their booked car, the array bookingList is looped
 //    to locate their booking and the returnCar method from DB.java is called,
 //    which inserts the end date and time and end location values in the bookings
@@ -127,6 +147,12 @@ public class BookingService {
         Booking.updateBookingList();
         return DB.fetchAllBookingsByUser_id(user_id);
     }
+    
+    /* @author: Rachel
+    Date: 7.9.17
+    Calls fetchLastCompleteBookingOfUser from DB.java. Code not working.
+    Edited: 7.9.17 by Rachel: Fixed with working code.
+    */
     
     public static Booking getLastCompleteBookingOfUser(String user_id) {
         if(DB.fetchLastCompleteBookingOfUser(user_id).size() == 1 ){
