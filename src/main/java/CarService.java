@@ -15,6 +15,15 @@ public class CarService {
         Car.updateCarList();
         return;
     }
+    
+    /*  added 12-09-17 Alexander Young
+        deletes a car from the database based off plate_no
+    */
+    public static void deleteCar(String plate_no) {
+        DB.deleteCar(plate_no);
+        Car.updateCarList();
+        return;
+    }
 
     public static Car getCarByPlate_no(String plate_no) {
 
