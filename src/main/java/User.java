@@ -1,3 +1,11 @@
+/*
+*Edited : Vishal Pradhan
+Date: 29-08-2017
+* Added additional fields on to the users during registration and their 
+*credit card name, numbers etc
+*includes get and set of the relevant field
+*/
+
 import java.util.*;
 
 public class User {

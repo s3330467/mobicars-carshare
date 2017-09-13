@@ -96,7 +96,11 @@ public class DB {
                     .executeAndFetch(Booking.class);
         }
     }
-
+/*
+    *Edited: Vishal Pradhan
+    *Date: 28-08-2017
+    Added additional field to the Database for registration including credit card details etc
+    */
 //    new entry is created in users table and populates it with given values.
 //    returns false if email and password fields are blank or invalid email given
     public static boolean insertUser(String email, String password, String f_name, String l_name, String address, String license_no, String phone_no, String card_name, String card_no, String expiry_month, String expiry_year, String cvv) {

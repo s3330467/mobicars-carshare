@@ -5,7 +5,10 @@
  * Class: Car
  * Description: Car object declaring the cars MySQL table fields as variables.
  */
-
+/*
+*Edited: vishal Pradhan
+* added image fields along with get and set methods
+*/
 
 import java.util.*;
 

@@ -62,7 +62,11 @@ public class UserController {
             User.updateUserList();
             return User.userList;
         });
-        
+        /*
+        *Edited: Vishal Pradhan
+        *Date: 31-08-2017
+        * added a booking history route 
+        */
          get("/booking_history", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             model.put("template", "templates/booking_history.vtl");

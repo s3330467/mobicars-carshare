@@ -54,6 +54,11 @@ public class UserService {
         return null;
     }
     // creates a new user
+    /*
+    *Edited: vishal Pradhan
+    *Date: 29-08-2017
+    added card details to be stored along with users personal details
+    */
     public static boolean createUser(String email, String userPassword, 
             String f_name, String l_name, String address, String license_no, String phone_no, String card_name, String card_no, String expiry_month, String expiry_year, String cvv) {
 

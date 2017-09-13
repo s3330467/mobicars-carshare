@@ -1,7 +1,20 @@
-//new validation procedure for inputs
-//@author- vishal pradhan
-//
+/*new validation procedure for inputs
+* @author: Vishal Pradhan
+* Date: 13-08-2017
+*/
+/*
+ * Earlier version deleted due to new addition of fields to the register function
+ * originally dated 13-08-2017 and since than has been reformatted
+ */
+
+/*
+ * @Author:  Vishal Pradhan
+ * Edited on: 29-08-2017
+ */
 jQuery().ready(function() {
+    
+ //general rules that the variables need to follow while the form field is getting
+ //filled with clients input
  
   var v = jQuery("#contactform").validate({
       rules: {
@@ -18,7 +31,6 @@ jQuery().ready(function() {
 
         address: {
           required: true,
-//          accept:"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}",
           maxlength: 50
         },
 
@@ -42,9 +54,6 @@ jQuery().ready(function() {
         password1: {
           required: true,
           minlength: 8,
-//          minUpperCase: 1,
-//          minDigits: 1,
-//          minSpecial: 1,
           maxlength: 15
         },
         password2: {
@@ -57,9 +66,7 @@ jQuery().ready(function() {
           maxlength: 16
         },
         card_no: {
-          required: true,
-//          minlength: 13,
-//          maxlength: 16
+          required: true
         },
         expiry_month: {
           required: true
@@ -92,6 +99,11 @@ jQuery().ready(function() {
       $("#sf1").show("slow");
     });
     
+    /*@author: Vishal Pradhan
+    *Date: 13-08-2017
+    * this function checks that on clicking the submit button the variable are assigned to the 
+    * ID of the input.
+    */
     $(document).ready(function(){
        $('#submit').click(function(){
           var f_name = $("#f_name").val();
@@ -109,11 +121,16 @@ jQuery().ready(function() {
           var cvv =$("#cvv").val();
           var isvalid= true;
           
+          /*
+           * edited on : 29-08-2017
+           * checks to see if the field are not empty.
+           */
           if(card_name == "" || card_no == "" || expiry_month == "" || expiry_year == "" || cvv =="")
           {
               isvalid = false;
               alert("Field entry is required")
           }
+          //if all the fields are full it processes that data into DB using ajax 
              if(isValid == true){
                 $.ajax({
                 url: "/process_register",

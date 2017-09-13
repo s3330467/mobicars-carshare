@@ -1,7 +1,16 @@
 /* 
- @autor: Vishal Pradhan
+* @autor: Vishal Pradhan
+* Date: 20-08-2017
+* First implemented on the date mentioned above and since then a lot of changes occured with this script
  */
 
+/*
+ * Edited: 07-09-2017
+ * this function gets data from a Json file at the front end and loads up the map 
+ * as per the users selection..
+ * this is a dynamic dependent drop down list of items where the second dropdown lists
+ * depends on the selection of the first list by the user
+ */
 $(document).ready(function () {
 
     load_json_data();
@@ -10,6 +19,10 @@ $(document).ready(function () {
         var makeOption = '';
         var modelOption = '';
         
+        /*
+         * gets a json file called get_all_type and fills the search dropdown with non duplicate
+         *values of the different types of cars available
+         */
         $.getJSON("/get_all_types", function (data) {
             typeOption = '<option value="empty">Select Type</option>';
             $.each(data, function (i, car_type) {
@@ -17,6 +30,12 @@ $(document).ready(function () {
             });
             $('#type').html(typeOption);
         });
+       /*
+         * gets a json file called get_all_makes and fills the search dropdown with non duplicate
+         *values of the different makes of cars available
+         *This dropdown is independent of the previous one in a way that a user can select
+         *just the make as well without selecting the type
+         */
         $.getJSON("/get_all_makes", function (data) {
             makeOption = '<option value="empty">Select Make</option>';
             $.each(data, function (i, car_make) {
@@ -24,6 +43,10 @@ $(document).ready(function () {
             });
             $('#make').html(makeOption);
         });
+        
+         /*
+         * Load the value depending on the first selection of the users.
+         */
         $('#type').change(function () {
             var make = $(this).val();
             var j;
@@ -42,7 +65,9 @@ $(document).ready(function () {
                 break;
             }
         });
-
+        /*
+         * Load the value depending on the previous two selection made by the user.
+         */
         $('#make').change(function () {
             var k;
             for (k = 0; k < model.length; k++)
@@ -71,7 +96,7 @@ $(document).ready(function () {
             }
         });
     };
-    
+  
     /*
      * this version of find nearest car does not find the nearest car based on search results, only out of all cars
      * needs to be refined
