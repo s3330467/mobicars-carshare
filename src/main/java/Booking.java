@@ -59,6 +59,25 @@ public class Booking {
         this.end_lat = end_lat;
         this.end_lng = end_lng;
     }
+
+    public Booking(String id, String user_id, String car_id, String start_date, String start_time, String collection_date, String collection_time, String end_date, String end_time, double cost, double start_lat, double start_lng, double end_lat, double end_lng) {
+        this.id = id;
+        this.user_id = user_id;
+        this.car_id = car_id;
+        this.start_date = start_date;
+        this.start_time = start_time;
+        this.collection_date = collection_date;
+        this.collection_time = collection_time;
+        this.end_date = end_date;
+        this.end_time = end_time;
+        this.cost = cost;
+        this.start_lat = start_lat;
+        this.start_lng = start_lng;
+        this.end_lat = end_lat;
+        this.end_lng = end_lng;
+    }
+    
+    
     
     @Override
     public String toString() {
