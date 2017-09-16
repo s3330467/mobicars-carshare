@@ -32,8 +32,8 @@ public class Booking {
 
     /**
      * Constructor for a new booking
-     *
-     * @author Rachel
+     * <p>
+     * Author: <b>Rachel</b>
      * @param id the unique booking identifier number, auto incrementing integer
      * @param user_id the unique id of the user making the booking
      * @param car_id the unique id of the car being booking
@@ -55,8 +55,8 @@ public class Booking {
 
     /**
      * used to synchronise the state of the static arraylist of bookings with the state of the database.
-     *
-     * @author Rachel
+     * <p>
+     * Author: <b>Rachel</b>
      */
     public static void updateBookingList() {
         bookingList = DB.fetchBookings();

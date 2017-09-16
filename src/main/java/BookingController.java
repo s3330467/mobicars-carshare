@@ -1,14 +1,4 @@
 
-/**
- * @author Alexander Young
- * Date: 16-08-17
- * Class: BookingController
- * Description: Performs HTTP GET and POST requests using Spark routes.
- *              Gathers data from forms using HashMap and inserts them into
- *              specified templates.
- *              Uses Velocity Template Engine to reference .vtl files which
- *              are templates containing HTML.
- */
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -18,20 +8,39 @@ import spark.ModelAndView;
 import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
 
+/**
+ * Date: 16.8.17
+ * <p>
+ * Spark route controller for routes that relate to the manipulation or access
+ * of booking data<p>
+ *
+ * Performs HTTP GET and POST requests using Spark routes.<p>
+ * Gathers data from forms using HashMap and inserts them into specified
+ * templates.<p>
+ * Uses Velocity Template Engine to reference .vtl files which are templates
+ * containing HTML.<p>
+ * <b>spark routes are not recognised as methods by Javadoc, review the code to
+ * see full comments</b>
+ *
+ * @author Alexander Young
+ */
 public class BookingController {
 
     public BookingController(final BookingService bookingService) {
 
-        /*     
-        @author Alexander Young
-        Date: 16-08-17
-        GET request to return list of all bookings by calling updateBookingList
-        method from Booking.java
-        returns in JSON format
-        
-        updated 10-9-17 Alexander Young
-        added data field to the JSON output of this route to make it easier to 
-        parse it into DataTable()
+        /**
+         * Author: <b>Alexander Young</b><p>
+         * Date: 16.8.17
+         * <p>
+         * GET request to return list of all bookings by calling
+         * updateBookingList method from Booking.java<p>
+         *
+         * @return a list of all bookings in JSON format
+         *
+         * Updated 10.9.17 by Alexander Young<p>
+         * added data field to the JSON output of this route to make it easier
+         * to parse it into DataTable()
+         * <p>
          */
         get("/get_booking_history", (request, response) -> {
             Gson gson = new Gson();
@@ -44,11 +53,19 @@ public class BookingController {
             res.type("application/json");
         });
 
-        /*     
-        @author Alexander Young
-        Date: 16-08-17
-        GET request to return list of all bookings only for the currently logged in user
-        return in JSON format
+        /**
+         * Author: <b>Alexander Young</b><p>
+         * Date: 16.8.17
+         * <p>
+         * GET request to return list of all bookings only for the currently
+         * logged in user return in JSON format<p>
+         *
+         * @return a list of the current users bookings in JSON format
+         *
+         * Updated 10.9.17 by Alexander Young<p>
+         * added data field to the JSON output of this route to make it easier
+         * to parse it into DataTable()
+         * <p>
          */
         get("/get_booking_history_for_current_user", (request, response) -> {
             Gson gson = new Gson();
@@ -66,13 +83,16 @@ public class BookingController {
             res.type("application/json");
         });
 
-        /*     
-        @author Alexander Young
-        Date: 16-08-17
-        POST request  
-        gets user by session. Fetches plate number of the user's selected car
-        and inserts both objects into confirm_booking.vtl, which is then
-        inserted into layout_main.vtl.
+        /**
+         * Author: <b>Alexander Young</b><p>
+         * Date: 16.8.17
+         * <p>
+         * POST request<p>
+         * gets user by session. Fetches plate number of the user's selected car
+         * and inserts both objects into confirm_booking.vtl, which is then
+         * inserted into layout_main.vtl.<p>
+         *
+         * @return booking confirmation html page displayed to browser
          */
         post("/process_book_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
@@ -88,11 +108,21 @@ public class BookingController {
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
 
-        /*     
-        @author Alexander Young
-        Date: 16-08-17
-        POST request  
-        actually creates the booking in the SQL DB and returns booking details.vtl to the user
+        /**
+         * Author: <b>Alexander Young</b><p>
+         * Date: 16.8.17
+         * <p>
+         * POST request<p>
+         * actually creates the booking in the SQL DB and redirects the user to
+         * /booking_made upon success<p>
+         *
+         * Updated 30.8.17 by Alexander Young<p>
+         * added a time check for bookings, bookings will expire 15 minutes
+         * (900000 milliseconds) after a booking is created<p>
+         *
+         * Updated 05.9.17 by Alexander Young<p>
+         * added a check to only cancel bookings that haven't been collected
+         * when the 15 minutes expire<p>
          */
         post("/process_confirm_booking", (request, response) -> {
             String plate_no = request.queryParams("plate_no");
@@ -105,16 +135,6 @@ public class BookingController {
             if (BookingService.createBooking(car, user)) {
                 Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
                 request.session().attribute("session_booking", booking.getId());
-
-                /*
-                  30-08-17 edited by Alexander Young
-                    added a time check for bookings, bookings will expire 15 minutes
-                    (900000 milliseconds) after a booking is created
-                
-                  05-09-17 edited by Alexander Young
-                    added a check to only cancel bookings that haven't been
-                    collected when the 15 minutes expire
-                 */
                 Date current_date = new Date();
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date booking_date = df.parse(booking.getStart_date() + " " + booking.getStart_time());
@@ -146,17 +166,21 @@ public class BookingController {
                 return "temporary booking failure page";
             }
         });
-
-        
-        /*     
-        @author Alexander Young
-        Date: 17-08-17
-        POST request  
-        returns a page to the user providing booking and car information by vtl import
-        
-        Edited 07-09-17 Rachel Tan
-        renamed the route from /booking_details to /booking_made to make its function 
-        more immediately apparent
+        /**
+         * Author: <b>Alexander Young</b><p>
+         * Date: 16.8.17
+         * <p>
+         * GET request<p>
+         * @return booking details html page is displayed to the user
+         *
+         * Updated 07.9.17 by Rachel Tan<p>
+         * renamed the route from /booking_details to /booking_made to make its
+         * function more immediately apparent<p>
+         *
+         * Updated 30.8.17 by Alexander Young<p>
+         * added time related checks, puts into velocity templates the number of
+         * seconds until the booking should expire. in the booking_made.vtl this
+         * value is used to display an accurate javascript countdown timer<p>
          */
         get("/booking_made", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
@@ -165,11 +189,6 @@ public class BookingController {
             Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
-
-            /*30-8-17 edited by Alexander Young
-            added time related checks, puts into velocity templates the number 
-            of seconds until the booking should expire. on the booking_made.vtl 
-            this value is used to display an accurate javascript countdown timer*/
             Date current_date = new Date();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date booking_date = df.parse(booking.getStart_date() + " " + booking.getStart_time());
@@ -185,12 +204,17 @@ public class BookingController {
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
 
-        /* @author: Rachel
-        Date: 22.8.17
-        Edited: 30.8.17 by Rachel: Changed the template put from booked_car_info.vtl
-        to booking_in_progress.vtl
-        POST request that gets the user's session, calls the collectCar()
-        method from BookingService and redirects to /booking_in_progress
+        /**
+         * Author: <b>Rachel Tan</b><p>
+         * Date: 22.8.17
+         * <p>
+         * POST request<p>
+         * gets the user's session, calls the collectCar() method from
+         * BookingService and redirects to /booking_in_progress<p>
+         *
+         * Updated 30.8.17 by Rachel Tan<p>
+         * Changed the template put from booked_car_info.vtl to
+         * booking_in_progress.vtl<p>
          */
         post("/process_collect_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
@@ -208,10 +232,13 @@ public class BookingController {
             return null;
         });
 
-        /* @author: Rachel
-        Date: 6.9.17
-        Gets booking details including collection_date from user's session and 
-        puts them on the template booking_in_progress.vtl.
+        /**
+         * Author: <b>Rachel Tan</b><p>
+         * Date: 6.9.17
+         * <p>
+         * GET request<p>
+         * Gets booking details including collection_date from user's session
+         * and puts them on the template booking_in_progress.vtl<p>
          */
         get("/booking_in_progress", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
@@ -234,18 +261,29 @@ public class BookingController {
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
 
-        /*
-        Edited 30.8.17 by Rachel: Added redirect to returned_car.vtl instead of
-        back to home page.
-        Edited 30.8.17 by Rachel: Fixed post not working by rearranging order
-        of code, added car put to be able to call car variables in redirected
-        page.
-        Edited 6.9.17 by Rachel: Removed put template, added redirect to GET method.
-        This is to ensure the POST process is completed before displaying booking
-        details on redirect.
-        
-        Edited 13-9-17 by Alexander Young
-        removed unused vtl code as this route now only redirects and never serves vtl
+        /**
+         * Author: <b>Alexander Young</b><p>
+         * Date: 25.8.17
+         * <p>
+         * POST request<p>
+         * calls the service method that handles returning a car and redirects
+         * the user to a HTML page that summarises their booking<p>
+         *
+         * Updated 30.8.17 by Rachel Tan<p>
+         * Added redirect to returned_car.vtl instead of back to home page.<p>
+         *
+         * Updated 30.8.17 by Rachel Tan<p>
+         * Fixed post not working by rearranging order of code, added car put to
+         * be able to call car variables in redirected page.<p>
+         *
+         * Updated 6.9.17 by Rachel Tan<p>
+         * Removed put template, added redirect to GET method. This is to ensure
+         * the POST process is completed before displaying booking details on
+         * redirect.<p>
+         *
+         * Updated 13.9.17 by Alexander Young<p>
+         * removed unused vtl code as this route now only redirects and never
+         * serves vtl<p>
          */
         post("/process_return_car", (request, response) -> {
             Booking.updateBookingList();
@@ -256,14 +294,18 @@ public class BookingController {
             return null;
         });
 
-        /*      
-        @author: Rachel
-        Date: 6.9.17
-        Gets booking details by user's session and puts them on the template
-        booking_summary.vtl.
-        Edited: 7.9.17 by Rachel: Changed booking to call getLastCompleteBookingOfUser()
-        instead of getCurrentBookingOfUser(), because after POST /process_return_car,
-        there is no current booking.
+        /**
+         * Author: <b>Rachel Tan</b><p>
+         * Date: 6.9.17
+         * <p>
+         * GET request<p>
+         * Gets booking details by user's session and puts them on the template
+         * booking_summary.vtl.<p>
+         *
+         * Updated 7.9.17 by Rachel Tan<p>
+         * Changed booking to call getLastCompleteBookingOfUser() instead of
+         * getCurrentBookingOfUser(), because after POST /process_return_car,
+         * there is no current booking.<p>
          */
         get("/booking_summary", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
@@ -280,11 +322,13 @@ public class BookingController {
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
 
-        /*     
-        @author Alexander Young
-        Date: 17-08-17
-        POST request  
-        calls the method that cancels a booking in progress in BookingService()
+        /**
+         * Author: <b>Alexander Young</b><p>
+         * Date: 17.8.17
+         * <p>
+         * POST request<p>
+         * calls the method that cancels a booking in progress in BookingService()
+         * <p>
          */
         post("/process_cancel_booking", (request, response) -> {
             if (BookingService.cancelBooking(request.session().attribute("session_booking"))) {
@@ -295,5 +339,4 @@ public class BookingController {
             return null;
         });
     }
-
 }
