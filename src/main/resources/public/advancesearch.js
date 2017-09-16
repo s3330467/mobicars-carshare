@@ -14,7 +14,7 @@
 $(document).ready(function () {
     /*
      * Edited: Vishal Pradhan
-     * date: 15-09-2017
+     * date: 16-09-2017
      * added slider bars for distance and price
      */
         $('#price_min').change(function(){  
