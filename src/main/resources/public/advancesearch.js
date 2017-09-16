@@ -12,7 +12,22 @@
  * depends on the selection of the first list by the user
  */
 $(document).ready(function () {
-
+    /*
+     * Edited: Vishal Pradhan
+     * date: 15-09-2017
+     * added slider bars for distance and price
+     */
+        $('#price_min').change(function(){  
+           var price = $(this).val();  
+           $("#price_range").text("Cars under Price $" + price);  
+             
+      });  
+        $('#distance_min').change(function(){  
+           var distance = $(this).val();  
+           $("#distance_range").text("Cars within the Distance of " + distance + " Km");  
+             
+      });  
+      
     load_json_data();
     function load_json_data() {
         var typeOption = '';
