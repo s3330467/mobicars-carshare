@@ -10,7 +10,7 @@ import java.util.*;
  * Edited 22.8.17 by Rachel: Added the variables: collection_date,
  * collection_time and end_date
  *
- * @author Rachel
+ * @author Rachel Tan
  */
 public class Booking {
 
