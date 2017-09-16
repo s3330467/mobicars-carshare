@@ -1,4 +1,3 @@
-
 import java.util.*;
 
 /**
@@ -33,7 +32,7 @@ public class Booking {
     /**
      * Constructor for a new booking
      * <p>
-     * Author: <b>Rachel</b>
+     * Author: <b>Rachel Tan</b>
      * @param id the unique booking identifier number, auto incrementing integer
      * @param user_id the unique id of the user making the booking
      * @param car_id the unique id of the car being booking
@@ -56,7 +55,7 @@ public class Booking {
     /**
      * used to synchronise the state of the static arraylist of bookings with the state of the database.
      * <p>
-     * Author: <b>Rachel</b>
+     * Author: <b>Rachel Tan</b>
      */
     public static void updateBookingList() {
         bookingList = DB.fetchBookings();

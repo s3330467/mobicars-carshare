@@ -1,15 +1,18 @@
-/**
- *
- * @author Rachel
- * Date: 10.8.17
- * Class: Car
- * Description: Car object declaring the cars MySQL table fields as variables.
- */
-
 
 import java.util.*;
 
+/**
+ * Date: 10.8.17
+ * <p>
+ * POJO Car object declaring the cars MySQL table fields as variables.<p>
+ *
+ * Updated 10.9.17 by Rachel Tan<p>
+ * Added the variables: collection_date, collection_time and end_date<p>
+ *
+ * @author Rachel Tan
+ */
 public class Car {
+
     private String image;
     private String id;
     private String type;
@@ -22,7 +25,20 @@ public class Car {
     private boolean available;
     public static List<Car> carList = new ArrayList<Car>();
 
-    //constructor
+    /**
+     * Constructor for a new Car
+     * <p>
+     * Author: <b>Rachel Tan</b>
+     * @param id the unique car identifier, an auto incrementing integer
+     * @param type the type of the car - e.g., sedan, hatchback, luxury
+     * @param make the make of the car - e.g., Ford, Mazda, Toyota
+     * @param model the model of the car - e.g., Festiva, Corolla, Camry
+     * @param plate_no the registration plate number of the car
+     * @param hourly_price the price in AUD that is charged for every hour the car is rented
+     * @param lat the latitude of the current position of the car
+     * @param lng the longitude of the current position of the car
+     * @param available boolean is true if the car is not currently booked, false if the car is booked or otherwise unavailable for booking
+     */
     public Car(String image, String id, String type, String make, String model, String plate_no, double hourly_price, double lat, double lng, boolean available) {
         this.image = image;
         this.id = id;
@@ -39,28 +55,36 @@ public class Car {
     //toString method
     @Override
     public String toString() {
-        return "Car{" +
-                "image='" + image + '\'' +
-                "id='" + id + '\'' +
-                ", type='" + type + '\'' +
-                ", make='" + make + '\'' +
-                ", model='" + model + '\'' +
-                ", plate_no='" + plate_no + '\'' +
-                ", hourly_price=" + hourly_price +
-                ", lat=" + lat +
-                ", lng=" + lng +
-                ", available=" + available +
-                '}';
+        return "Car{"
+                + "image='" + image + '\''
+                + "id='" + id + '\''
+                + ", type='" + type + '\''
+                + ", make='" + make + '\''
+                + ", model='" + model + '\''
+                + ", plate_no='" + plate_no + '\''
+                + ", hourly_price=" + hourly_price
+                + ", lat=" + lat
+                + ", lng=" + lng
+                + ", available=" + available
+                + '}';
     }
 
-    //populates array named carList with all cars in database by calling fetchCars method from DB.java
+    /**
+     * used to synchronise the state of the static arraylist of Cars with the state of the database.
+     * <p>
+     * Author: <b>Rachel Tan</b>
+     */
     public static void updateCarList() {
         carList = DB.fetchCars();
     }
 
-    public String getType() { return type; }
+    public String getType() {
+        return type;
+    }
 
-    public void setType(String type) { this.type = type; }
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getImage() {
         return image;
@@ -70,7 +94,7 @@ public class Car {
 
         this.image = image;
     }
-    
+
     public String getId() {
         return id;
     }
