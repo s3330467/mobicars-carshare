@@ -1,17 +1,19 @@
-/**
- *
- * @author Rachel
- * Date: 14.8.17
- * Class: Booking
- * Description: Booking object declaring the bookings MySQL table fields as variables
- */
-
 
 import java.util.*;
 
-//Edited 22.8.17 by Rachel: Added the variables: collection_date, collection_time
-//and end_date
+/**
+ * Date: 14.8.17 
+ * <p>
+ * POJO Booking object declaring the bookings MySQL table fields as
+ * variables
+ * <p>
+ * Edited 22.8.17 by Rachel: Added the variables: collection_date,
+ * collection_time and end_date
+ *
+ * @author Rachel
+ */
 public class Booking {
+
     private String id;
     private String user_id;
     private String car_id;
@@ -28,7 +30,16 @@ public class Booking {
     private double end_lng;
     public static List<Booking> bookingList = new ArrayList<Booking>();
 
-    //constructor used when initiating a booking
+    /**
+     * Constructor for a new booking
+     *
+     * @author Rachel
+     * @param id the unique booking identifier number, auto incrementing integer
+     * @param user_id the unique id of the user making the booking
+     * @param car_id the unique id of the car being booking
+     * @param start_date the date of the booking in the format yyyy-MM-dd
+     * @param start_time the time of the booking in the format HH:mm:ss
+     */
     public Booking(String id, String user_id, String car_id, String start_date, String start_time) {
         this.id = id;
         this.user_id = user_id;
@@ -36,36 +47,17 @@ public class Booking {
         this.start_date = start_date;
         this.start_time = start_time;
     }
-
-//    Edited: 22.8.17 by Rachel: Added parameters: collection_date, collection_time,
-        //constructor used when collecting a car
-    public Booking(String id, String user_id, String car_id, String collection_date, String collection_time, double start_lat, double start_lng) {
-        this.id = id;
-        this.user_id = user_id;
-        this.car_id = car_id;
-        this.collection_date = collection_date;
-        this.collection_time = collection_time;
-        this.start_lat = start_lat;
-        this.start_lng = start_lng;
-    }
-    
-//Edited: 22.8.17 by Rachel: Added parameters: end_date
-    //constructor used when ending a booking
-    public Booking(String id, String user_id, String car_id, String end_date, double end_lat, double end_lng) {
-        this.id = id;
-        this.user_id = user_id;
-        this.car_id = car_id;
-        this.end_date = end_date;
-        this.end_lat = end_lat;
-        this.end_lng = end_lng;
-    }
     
     @Override
     public String toString() {
         return "Booking{" + "booking_id=" + id + ", user_id=" + user_id + ", car_id=" + car_id + ", start_date=" + start_date + ", end_date=" + end_date + ", start_time=" + start_time + ", end_time=" + end_time + ", cost=" + cost + ", start_lat=" + start_lat + ", start_lng=" + start_lng + ", end_lat=" + end_lat + ", end_lng=" + end_lng + '}';
     }
-    
-    //populates array named bookingList with all bookings in database by calling fetchBookings method from DB.java
+
+    /**
+     * used to synchronise the state of the static arraylist of bookings with the state of the database.
+     *
+     * @author Rachel
+     */
     public static void updateBookingList() {
         bookingList = DB.fetchBookings();
     }
@@ -105,7 +97,7 @@ public class Booking {
     public String getStart_time() {
         return start_time;
     }
-    
+
     public void setStart_time(String start_time) {
         this.start_time = start_time;
     }
@@ -125,7 +117,7 @@ public class Booking {
     public void setCollection_time(String collection_time) {
         this.collection_time = collection_time;
     }
-    
+
     public String getEnd_date() {
         return end_date;
     }
@@ -134,7 +126,7 @@ public class Booking {
         this.end_date = end_date;
     }
 
-        public String getEnd_time() {
+    public String getEnd_time() {
         return end_time;
     }
 
@@ -181,9 +173,5 @@ public class Booking {
     public void setEnd_lng(double end_lng) {
         this.end_lng = end_lng;
     }
-    
-    
-        
-    
-    
-    }
+
+}
