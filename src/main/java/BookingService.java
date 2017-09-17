@@ -275,7 +275,7 @@ public class BookingService {
      * @param booking the booking to calculate duration
      * @return the duration in seconds of the booking
      */
-    public static long calculateBookingSeconds(Booking booking) {
+    public static int calculateBookingSeconds(Booking booking) {
         //initialise the duration to 0;
         long durationOfBooking = 0;
         //create a dateFormat object that matches the date formats used in the database
@@ -293,7 +293,8 @@ public class BookingService {
         } catch (ParseException e) {
             System.out.println("could not parse dates in calculateBookingDuration()");
         }
-        return durationOfBooking;
+        int durationInSeconds = (int)durationOfBooking;
+        return durationInSeconds;
     }
     
     /**
@@ -306,8 +307,9 @@ public class BookingService {
      * @return the duration in hours of the booking
      */
     public static double calculateBookingHours(Booking booking) {
-        long durationInSeconds = calculateBookingSeconds(booking);
-        //divide the result by 60 to convert it to hours
-        return durationInSeconds/60;
+        //cast the time in seconds to double so it can be divided
+        double durationInSeconds = (double)calculateBookingSeconds(booking);
+        //divide the result by 60 twice to convert it to hours
+        return ((durationInSeconds)/60)/60;
     }
 }
