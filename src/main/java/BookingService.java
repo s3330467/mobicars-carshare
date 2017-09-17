@@ -234,6 +234,9 @@ public class BookingService {
      * <p>
      * calculates the total cost of a completed booking<p>
      *
+     * Updated 17.9.17 by Alexander Young<p>
+     * renamed method to calculateTotalCostofBooking from getTotalCostofBooking() as the method isn't really a getter method<p>
+     * 
      * @param booking the booking to calculate total cost for
      * @return the total cost of the completed booking
      */
