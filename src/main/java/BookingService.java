@@ -250,13 +250,13 @@ public class BookingService {
             Date collectionDateTime = df.parse(booking.getCollection_date() + " " + booking.getCollection_time());
             Date endDateTime = df.parse(booking.getEnd_date() + " " + booking.getEnd_time());
             /**
-             * calculate the duration of the booking in seconds by subracting
+             * calculate the duration of the booking in seconds by subtracting
              * the collection time from the end time. this result is given in
              * milliseconds, so divide it by 1000 to turn it into seconds
              */
             durationOfBooking = ((endDateTime.getTime() - collectionDateTime.getTime()) / 1000);
         } catch (ParseException e) {
-            System.out.println("could not parse dates in getTotalCostOfBooking()");
+            System.out.println("could not parse dates in calculateTotalCostOfBooking()");
         }
         //get the car that was booked so that we can get price information from it
         Car bookedCar = CarService.getCarById(booking.getCar_id());
@@ -264,5 +264,50 @@ public class BookingService {
         double pricePerSecond = (bookedCar.getHourly_price() / 60) / 60;
         //multiply the price per second with the duration in seconds to get the cost of the booking
         return pricePerSecond * durationOfBooking;
+    }
+    
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 17.9.17
+     * <p>
+     * calculates the elapsed duration in seconds between the collection and return of a booking<p>
+     * 
+     * @param booking the booking to calculate duration
+     * @return the duration in seconds of the booking
+     */
+    public static long calculateBookingSeconds(Booking booking) {
+        //initialise the duration to 0;
+        long durationOfBooking = 0;
+        //create a dateFormat object that matches the date formats used in the database
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            //parse the separate time and date strings stored in the database into a single Date object
+            Date collectionDateTime = df.parse(booking.getCollection_date() + " " + booking.getCollection_time());
+            Date endDateTime = df.parse(booking.getEnd_date() + " " + booking.getEnd_time());
+            /**
+             * calculate the duration of the booking in seconds by subtracting
+             * the collection time from the end time. this result is given in
+             * milliseconds, so divide it by 1000 to turn it into seconds
+             */
+            durationOfBooking = ((endDateTime.getTime() - collectionDateTime.getTime()) / 1000);
+        } catch (ParseException e) {
+            System.out.println("could not parse dates in calculateBookingDuration()");
+        }
+        return durationOfBooking;
+    }
+    
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 17.9.17
+     * <p>
+     * calculates the elapsed duration in hours between the collection and return of a booking<p>
+     * 
+     * @param booking the booking to calculate duration
+     * @return the duration in hours of the booking
+     */
+    public static double calculateBookingHours(Booking booking) {
+        long durationInSeconds = calculateBookingSeconds(booking);
+        //divide the result by 60 to convert it to hours
+        return durationInSeconds/60;
     }
 }
