@@ -237,7 +237,7 @@ public class BookingService {
      * @param booking the booking to calculate total cost for
      * @return the total cost of the completed booking
      */
-    public static double getTotalCostOfBooking(Booking booking) {
+    public static double calculateTotalCostOfBooking(Booking booking) {
         //initialise the duration to 0;
         long durationOfBooking = 0;
         //create a dateFormat object that matches the date formats used in the database
