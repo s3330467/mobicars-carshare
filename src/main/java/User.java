@@ -1,5 +1,12 @@
 import java.util.*;
 
+/**
+ * Date: 10.8.17
+ * <p>
+ * POJO Car object declaring the users MySQL table fields as variables.<p>
+ *
+ * @author Alexander Young
+ */
 public class User {
     private String id;
     private String f_name;
@@ -17,12 +24,40 @@ public class User {
     private double lat;
     private double lng;
     public static List<User> userList = new ArrayList<User>();
-
+    
+    /**
+     * Constructor for a new User
+     * <p>
+     * Author: <b>Alexander Young</b>
+     * 
+     * @param email email address of the user
+     * @param password password of the user, by this point the password should
+     * already be encrypted as this is the state it will be stored in
+     */
     public User(String email, String password) {
         this.email = email;
         this.password = password;
     }
-
+    
+    /**
+     * Constructor for a new User
+     * <p>
+     * Author: <b>Alexander Young</b>
+     * 
+     * @param email email address of the user
+     * @param password password of the user, by this point the password should
+     * already be encrypted as this is the state it will be stored in
+     * @param f_name first name of the user
+     * @param l_name last name of the user
+     * @param address address of the user
+     * @param license_no license number of the user
+     * @param phone_no phone number of the user
+     * @param card_name card name on the card on file for the user
+     * @param card_no card number of the card on file for the user
+     * @param expiry_month expiry month of the card on file for the user
+     * @param expiry_year expiry year of the card on file for the user
+     * @param cvv cvv of the card on file for the user
+     */
     public User(String f_name, String l_name, String email, String password, String address, String license_no, String phone_no, String card_name,
             String card_no, String expiry_month, String expiry_year, String cvv) {
         this.f_name = f_name;
@@ -39,6 +74,22 @@ public class User {
         this.cvv = cvv;
     }
     
+    /**
+     * Constructor for a new User
+     * <p>
+     * Author: <b>Alexander Young</b>
+     * 
+     * @param id unique id of the user
+     * @param email email address of the user
+     * @param password password of the user, by this point the password should
+     * already be encrypted as this is the state it will be stored in
+     * @param f_name first name of the user
+     * @param l_name last name of the user
+     * @param license_no license number of the user
+     * @param phone_no phone number of the user
+     * @param lat initial latitude of the user
+     * @param lng initial longitude of the user
+     */
     public User(String id, String f_name, String l_name, String email, String password, String license_no, String phone_no, double lat, double lng) {
         this.id = id;
         this.f_name = f_name;
@@ -56,7 +107,12 @@ public class User {
         return "User{" + "id=" + id + ", f_name=" + f_name + ", l_name=" + l_name + ", email=" + email + ", password=" + password + ", address=" + address + ", license_no=" + license_no + ", phone_no=" + phone_no + 
                 ",card_name="+ card_name + ",card_no=" + card_no + ",expiry_month=" + expiry_month + ",expiry_year=" + expiry_year + ",cvv=" + cvv + ", lat=" + lat + ", lng=" + lng + '}';
     }
-
+    
+    /**
+     * used to synchronise the state of the static arraylist of Users with the state of the database.
+     * <p>
+     * Author: <b>Alexander Young</b>
+     */
     public static void updateUserList() {
         userList = DB.fetchUsers();
     }
