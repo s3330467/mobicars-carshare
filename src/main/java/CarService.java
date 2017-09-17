@@ -2,29 +2,75 @@
 import org.sql2o.*;
 import java.util.*;
 
+/**
+ * Date: 10.8.17
+ * <p>
+ * Contains a list of methods that manipulate Car data and calls SQL methods in
+ * the DB class to insert or retrieve car data
+ *
+ * @author Alexander Young
+ */
 public class CarService {
 
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 10.8.17
+     * <p>
+     * Updates the carList array from the DB and then returns an arraylist of
+     * Car's
+     *
+     * @return a single Booking object that matches the booking_id parameter
+     */
     public static List<Car> getAllCars() {
         Car.updateCarList();
         return Car.carList;
     }
-    //test
 
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 10.8.17
+     * <p>
+     * calls the DB insert car method to insert a new car into the SQL database,
+     * then updates the carList<p>
+     *
+     * @param image filename of the image to display for this car
+     * @param type the type of the car to be added- e.g., sedan, hatchback,
+     * luxury
+     * @param make the make of the car to be added - e.g., Ford, Mazda, Toyota
+     * @param model the model of the car to be added - e.g., Festiva, Corolla,
+     * Camry
+     * @param plate_no the registration plate number of the car to be added
+     * @param hourly_price the price in AUD that is charged for every hour the
+     * car is rented
+     * @param lat the latitude of the current position of the car
+     * @param lng the longitude of the current position of the car
+     */
     public static void createCar(String image, String type, String make, String model, String plate_no, double hourly_price, double lat, double lng) {
         DB.insertCar(image, type, make, model, plate_no, hourly_price, lat, lng);
         Car.updateCarList();
-        return;
     }
-    
-    /*  added 12-09-17 Alexander Young
-        deletes a car from the database based off plate_no
-    */
+
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 12.9.17
+     * <p>
+     * deletes a car from the database and updates the static carList array<p>
+     *
+     * @param plate_no the registration plate number of the car to be deleted
+     */
     public static void deleteCar(String plate_no) {
         DB.deleteCar(plate_no);
         Car.updateCarList();
-        return;
     }
-
+    
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 13.8.17
+     * <p>
+     * get a single car from the carList array that matches the given plate_no<p>
+     *
+     * @param plate_no the registration plate number of the car to be fetched, return null if the car cannot be found
+     */
     public static Car getCarByPlate_no(String plate_no) {
 
         int i;
@@ -37,7 +83,15 @@ public class CarService {
         }
         return null;
     }
-
+    
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 17.8.17
+     * <p>
+     * get a single car from the carList array that matches the given car id<p>
+     *
+     * @param id the unique id of the car to be fetched, return null if the car cannot be found
+     */
     public static Car getCarById(String id) {
 
         int i;
@@ -49,7 +103,25 @@ public class CarService {
         }
         return null;
     }
-
+    
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 8.9.17
+     * <p>
+     * return an arraylist of cars that match given search criteria, can search by the following combinations<p>
+     * type<p>
+     * make<p>
+     * model<p>
+     * type + make<p>
+     * type + make + model<p>
+     * 
+     * a field that is not being searched for should not be null, it should be a string that contains the text "empty"
+     *
+     * @param type the type of car being searched for, if not searching for type the expected parameter is "empty" not null
+     * @param make the make of car being searched for, if not searching for make the expected parameter is "empty" not null
+     * @param model the model of car being searched for, if not searching for model the expected parameter is "empty" not null
+     * @return an arraylist of cars that match to given search parameters, the list will be empty if no matches are found
+     */
     public static List<Car> carSearch(String type, String make, String model) {
         Car.updateCarList();
         List<Car> carList = Car.carList;
@@ -90,8 +162,7 @@ public class CarService {
                     }
                 }
             }
-        } 
-        else {
+        } else {
             //user is searching for type, make, model
             System.out.println(type + make + model);
             for (int i = 0; i < carList.size(); i++) {
