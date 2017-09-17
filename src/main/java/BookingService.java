@@ -6,7 +6,7 @@ import java.text.*;
 /**
  * Date: 17.8.17
  * <p>
- * Contains a list of methods that manipulate booking information and calls SQL
+ * Contains methods that manipulate booking information and calls SQL
  * methods in the DB class to insert or retrieve booking data
  *
  * @author Rachel Tan

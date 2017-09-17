@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Date: 10.8.17
  * <p>
- * Contains a list of methods that manipulate Car data and calls SQL methods in
+ * Contains methods that manipulate Car data and calls SQL methods in
  * the DB class to insert or retrieve car data
  *
  * @author Alexander Young
