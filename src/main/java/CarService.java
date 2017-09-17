@@ -5,8 +5,8 @@ import java.util.*;
 /**
  * Date: 10.8.17
  * <p>
- * Contains methods that manipulate Car data and calls SQL methods in
- * the DB class to insert or retrieve car data
+ * Contains methods that manipulate Car data and calls SQL methods in the DB
+ * class to insert or retrieve car data
  *
  * @author Alexander Young
  */
@@ -62,14 +62,16 @@ public class CarService {
         DB.deleteCar(plate_no);
         Car.updateCarList();
     }
-    
+
     /**
      * Author: <b>Alexander Young</b><p>
      * Date: 13.8.17
      * <p>
-     * get a single car from the carList array that matches the given plate_no<p>
+     * get a single car from the carList array that matches the given
+     * plate_no<p>
      *
-     * @param plate_no the registration plate number of the car to be fetched, return null if the car cannot be found
+     * @param plate_no the registration plate number of the car to be fetched,
+     * return null if the car cannot be found
      */
     public static Car getCarByPlate_no(String plate_no) {
 
@@ -83,14 +85,15 @@ public class CarService {
         }
         return null;
     }
-    
+
     /**
      * Author: <b>Alexander Young</b><p>
      * Date: 17.8.17
      * <p>
      * get a single car from the carList array that matches the given car id<p>
      *
-     * @param id the unique id of the car to be fetched, return null if the car cannot be found
+     * @param id the unique id of the car to be fetched, return null if the car
+     * cannot be found
      */
     public static Car getCarById(String id) {
 
@@ -103,24 +106,30 @@ public class CarService {
         }
         return null;
     }
-    
+
     /**
      * Author: <b>Alexander Young</b><p>
      * Date: 8.9.17
      * <p>
-     * return an arraylist of cars that match given search criteria, can search by the following combinations<p>
+     * return an arraylist of cars that match given search criteria, can search
+     * by the following combinations<p>
      * type<p>
      * make<p>
      * model<p>
      * type + make<p>
      * type + make + model<p>
-     * 
-     * a field that is not being searched for should not be null, it should be a string that contains the text "empty"
      *
-     * @param type the type of car being searched for, if not searching for type the expected parameter is "empty" not null
-     * @param make the make of car being searched for, if not searching for make the expected parameter is "empty" not null
-     * @param model the model of car being searched for, if not searching for model the expected parameter is "empty" not null
-     * @return an arraylist of cars that match to given search parameters, the list will be empty if no matches are found
+     * a field that is not being searched for should not be null, it should be a
+     * string that contains the text "empty"
+     *
+     * @param type the type of car being searched for, if not searching for type
+     * the expected parameter is "empty" not null
+     * @param make the make of car being searched for, if not searching for make
+     * the expected parameter is "empty" not null
+     * @param model the model of car being searched for, if not searching for
+     * model the expected parameter is "empty" not null
+     * @return an arraylist of cars that match to given search parameters, the
+     * list will be empty if no matches are found
      */
     public static List<Car> carSearch(String type, String make, String model) {
         Car.updateCarList();

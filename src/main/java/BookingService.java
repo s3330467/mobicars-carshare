@@ -6,8 +6,8 @@ import java.text.*;
 /**
  * Date: 17.8.17
  * <p>
- * Contains methods that manipulate booking information and calls SQL
- * methods in the DB class to insert or retrieve booking data
+ * Contains methods that manipulate booking information and calls SQL methods in
+ * the DB class to insert or retrieve booking data
  *
  * @author Rachel Tan
  */
@@ -198,7 +198,8 @@ public class BookingService {
      * the fetchAllBookingsByUser_id method from DB.java<p>
      *
      * @param user_id the user id of the user to get a list of bookings for
-     * @return an arraylist of Booking objects, containing all of the users bookings
+     * @return an arraylist of Booking objects, containing all of the users
+     * bookings
      */
     public static List<Booking> getAllBookingsByUser_id(String user_id) {
         Booking.updateBookingList();
@@ -210,12 +211,14 @@ public class BookingService {
      * Date: 7.9.17
      * <p>
      * Calls fetchLastCompleteBookingOfUser from DB.java. Code not working.<p>
-     * 
+     *
      * Updated 7.9.17 by Rachel Tan<p>
      * Fixed with working code.<p>
      *
-     * @param user_id the user id of the user to get the last complete booking for
-     * @return an arraylist of Booking objects, containing only the users most recent completed booking
+     * @param user_id the user id of the user to get the last complete booking
+     * for
+     * @return an arraylist of Booking objects, containing only the users most
+     * recent completed booking
      */
     public static Booking getLastCompleteBookingOfUser(String user_id) {
         if (DB.fetchLastCompleteBookingOfUser(user_id).size() == 1) {

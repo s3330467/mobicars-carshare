@@ -1,3 +1,4 @@
+
 import java.util.*;
 
 /**
@@ -8,6 +9,7 @@ import java.util.*;
  * @author Alexander Young
  */
 public class User {
+
     private String id;
     private String f_name;
     private String l_name;
@@ -24,12 +26,12 @@ public class User {
     private double lat;
     private double lng;
     public static List<User> userList = new ArrayList<User>();
-    
+
     /**
      * Constructor for a new User
      * <p>
      * Author: <b>Alexander Young</b>
-     * 
+     *
      * @param email email address of the user
      * @param password password of the user, by this point the password should
      * already be encrypted as this is the state it will be stored in
@@ -38,12 +40,12 @@ public class User {
         this.email = email;
         this.password = password;
     }
-    
+
     /**
      * Constructor for a new User
      * <p>
      * Author: <b>Alexander Young</b>
-     * 
+     *
      * @param email email address of the user
      * @param password password of the user, by this point the password should
      * already be encrypted as this is the state it will be stored in
@@ -73,12 +75,12 @@ public class User {
         this.expiry_year = expiry_year;
         this.cvv = cvv;
     }
-    
+
     /**
      * Constructor for a new User
      * <p>
      * Author: <b>Alexander Young</b>
-     * 
+     *
      * @param id unique id of the user
      * @param email email address of the user
      * @param password password of the user, by this point the password should
@@ -104,12 +106,13 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", f_name=" + f_name + ", l_name=" + l_name + ", email=" + email + ", password=" + password + ", address=" + address + ", license_no=" + license_no + ", phone_no=" + phone_no + 
-                ",card_name="+ card_name + ",card_no=" + card_no + ",expiry_month=" + expiry_month + ",expiry_year=" + expiry_year + ",cvv=" + cvv + ", lat=" + lat + ", lng=" + lng + '}';
+        return "User{" + "id=" + id + ", f_name=" + f_name + ", l_name=" + l_name + ", email=" + email + ", password=" + password + ", address=" + address + ", license_no=" + license_no + ", phone_no=" + phone_no
+                + ",card_name=" + card_name + ",card_no=" + card_no + ",expiry_month=" + expiry_month + ",expiry_year=" + expiry_year + ",cvv=" + cvv + ", lat=" + lat + ", lng=" + lng + '}';
     }
-    
+
     /**
-     * used to synchronise the state of the static arraylist of Users with the state of the database.
+     * used to synchronise the state of the static arraylist of Users with the
+     * state of the database.
      * <p>
      * Author: <b>Alexander Young</b>
      */
@@ -196,7 +199,7 @@ public class User {
     public void setAddress(String address) {
         this.address = address;
     }
-    
+
     public String getCard_name() {
         return card_name;
     }
@@ -204,7 +207,7 @@ public class User {
     public void setCard_name(String card_name) {
         this.card_name = card_name;
     }
-    
+
     public String getCard_no() {
         return card_no;
     }
@@ -212,7 +215,7 @@ public class User {
     public void setCard_no(String card_no) {
         this.card_no = card_no;
     }
-    
+
     public String getExpiry_month() {
         return expiry_month;
     }
@@ -220,21 +223,21 @@ public class User {
     public void setExpiry_month(String expiry_month) {
         this.expiry_month = expiry_month;
     }
-    
-     public String getExpiry_year() {
+
+    public String getExpiry_year() {
         return expiry_year;
     }
 
     public void setExpiry_year(String expiry_year) {
         this.expiry_year = expiry_year;
     }
-    
-     public String getCvv() {
+
+    public String getCvv() {
         return cvv;
     }
 
     public void setCvv(String cvv) {
         this.cvv = cvv;
     }
-    
+
 }

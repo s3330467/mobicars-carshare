@@ -29,15 +29,18 @@ public class Car {
      * Constructor for a new Car
      * <p>
      * Author: <b>Rachel Tan</b>
+     *
      * @param id the unique car identifier, an auto incrementing integer
      * @param type the type of the car - e.g., sedan, hatchback, luxury
      * @param make the make of the car - e.g., Ford, Mazda, Toyota
      * @param model the model of the car - e.g., Festiva, Corolla, Camry
      * @param plate_no the registration plate number of the car
-     * @param hourly_price the price in AUD that is charged for every hour the car is rented
+     * @param hourly_price the price in AUD that is charged for every hour the
+     * car is rented
      * @param lat the latitude of the current position of the car
      * @param lng the longitude of the current position of the car
-     * @param available boolean is true if the car is not currently booked, false if the car is booked or otherwise unavailable for booking
+     * @param available boolean is true if the car is not currently booked,
+     * false if the car is booked or otherwise unavailable for booking
      */
     public Car(String image, String id, String type, String make, String model, String plate_no, double hourly_price, double lat, double lng, boolean available) {
         this.image = image;
@@ -70,7 +73,8 @@ public class Car {
     }
 
     /**
-     * used to synchronise the state of the static arraylist of Cars with the state of the database.
+     * used to synchronise the state of the static arraylist of Cars with the
+     * state of the database.
      * <p>
      * Author: <b>Rachel Tan</b>
      */

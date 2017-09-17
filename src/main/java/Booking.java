@@ -1,10 +1,10 @@
+
 import java.util.*;
 
 /**
- * Date: 14.8.17 
+ * Date: 14.8.17
  * <p>
- * POJO Booking object declaring the bookings MySQL table fields as
- * variables
+ * POJO Booking object declaring the bookings MySQL table fields as variables
  * <p>
  * Edited 22.8.17 by Rachel: Added the variables: collection_date,
  * collection_time and end_date
@@ -33,6 +33,7 @@ public class Booking {
      * Constructor for a new booking
      * <p>
      * Author: <b>Rachel Tan</b>
+     *
      * @param id the unique booking identifier number, auto incrementing integer
      * @param user_id the unique id of the user making the booking
      * @param car_id the unique id of the car being booking
@@ -46,14 +47,15 @@ public class Booking {
         this.start_date = start_date;
         this.start_time = start_time;
     }
-    
+
     @Override
     public String toString() {
         return "Booking{" + "booking_id=" + id + ", user_id=" + user_id + ", car_id=" + car_id + ", start_date=" + start_date + ", end_date=" + end_date + ", start_time=" + start_time + ", end_time=" + end_time + ", cost=" + cost + ", start_lat=" + start_lat + ", start_lng=" + start_lng + ", end_lat=" + end_lat + ", end_lng=" + end_lng + '}';
     }
 
     /**
-     * used to synchronise the state of the static arraylist of bookings with the state of the database.
+     * used to synchronise the state of the static arraylist of bookings with
+     * the state of the database.
      * <p>
      * Author: <b>Rachel Tan</b>
      */

@@ -165,7 +165,7 @@ public class CarController {
             System.out.print(results);
             return results;
         }, JsonUtil.json());
-        
+
         /**
          * Author: <b>Alexander Young</b><p>
          * Date: 7.9.17

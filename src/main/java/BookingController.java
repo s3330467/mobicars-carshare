@@ -327,7 +327,8 @@ public class BookingController {
          * Date: 17.8.17
          * <p>
          * POST request<p>
-         * calls the method that cancels a booking in progress in BookingService()
+         * calls the method that cancels a booking in progress in
+         * BookingService()
          * <p>
          */
         post("/process_cancel_booking", (request, response) -> {

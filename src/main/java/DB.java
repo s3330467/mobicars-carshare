@@ -427,7 +427,8 @@ public class DB {
      * update the availability of a specified car<p>
      *
      * @param plate_no the plate number of the car being updated
-     * @param available value to update the availability state to, true is the car can be booked, false if it cannot
+     * @param available value to update the availability state to, true is the
+     * car can be booked, false if it cannot
      * @return true if the car is updated, otherwise false
      */
     public static boolean updateCarAvailable(String plate_no, boolean available) {

@@ -1,24 +1,42 @@
+
 import org.sql2o.*;
 import java.util.*;
 import org.jasypt.util.password.*;
 
+/**
+ * Date: 7.8.17
+ * <p>
+ * Contains methods that manipulate User data and calls SQL methods in the DB
+ * class to insert or retrieve user data
+ *
+ * Updated 17.9.17 by Alexander Young<p>
+ * removed sql static variables as database methods now have their own class
+ * DB.java<p>
+ *
+ * @author Alexander Young
+ */
 public class UserService {
 
-    public static String sqlDB = "jdbc:mysql://localhost:3306/mobicars";
-    public static String sqlUser = "ubuntu";
-    public static String sqlPass = "password";
-
-
-    // returns a list of all users
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 7.8.17
+     * <p>
+     * @return a list of all users found in the database
+     */
     public static List<User> getAllUsers() {
         User.updateUserList();
         return User.userList;
     }
 
-
-    // returns a single user by id
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 7.8.17
+     * <p>
+     * @param id unique id of the user to retrieve from the database
+     * @return a single User object for the user that matches the id given, or
+     * null if no match is found
+     */
     public static User getUser(String id) {
-
         int i;
         User.updateUserList();
         for (i = 0; i < User.userList.size(); i++) {
@@ -29,57 +47,105 @@ public class UserService {
         return null;
     }
 
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 9.8.17
+     * <p>
+     * @param email unique email of the user to retrieve from the database
+     * @return a single User object for the user that matches the email given,
+     * or null if no match is found
+     */
     public static User getUserByEmail(String email) {
-
         int i;
         User.updateUserList();
-        for(i = 0; i <User.userList.size(); i++) {
-            if(User.userList.get(i).getEmail().equals(email)) {
+        for (i = 0; i < User.userList.size(); i++) {
+            if (User.userList.get(i).getEmail().equals(email)) {
                 System.out.println("fetching user with the email: " + User.userList.get(i).getEmail());
                 return User.userList.get(i);
             }
         }
         return null;
     }
-    
-    public static User getUserById(String id) {
 
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 7.8.17
+     * <p>
+     * @param id unique id of the user to retrieve from the database
+     * @return a single User object for the user that matches the id given, or
+     * null if no match is found
+     */
+    public static User getUserById(String id) {
         int i;
         User.updateUserList();
-        for(i = 0; i <User.userList.size(); i++) {
-            if(User.userList.get(i).getId().equals(id)) {
+        for (i = 0; i < User.userList.size(); i++) {
+            if (User.userList.get(i).getId().equals(id)) {
                 return User.userList.get(i);
             }
         }
         return null;
     }
-    // creates a new user
-    public static boolean createUser(String email, String userPassword, 
+
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 8.8.17
+     * <p>
+     * encrypts the password provided by the user and then calls the DB method
+     * to insert the user into the database<p>
+     *
+     * @param email email address of the user
+     * @param userPassword password of the user, at this point the password is
+     * not encrypted
+     * @param f_name first name of the user
+     * @param l_name last name of the user
+     * @param address address of the user
+     * @param license_no license number of the user
+     * @param phone_no phone number of the user
+     * @param card_name card name on the card on file for the user
+     * @param card_no card number of the card on file for the user
+     * @param expiry_month expiry month of the card on file for the user
+     * @param expiry_year expiry year of the card on file for the user
+     * @param cvv cvv of the card on file for the user
+     * @return true if the user is created, false otherwise
+     */
+    public static boolean createUser(String email, String userPassword,
             String f_name, String l_name, String address, String license_no, String phone_no, String card_name, String card_no, String expiry_month, String expiry_year, String cvv) {
 
         //create an encrypted password based off the supplied password string
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(userPassword);
 
-        if(!DB.insertUser(email, encryptedPassword, f_name, l_name, address, license_no, phone_no, card_name, card_no, expiry_month, expiry_year, cvv)) {
+        if (!DB.insertUser(email, encryptedPassword, f_name, l_name, address, license_no, phone_no, card_name, card_no, expiry_month, expiry_year, cvv)) {
             return false;
         }
         User.updateUserList();
-        return  true;
+        return true;
     }
 
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 8.8.17
+     * <p>
+     * login validation<p>
+     * checks that the supplied plain text password matches the encrypted
+     * password stored in the database<p>
+     *
+     * @param email email address of the user
+     * @param inputPassword password of the user, at this point the password is
+     * not encrypted
+     * @return true if the email and password provided are valid credentials,
+     * false otherwise
+     */
     public static Boolean validateUser(String email, String inputPassword) {
         //ensure the userlist is up to date
         User.updateUserList();
         //get the user who matches the supplied email
         User user = getUserByEmail(email);
         //if no user is returned the email is not in the database, return false
-        if( user == null) {
+        if (user == null) {
             System.out.println("user not validated because user doesnt exist");
             return false;
-    }
-
-
+        }
         //compare the supplied password with the users encrypted password, return true if they match
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         if (passwordEncryptor.checkPassword(inputPassword, user.getPassword())) {
@@ -89,7 +155,4 @@ public class UserService {
             return false;
         }
     }
-
-    // updates an existing user
-    public User updateUser(String id, String name, String email) { return null; }
 }

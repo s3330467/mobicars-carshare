@@ -1,3 +1,4 @@
+
 import java.util.*;
 import java.lang.Number;
 import spark.ModelAndView;
@@ -36,10 +37,10 @@ public class UserController {
          * they are not redirect them to the login page<p>
          * if the user has a booking in progress redirect them to their
          * booking_details<p>
-         * 
+         *
          * Updated 13.8.17 by Alexander Young<p>
          * removed /home route, as / is now used in place of /home<p>
-         * 
+         *
          * Updated 17.8.17 by Alexander Young<p>
          * no longer redirects to /register if the user isn't logged in<p>
          */
@@ -179,12 +180,14 @@ public class UserController {
          * registers the user by adding them to the database based on the
          * registration details provided by the POST request
          * <p>
-         * 
+         *
          * Updated 11.8.17 by Alexander Young<p>
-         * redirects to /login if registration succeeds, or to /register if it fails<p>
-         * 
+         * redirects to /login if registration succeeds, or to /register if it
+         * fails<p>
+         *
          * Updated 13.8.17 by Alexander Young<p>
-         * added new fields to keep in sync with changes to the SQL database and User class<p>
+         * added new fields to keep in sync with changes to the SQL database and
+         * User class<p>
          */
         post("/process_register", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
@@ -215,7 +218,7 @@ public class UserController {
          * POST request<p>
          * logs the user in if the provided query parameters for email and
          * password have matches in the user database
-         * 
+         *
          * Updated 11.8.17 by Alexander Young<p>
          * redirects back to /login if login fails
          * <p>
