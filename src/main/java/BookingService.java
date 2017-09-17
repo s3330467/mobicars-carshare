@@ -2,6 +2,7 @@
 import org.sql2o.*;
 import java.util.*;
 import java.text.*;
+import java.text.SimpleDateFormat;
 
 /**
  * Date: 17.8.17
@@ -225,5 +226,40 @@ public class BookingService {
             return DB.fetchLastCompleteBookingOfUser(user_id).get(0);
         }
         return null;
+    }
+
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 17.9.17
+     * <p>
+     * calculates the total cost of a completed booking<p>
+     *
+     * @param booking the booking to calculate total cost for
+     * @return the total cost of the completed booking
+     */
+    public static double getTotalCostOfBooking(Booking booking) {
+        //initialise the duration to 0;
+        long durationOfBooking = 0;
+        //create a dateFormat object that matches the date formats used in the database
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            //parse the separate time and date strings stored in the database into a single Date object
+            Date collectionDateTime = df.parse(booking.getCollection_date() + " " + booking.getCollection_time());
+            Date endDateTime = df.parse(booking.getEnd_date() + " " + booking.getEnd_time());
+            /**
+             * calculate the duration of the booking in seconds by subracting
+             * the collection time from the end time. this result is given in
+             * milliseconds, so divide it by 1000 to turn it into seconds
+             */
+            durationOfBooking = ((endDateTime.getTime() - collectionDateTime.getTime()) / 1000);
+        } catch (ParseException e) {
+            System.out.println("could not parse dates in getTotalCostOfBooking()");
+        }
+        //get the car that was booked so that we can get price information from it
+        Car bookedCar = CarService.getCarById(booking.getCar_id());
+        //divide the hourly rate of the car by 60 twice to get the price per second
+        double pricePerSecond = (bookedCar.getHourly_price() / 60) / 60;
+        //multiply the price per second with the duration in seconds to get the cost of the booking
+        return pricePerSecond * durationOfBooking;
     }
 }
