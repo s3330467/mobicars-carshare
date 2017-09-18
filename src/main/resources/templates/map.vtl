@@ -1,9 +1,16 @@
+<!--@Author: Vishal Pradhan
+Date: 23-08-2017-->
+
 <script src="search.js"></script>
     <script src="advancesearch.js"></script>
+
+<!--On clicking the icon a sliding menu bar opens up which provides user with advance searching ability-->
 
 <div id="navopenbtn" onclick="openNav()">
     <span class="glyphicon glyphicon-search" style="font-size:45px" onclick="openNav()"></span>
 </div>
+
+<!--On clicking the 'x' icon at the top the sliding bar retracts back providing a clear view of the default screen -->
 
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -26,11 +33,31 @@
                 <option value="empty">Select Model</option>
             </select>
         </div>
+
+        <!--Edited : Vishal Pradhan     Date: 16-09-2017    Adding distance and price sliders-->
+        <div>
+            <label for="distance_min">Distance: </label>
+            <input type="range" name="distance_min" id="distance_min" step="1" value="0" min="1" max="15">
+            <span id="distance_range"></span>
+        </div>
+        <br />
+
+        <div>
+            <label for="price_min">Price: </label>
+            <input type="range" name="price_min" id="price_min" step="10" value="10" min="10" max="100">
+            <span id="price_range"></span>
+            
+        </div>
+        <br />
+
         <button id="search-btn" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
         <button id="find-nearest-btn" type="button" class="btn btn-primary">find nearest car</button>
         <button id="reset-map-btn" type="button" class="btn btn-primary">reset</button>
     </form>           
 </div>
+
+
+<!--@Author: Alexander Young-->
 
 <div id="map">
     <script>

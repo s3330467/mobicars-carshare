@@ -85,7 +85,7 @@ public class UserService {
         }
         return null;
     }
-
+    
     /**
      * Author: <b>Alexander Young</b><p>
      * Date: 8.8.17
@@ -93,6 +93,9 @@ public class UserService {
      * encrypts the password provided by the user and then calls the DB method
      * to insert the user into the database<p>
      *
+     * Updated 29.08.2017  by 29-08-2017 Vishal Pradhan<p>
+     * Added card details to be stored along with users personal details<p>
+     * 
      * @param email email address of the user
      * @param userPassword password of the user, at this point the password is
      * not encrypted
@@ -108,7 +111,9 @@ public class UserService {
      * @param cvv cvv of the card on file for the user
      * @return true if the user is created, false otherwise
      */
-    public static boolean createUser(String email, String userPassword,
+   
+    // creates a new user
+    public static boolean createUser(String email, String userPassword, 
             String f_name, String l_name, String address, String license_no, String phone_no, String card_name, String card_no, String expiry_month, String expiry_year, String cvv) {
 
         //create an encrypted password based off the supplied password string

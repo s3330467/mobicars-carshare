@@ -8,8 +8,12 @@ import java.util.*;
  *
  * Updated 10.9.17 by Rachel Tan<p>
  * Added the variables: collection_date, collection_time and end_date<p>
- *
+ * 
+ * Updated by Vishal Pradhan<p>
+ * Added image fields along with get and set methods<p>
+ * 
  * @author Rachel Tan
+ * 
  */
 public class Car {
 

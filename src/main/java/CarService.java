@@ -18,7 +18,10 @@ public class CarService {
      * <p>
      * Updates the carList array from the DB and then returns an arraylist of
      * Car's
-     *
+     * 
+     * Updated 28.08.2017 by Vishal Pradhan<p>
+     * Added image field on create car<p>
+     * 
      * @return a single Booking object that matches the booking_id parameter
      */
     public static List<Car> getAllCars() {

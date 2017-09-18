@@ -116,6 +116,9 @@ public class DB {
      * Updated 7.9.17 by Rachel Tan<p>
      * Added command to display only bookings that do not have a null collection
      * date as those are canceled bookings.<p>
+     * 
+     * Updated 28.08.2017 by Vishal Pradhan<p>
+     * Added additional field to the Database for registration including credit card details etc<p>
      *
      * @param user_id unique id of the user to fetch booking for
      * @return an arraylist of Bookings, containing only the users most recent

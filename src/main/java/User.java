@@ -45,6 +45,11 @@ public class User {
      * Constructor for a new User
      * <p>
      * Author: <b>Alexander Young</b>
+     * 
+     * Updated 29.08.2017 by Vishal Pradhan<p>
+     * Added additional fields on to the users during registration and their 
+     * Credit card name, numbers etc
+     * Includes get and set of the relevant field<p>
      *
      * @param email email address of the user
      * @param password password of the user, by this point the password should

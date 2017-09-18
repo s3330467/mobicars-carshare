@@ -1,5 +1,11 @@
+/*
+ * @Author: Vishal Pradhan
+ * Date: 20-08-2017
+ */
 
-
+/*this function checks if the user has the input field filled up..
+ * if not a warning is displayed underneath the input field
+ */
 $(document).ready(function(){
 
     $("#sign_in").click(function(){
@@ -8,7 +14,7 @@ $(document).ready(function(){
 
 
         var isValid = true;
-
+        //checks if the email field is not empty
         if(email == ""){
             isValid = false;
             $("#error_Email").html("Email cannot be empty");
@@ -16,7 +22,7 @@ $(document).ready(function(){
         }else{
             $("#error_Email").html("");
         }
-
+        //checks if the password field is not empty
         if(password == ""){
             isValid = false;
             $("#error_Password").html("Password cannot be empty");
@@ -24,13 +30,11 @@ $(document).ready(function(){
         }else{
             $("#error_Password").html("");
         }
-        // will only work if the data base is updated..but since spark has auto php thing we might not need it as well
-//        if(isValid == false){
-//            $.ajax({
-//               url: "/register", 
-//               type: "POST",
-//            });
-//        }
+        
+        /*once all the criteria is fulfilled, the form is processed towards process_login
+         * where the process is validated at the back end of the application to see
+         * if the user exists or not... 
+         */
         
         if(isValid == true){
             $.ajax({

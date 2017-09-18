@@ -1,6 +1,11 @@
-//
-//  @author: Vishal Pradhan
-//
+/*
+* @author: Vishal Pradhan
+* Date: 10-09-2017
+*/
+/*
+ * A function which tests the validity of the credit card provided by the client
+ * mainly uses an algorithm called luhn algorithm to do so.
+ */
 function testCreditCard () {
   myCardNo = document.getElementById('card_no').value;
   myCardType = document.getElementById('card_type').value;

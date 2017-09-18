@@ -143,12 +143,13 @@ public class UserController {
         });
 
         /**
-         * Author: <b>Alexander Young</b><p>
-         * Date: 16.8.17
+         * Author: <b>Vishal Pradhan</b><p>
+         * Date: 31.08.2017
          * <p>
          * GET request<p>
          * @return booking history page is displayed to user
          */
+      
         get("/booking_history", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             model.put("template", "templates/booking_history.vtl");
