@@ -288,6 +288,7 @@ public class BookingController {
         post("/process_return_car", (request, response) -> {
             Booking.updateBookingList();
             if (BookingService.returnCar(request.session().attribute("session_booking"))) {
+                
                 request.session().attribute("session_booking", null);
                 response.redirect("/booking_summary");
             }
@@ -318,6 +319,7 @@ public class BookingController {
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             Booking booking = BookingService.getLastCompleteBookingOfUser(user.getId());
             booking.setCost(BookingService.calculateTotalCostOfBooking(booking));
+            booking.setHours(BookingService.calculateBookingHours(booking));
             Car car = CarService.getCarById(booking.getCar_id());
 
             model.put("car", car);

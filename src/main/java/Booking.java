@@ -22,6 +22,7 @@ public class Booking {
     private String collection_time;
     private String end_date;
     private String end_time;
+    private double hours;
     private double cost;
     private double start_lat;
     private double start_lng;
@@ -135,6 +136,14 @@ public class Booking {
         this.end_time = end_time;
     }
 
+    public double getHours() {
+        return hours;
+    }
+
+    public void setHours(double hours) {
+        this.hours = hours;
+    }
+       
     public double getCost() {
         return cost;
     }

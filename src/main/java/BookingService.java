@@ -309,6 +309,9 @@ public class BookingService {
      * <p>
      * calculates the elapsed duration in hours between the collection and return of a booking<p>
      * 
+     * Updated 19.9.17 by Rachel Tan<p>
+     * Time is reduced to 2 decimal places.
+     * 
      * @param booking the booking to calculate duration
      * @return the duration in hours of the booking
      */
@@ -316,6 +319,24 @@ public class BookingService {
         //cast the time in seconds to double so it can be divided
         double durationInSeconds = (double)calculateBookingSeconds(booking);
         //divide the result by 60 twice to convert it to hours
-        return ((durationInSeconds)/60)/60;
+        durationInSeconds = ((durationInSeconds)/60)/60;
+        durationInSeconds = Math.round(durationInSeconds * 100);
+        durationInSeconds = durationInSeconds/100;
+        return durationInSeconds;
     }
+    
+    /**
+     * Author: <b>Rachel Tan</b><p>
+     * Date 19.9.17
+     * <p>
+     * Gets ID of user's current booking to update total cost in database with
+     * NOT CURRENTLY WORKING OR COMPLETE
+     */
+    /*
+    public static boolean insertTotalCostOfBookingById() {
+        Booking.updateBookingList();
+        Booking booking = getCurrentBookingByUser_id(user.getId());
+        DB.updateTotalCostOfBookingById(getCurrent)
+    }
+*/
 }
