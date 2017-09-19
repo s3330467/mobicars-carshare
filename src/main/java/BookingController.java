@@ -41,10 +41,13 @@ public class BookingController {
          * added data field to the JSON output of this route to make it easier
          * to parse it into DataTable()
          * <p>
+         *
+         * Updated 20.9.17 by Alexander Young<p>
+         * removed reference to the updateBookingList method<p>
          */
         get("/get_booking_history", (request, response) -> {
             Gson gson = new Gson();
-            Booking.updateBookingList();
+            //Booking.updateBookingList();
             String jsonObject = gson.toJson(Booking.bookingList);
             return "{\"data\":" + jsonObject + "}";
         });
@@ -65,16 +68,20 @@ public class BookingController {
          * Updated 10.9.17 by Alexander Young<p>
          * added data field to the JSON output of this route to make it easier
          * to parse it into DataTable()
+         *
+         * Updated 20.9.17 by Alexander Young<p>
+         * removed reference to the updateBookingList and updateUserList
+         * methods<p>
          * <p>
          */
         get("/get_booking_history_for_current_user", (request, response) -> {
             Gson gson = new Gson();
-            Booking.updateBookingList();
-            User.updateUserList();
+            //Booking.updateBookingList();
+            //User.updateUserList();
             User currentUser = UserService.getUserByEmail(request.session().attribute("session_email"));
             System.out.println(currentUser.getId());
             List<Booking> usersBookings = BookingService.getAllBookingsByUser_id(currentUser.getId());
-            Booking.updateBookingList();
+            // Booking.updateBookingList();
             String jsonObject = gson.toJson(usersBookings);
             return "{\"data\":" + jsonObject + "}";
         });
@@ -92,13 +99,16 @@ public class BookingController {
          * and inserts both objects into confirm_booking.vtl, which is then
          * inserted into layout_main.vtl.<p>
          *
+         * Updated 20.9.17 by Alexander Young<p>
+         * removed reference to the updateBookingList and updateCarList
+         * methods<p>
          * @return booking confirmation html page displayed to browser
          */
         post("/process_book_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String plate_no = request.queryParams("plate_no");
-           // Car.updateCarList();
-            User.updateUserList();
+            // Car.updateCarList();
+            //User.updateUserList();
             System.out.println("booking plate no: " + plate_no);
             Car car = CarService.getCarByPlate_no(plate_no);
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
@@ -123,12 +133,16 @@ public class BookingController {
          * Updated 05.9.17 by Alexander Young<p>
          * added a check to only cancel bookings that haven't been collected
          * when the 15 minutes expire<p>
+         *
+         * Updated 20.9.17 by Alexander Young<p>
+         * removed reference to the updateBookingList, updateUserList and
+         * updateCarList methods<p>
          */
         post("/process_confirm_booking", (request, response) -> {
             String plate_no = request.queryParams("plate_no");
             //Car.updateCarList();
-            User.updateUserList();
-            Booking.updateBookingList();
+            //User.updateUserList();
+            //Booking.updateBookingList();
             System.out.println("confirm booking plate no: " + plate_no);
             Car car = CarService.getCarByPlate_no(plate_no);
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
@@ -144,7 +158,7 @@ public class BookingController {
                 timer.schedule(new TimerTask() {
                     public void run() {
                         System.out.println("\n\n\n\nattempting to cancel booking");
-                        Booking.updateBookingList();
+                        //Booking.updateBookingList();
                         Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
                         if (booking.getCollection_date() == null) {
                             if (BookingService.cancelBooking(request.session().attribute("session_booking"))) {
@@ -181,12 +195,16 @@ public class BookingController {
          * added time related checks, puts into velocity templates the number of
          * seconds until the booking should expire. in the booking_made.vtl this
          * value is used to display an accurate javascript countdown timer<p>
+         *
+         * Updated 20.9.17 by Alexander Young<p>
+         * removed reference to the updateBookingList, updateUserList and
+         * updateCarList methods<p>
          */
         get("/booking_made", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             //Car.updateCarList();
-            User.updateUserList();
-            Booking.updateBookingList();
+            //User.updateUserList();
+            //Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
             Date current_date = new Date();
@@ -215,12 +233,16 @@ public class BookingController {
          * Updated 30.8.17 by Rachel Tan<p>
          * Changed the template put from booked_car_info.vtl to
          * booking_in_progress.vtl<p>
+         *
+         * Updated 20.9.17 by Alexander Young<p>
+         * removed reference to the updateBookingList, updateUserList and
+         * updateCarList methods<p>
          */
         post("/process_collect_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             //Car.updateCarList();
-            User.updateUserList();
-            Booking.updateBookingList();
+            //User.updateUserList();
+            //Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
             Car car = CarService.getCarById(booking.getCar_id());
@@ -239,12 +261,16 @@ public class BookingController {
          * GET request<p>
          * Gets booking details including collection_date from user's session
          * and puts them on the template booking_in_progress.vtl<p>
+         *
+         * Updated 20.9.17 by Alexander Young<p>
+         * removed reference to the updateBookingList, updateUserList and
+         * updateCarList methods<p>
          */
         get("/booking_in_progress", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             //Car.updateCarList();
-            User.updateUserList();
-            Booking.updateBookingList();
+            //User.updateUserList();
+            //Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
             Car car = CarService.getCarById(booking.getCar_id());
@@ -284,9 +310,12 @@ public class BookingController {
          * Updated 13.9.17 by Alexander Young<p>
          * removed unused vtl code as this route now only redirects and never
          * serves vtl<p>
+         *
+         * Updated 20.9.17 by Alexander Young<p>
+         * removed reference to the updateBookingList method<p>
          */
         post("/process_return_car", (request, response) -> {
-            Booking.updateBookingList();
+            //Booking.updateBookingList();
             if (BookingService.returnCar(request.session().attribute("session_booking"))) {
                 request.session().attribute("session_booking", null);
                 response.redirect("/booking_summary");
@@ -306,12 +335,16 @@ public class BookingController {
          * Changed booking to call getLastCompleteBookingOfUser() instead of
          * getCurrentBookingOfUser(), because after POST /process_return_car,
          * there is no current booking.<p>
+         *
+         * Updated 20.9.17 by Alexander Young<p>
+         * removed reference to the updateBookingList, updateUserList and
+         * updateCarList methods<p>
          */
         get("/booking_summary", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             //Car.updateCarList();
-            User.updateUserList();
-            Booking.updateBookingList();
+            //User.updateUserList();
+            //Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             Booking booking = BookingService.getLastCompleteBookingOfUser(user.getId());
             Car car = CarService.getCarById(booking.getCar_id());

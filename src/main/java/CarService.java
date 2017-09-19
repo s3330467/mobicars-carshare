@@ -33,6 +33,10 @@ public class CarService {
      * calls the DB insert car method to insert a new car into the SQL database,
      * then updates the carList<p>
      *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed updateCarList() method and instead add a single new car the
+     * static Car.carList
+     *
      * @param image filename of the image to display for this car
      * @param type the type of the car to be added- e.g., sedan, hatchback,
      * luxury
@@ -47,6 +51,7 @@ public class CarService {
      */
     public static void createCar(String image, String type, String make, String model, String plate_no, double hourly_price, double lat, double lng) {
         DB.insertCar(image, type, make, model, plate_no, hourly_price, lat, lng);
+        Car.carList.add(CarService.getCarByPlate_no(plate_no));
         //Car.updateCarList();
     }
 
@@ -56,9 +61,14 @@ public class CarService {
      * <p>
      * deletes a car from the database and updates the static carList array<p>
      *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed reference to the updateCarList method, the method now updates
+     * java objects directly as well as editing the DB<p>
+     *
      * @param plate_no the registration plate number of the car to be deleted
      */
     public static void deleteCar(String plate_no) {
+        Car.carList.remove(getCarByPlate_no(plate_no));
         DB.deleteCar(plate_no);
         //Car.updateCarList();
     }
@@ -189,7 +199,7 @@ public class CarService {
         }
         return searchResults;
     }
-    
+
     /**
      * Author: <b>Alexander Young</b><p>
      * Date: 19.9.17

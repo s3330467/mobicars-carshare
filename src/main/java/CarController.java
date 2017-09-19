@@ -53,14 +53,17 @@ public class CarController {
          * <p>
          * POST request<p>
          *
+         * Updated 20.9.17 by Alexander Young<p>
+         * removed reference to the updateUserList and updateCarList methods
+         *
          * @return HTML for a car details popup when the user clicks on a car on
          * the map
          */
         post("/process_get_car_details", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String plate_no = request.queryParams("plate_no");
-           // Car.updateCarList();
-            User.updateUserList();
+            // Car.updateCarList();
+            //User.updateUserList();
             Car car = CarService.getCarByPlate_no(plate_no);
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             model.put("car", car);

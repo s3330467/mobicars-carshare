@@ -29,7 +29,7 @@ public class BookingService {
      */
     public static Booking getBooking(String booking_id) {
         int i;
-        Booking.updateBookingList();
+        //Booking.updateBookingList();
         for (i = 0; i < Booking.bookingList.size(); i++) {
             if (Booking.bookingList.get(i).getId().equals(booking_id)) {
                 return Booking.bookingList.get(i);
@@ -52,12 +52,42 @@ public class BookingService {
      * <p>
      * there should only ever be 1 booking in this array, but its size is
      * checked to be 1 in case things go wrong.
+     *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed reference to the updateBookingList method, the code first checks
+     * if a complete entry exists in the java object list, if not it fetches the
+     * matching booking from the SQL database and then adds it to the java
+     * object list<p>
      */
     public static Booking getCurrentBookingByUser_id(String user_id) {
-        Booking.updateBookingList();
-        if (DB.fetchCurrentBookingByUser_id(user_id).size() == 1) {
-            return DB.fetchCurrentBookingByUser_id(user_id).get(0);
+        //Booking.updateBookingList();
+        Booking booking;
+        for (int i = 0; i < Booking.bookingList.size(); i++) {
+            booking = Booking.bookingList.get(i);
+            if (Booking.bookingList.get(i).getUser_id().equals(user_id)) {
+                if (booking.getEnd_date() == null && booking.getId() != null) {
+                    return booking;
+                }
+            }
         }
+
+        if (DB.fetchCurrentBookingByUser_id(user_id).size() == 1) {
+            booking = DB.fetchCurrentBookingByUser_id(user_id).get(0);
+            //return DB.fetchCurrentBookingByUser_id(user_id).get(0);
+            return booking;
+        }
+//        Booking booking;
+//        for (int i = 0; i < Booking.bookingList.size(); i++) {
+//            booking = Booking.bookingList.get(i);
+//            System.out.println("User Id of this user is: " + booking.getUser_id());
+//            if (Booking.bookingList.get(i).getUser_id().equals(user_id)) {
+//                System.out.println("user matched, end date looks like: " + booking.getEnd_date());
+//                if (booking.getEnd_date() == null) {
+//                    return booking;
+//                }
+//            }
+//        }
+        System.out.println("could not find any current booking for user");
         return null;
     }
 
@@ -73,18 +103,25 @@ public class BookingService {
      *
      * @param booking_id the unique id of the booking to cancel
      * @return true if the booking is canceled successfully, otherwise false
+     *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed reference to the updateBookingList and updateUserList methods,
+     * the method now updates java objects directly as well as editing the DB<p>
      */
     public static boolean cancelBooking(String booking_id) {
         Date current_date = new Date();
-        Booking.updateBookingList();
+        //Booking.updateBookingList();
         Booking booking = getBooking(booking_id);
         Car car = CarService.getCarById(booking.getCar_id());
         String end_date = date.format(current_date);
         String end_time = time.format(current_date);
         if (DB.cancelBooking(booking_id, end_date, end_time)) {
+            booking.setEnd_date(end_date);
+            booking.setEnd_time(end_time);
             DB.updateCarAvailable(car.getPlate_no(), true);
+            car.setAvailable(true);
             //Car.updateCarList();
-            Booking.updateBookingList();
+            //Booking.updateBookingList();
             return true;
         }
         return false;
@@ -98,13 +135,18 @@ public class BookingService {
      * availability is set to false, and the insertBooking method from DB.java
      * is called.<p>
      *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed reference to the updateBookingList and updateCarList methods, the
+     * method now updates java objects directly as well as editing the DB<p>
+     *
      * @param car the car that is being booked
      * @param user the user making the booking
      * @return true if the booking is created successfully, otherwise false
      */
     public static boolean createBooking(Car car, User user) {
-        int user_id = Integer.parseInt(user.getId());
-        int car_id = Integer.parseInt(car.getId());
+        String user_id = user.getId();
+        System.out.println("Creating booking for userid: " + user_id);
+        String car_id = car.getId();
         Date current_date = new Date();
         String start_date = date.format(current_date);
         String start_time = time.format(current_date);
@@ -112,9 +154,14 @@ public class BookingService {
         double start_lng = car.getLng();
         if (car.isAvailable());
         if (DB.insertBooking(user_id, car_id, start_date, start_time, start_lat, start_lng)) {
+            Booking booking = getCurrentBookingByUser_id(user_id);
+            System.out.println(user_id);
+            System.out.println("this booking exists and its id is: " + booking.getId());
+            Booking.bookingList.add(booking);
             DB.updateCarAvailable(car.getPlate_no(), false);
+            car.setAvailable(false);
             //Car.updateCarList();
-            Booking.updateBookingList();
+            // Booking.updateBookingList();
             return true;
         }
         return false;
@@ -135,9 +182,14 @@ public class BookingService {
      *
      * Updated 24.8.17 by Rachel Tan<p>
      * Corrected String end_time typo.<p>
-     * 
+     *
      * Updated 19.9.17 by Alexander Young<p>
-     * added method call to begin simulated car movement when car is collected<p>
+     * added method call to begin simulated car movement when car is
+     * collected<p>
+     *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed reference to the updateBookingList method, the method now updates
+     * java objects directly as well as editing the DB<p>
      *
      * @param booking_id the id of the booking which is having its car collected
      * @return true if the collection is processed successfully, otherwise false
@@ -150,16 +202,18 @@ public class BookingService {
         int i;
         Booking booking;
         Car car;
-        Booking.updateBookingList();
+        //Booking.updateBookingList();
         booking = BookingService.getBooking(booking_id);
         if (DB.collectCar(booking_id, collection_date, collection_time)) {
             car = CarService.getCarById(booking.getCar_id());
             System.out.println(car.getPlate_no());
+            booking.setCollection_date(collection_date);
+            booking.setCollection_time(collection_time);
 //            car.carSim.setCar(car);
             car.carSim = new CarSimulator(car);
             car.carSim.startMoving();
-           // Car.updateCarList();
-            Booking.updateBookingList();
+            // Car.updateCarList();
+            //Booking.updateBookingList();
             return true;
         }
         return false;
@@ -174,6 +228,10 @@ public class BookingService {
      * which inserts the end date and time and end location values in the
      * bookings table on the database. The car availability is set to true.
      *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed reference to the updateBookingList and updateCarList methods, the
+     * method now updates java objects directly as well as editing the DB<p>
+     *
      * @param booking_id the id of the booking which is having its car returned
      * @return true if the car return is processed successfully, otherwise false
      */
@@ -181,22 +239,24 @@ public class BookingService {
         Date current_date = new Date();
         String end_date = date.format(current_date);
         String end_time = time.format(current_date);
-        Booking.updateBookingList();
+        //Booking.updateBookingList();
         Booking booking = getBooking(booking_id);
         Car car = CarService.getCarById(booking.getCar_id());
         double end_lat = car.getLat();
         double end_lng = car.getLng();
-        int i;
-        for (i = 0; i < Booking.bookingList.size(); i++) {
-            if (Booking.bookingList.get(i).getId().equals(booking_id)) {
-                DB.returnCar(booking_id, end_date, end_time, end_lat, end_lng);
-                DB.updateCarAvailable(car.getPlate_no(), true);
-                car.carSim.stopMoving();
-                //Car.updateCarList();
-                Booking.updateBookingList();
-                return true;
-            }
+        if (DB.returnCar(booking_id, end_date, end_time, end_lat, end_lng)) {
+            DB.updateCarAvailable(car.getPlate_no(), true);
+            car.setAvailable(true);
+            booking.setEnd_date(end_date);
+            booking.setEnd_time(end_time);
+            booking.setEnd_lat(end_lat);
+            booking.setEnd_lng(end_lng);
+            car.carSim.stopMoving();
+            //Car.updateCarList();
+            //Booking.updateBookingList();
+            return true;
         }
+
         return false;
     }
 
@@ -207,13 +267,22 @@ public class BookingService {
      * displays all bookings made by a user according to their id, by calling
      * the fetchAllBookingsByUser_id method from DB.java<p>
      *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed reference to the updateBookingList method,
+     *
      * @param user_id the user id of the user to get a list of bookings for
      * @return an arraylist of Booking objects, containing all of the users
      * bookings
      */
     public static List<Booking> getAllBookingsByUser_id(String user_id) {
-        Booking.updateBookingList();
-        return DB.fetchAllBookingsByUser_id(user_id);
+        //Booking.updateBookingList();
+        List<Booking> usersBookings = new ArrayList<Booking>();
+        for (int i = 0; i < Booking.bookingList.size(); i++) {
+            if (Booking.bookingList.get(i).getUser_id().equals(user_id)) {
+                usersBookings.add(Booking.bookingList.get(i));
+            }
+        }
+        return usersBookings;
     }
 
     /**
@@ -225,6 +294,10 @@ public class BookingService {
      * Updated 7.9.17 by Rachel Tan<p>
      * Fixed with working code.<p>
      *
+     * Updated 20.9.17 by Alexander Young<p>
+     * the method now uses the SQL output to help find a specific entry in
+     * bookingList rather than returning a completely new booking object<p>
+     *
      * @param user_id the user id of the user to get the last complete booking
      * for
      * @return an arraylist of Booking objects, containing only the users most
@@ -232,7 +305,8 @@ public class BookingService {
      */
     public static Booking getLastCompleteBookingOfUser(String user_id) {
         if (DB.fetchLastCompleteBookingOfUser(user_id).size() == 1) {
-            return DB.fetchLastCompleteBookingOfUser(user_id).get(0);
+            Booking booking = getBooking(DB.fetchLastCompleteBookingOfUser(user_id).get(0).getId());
+            return booking;
         }
         return null;
     }
