@@ -358,7 +358,7 @@ map.addListener('dragend', function () {
                 //for each data object(car) in the Json retrieved, create a map marker, 
                 //the variable i is the incrementing count, it must be present but is not ever used
                 $.each(cars, function (i, car) {
-                    if (car.available == true) {
+                    if (car.available == true || car.available == false) {
                         //get the distance between the userPos and the carPos in km
                         carPos = new google.maps.LatLng(car.lat, car.lng);
                         distance = google.maps.geometry.spherical.computeDistanceBetween(carPos, map.getCenter()) / 1000;

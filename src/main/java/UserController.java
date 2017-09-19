@@ -64,13 +64,17 @@ public class UserController {
          * If the user has a booking in progress and attempts to navigate to the
          * map it should redirect them to their booking in progress instead<p>
          *
+         * Updated 20.9.17 by Alexander Young<p>
+         * removed reference to the updateBookingList and updateCarList
+         * methods<p>
+         *
          * @return map html page displayed to user
          */
         get("/", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String currentUserEmail = request.session().attribute("session_email");
-            User.updateUserList();
-            Car.updateCarList();
+            //User.updateUserList();
+            //Car.updateCarList();
             boolean bookingState;
             if (request.session().attribute("session_booking") != null) {
                 bookingState = true;
@@ -138,7 +142,7 @@ public class UserController {
          * <p>
          */
         get("/users", (request, response) -> {
-            User.updateUserList();
+            //User.updateUserList();
             return User.userList;
         });
 
@@ -163,13 +167,20 @@ public class UserController {
          * POST request<p>
          * updates the currently logged in users location to the latitude and
          * longitude query parameters given
+         *
+         * Updated 20.9.17 by Alexander Young<p>
+         * removed reference to the updateBookingList and updateCarList methods,
+         * method now updates java objects directly instead of just in the DB<p>
          * <p>
          */
         post("/process_update_user_location", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
+            User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             double lat = Double.parseDouble(request.queryParams("lat"));
             double lng = Double.parseDouble(request.queryParams("lng"));
-            DB.updateUserLatLng(request.session().attribute("session_email"), lat, lng);
+            DB.updateUserLatLng(user.getEmail(), lat, lng);
+            user.setLat(lat);
+            user.setLng(lng);
             return "";
         });
 
