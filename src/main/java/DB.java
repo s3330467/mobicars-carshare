@@ -442,4 +442,28 @@ public class DB {
         }
         return true;
     }
+    
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 19.9.17
+     * <p>
+     * update a specified car to a new latitude and longitude<p>
+     *
+     * @param plate_no the plate number of the car to update position for
+     * @param lat the new latitude of the users position
+     * @param lng the new longitude of the users position
+     * @return true if the position is updated, otherwise false
+     */
+    public static boolean updateCarLatLng(String plate_no, double lat, double lng) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String updateSql = "UPDATE cars SET lat = :lat, lng = :lng WHERE plate_no = :plate_no";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(updateSql)
+                    .addParameter("plate_no", plate_no)
+                    .addParameter("lat", lat)
+                    .addParameter("lng", lng)
+                    .executeUpdate();
+        }
+        return true;
+    }
 }

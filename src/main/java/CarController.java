@@ -39,7 +39,7 @@ public class CarController {
          * <p>
          */
         get("/cars", (request, response) -> {
-            Car.updateCarList();
+            //Car.updateCarList();
             return Car.carList;
         }, JsonUtil.json());
 
@@ -59,7 +59,7 @@ public class CarController {
         post("/process_get_car_details", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String plate_no = request.queryParams("plate_no");
-            Car.updateCarList();
+           // Car.updateCarList();
             User.updateUserList();
             Car car = CarService.getCarByPlate_no(plate_no);
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
@@ -85,7 +85,7 @@ public class CarController {
             System.out.println(type);
             System.out.println(make);
             System.out.println(model);
-            Car.updateCarList();
+            //Car.updateCarList();
             List<Car> searchResults = CarService.carSearch(type, make, model);
             return searchResults;
         }, JsonUtil.json());
@@ -105,7 +105,7 @@ public class CarController {
          * @return JSON list of all the unique car types found in carList
          */
         get("/get_all_types", (request, response) -> {
-            Car.updateCarList();
+            //Car.updateCarList();
             Set<String> results = new HashSet<String>();
             for (int i = 0; i < Car.carList.size(); i++) {
                 results.add(Car.carList.get(i).getType());
@@ -129,7 +129,7 @@ public class CarController {
          * @return JSON list of all the unique car makes found in carList
          */
         get("/get_all_makes", (request, response) -> {
-            Car.updateCarList();
+            //Car.updateCarList();
             Set<String> results = new HashSet<String>();
             for (int i = 0; i < Car.carList.size(); i++) {
                 results.add(Car.carList.get(i).getMake());
@@ -154,7 +154,7 @@ public class CarController {
          * match the specified type
          */
         get("/get_make_by_type", (request, response) -> {
-            Car.updateCarList();
+            //Car.updateCarList();
             String type = request.queryParams("type");
             Set<String> results = new HashSet<String>();
             for (int i = 0; i < Car.carList.size(); i++) {
@@ -178,7 +178,7 @@ public class CarController {
          * match the specified make
          */
         get("/get_models_by_make", (request, response) -> {
-            Car.updateCarList();
+            //Car.updateCarList();
             String make = request.queryParams("make");
             Set<String> results = new HashSet<String>();
             for (int i = 0; i < Car.carList.size(); i++) {

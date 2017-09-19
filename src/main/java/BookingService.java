@@ -83,7 +83,7 @@ public class BookingService {
         String end_time = time.format(current_date);
         if (DB.cancelBooking(booking_id, end_date, end_time)) {
             DB.updateCarAvailable(car.getPlate_no(), true);
-            Car.updateCarList();
+            //Car.updateCarList();
             Booking.updateBookingList();
             return true;
         }
@@ -113,7 +113,7 @@ public class BookingService {
         if (car.isAvailable());
         if (DB.insertBooking(user_id, car_id, start_date, start_time, start_lat, start_lng)) {
             DB.updateCarAvailable(car.getPlate_no(), false);
-            Car.updateCarList();
+            //Car.updateCarList();
             Booking.updateBookingList();
             return true;
         }
@@ -135,6 +135,9 @@ public class BookingService {
      *
      * Updated 24.8.17 by Rachel Tan<p>
      * Corrected String end_time typo.<p>
+     * 
+     * Updated 19.9.17 by Alexander Young<p>
+     * added method call to begin simulated car movement when car is collected<p>
      *
      * @param booking_id the id of the booking which is having its car collected
      * @return true if the collection is processed successfully, otherwise false
@@ -145,14 +148,19 @@ public class BookingService {
         String collection_date = date.format(current_date);
         String collection_time = time.format(current_date);
         int i;
+        Booking booking;
+        Car car;
         Booking.updateBookingList();
-        for (i = 0; i < Booking.bookingList.size(); i++) {
-            if (Booking.bookingList.get(i).getId().equals(booking_id)) {
-                DB.collectCar(booking_id, collection_date, collection_time);
-                Car.updateCarList();
-                Booking.updateBookingList();
-                return true;
-            }
+        booking = BookingService.getBooking(booking_id);
+        if (DB.collectCar(booking_id, collection_date, collection_time)) {
+            car = CarService.getCarById(booking.getCar_id());
+            System.out.println(car.getPlate_no());
+//            car.carSim.setCar(car);
+            car.carSim = new CarSimulator(car);
+            car.carSim.startMoving();
+           // Car.updateCarList();
+            Booking.updateBookingList();
+            return true;
         }
         return false;
     }
@@ -183,7 +191,8 @@ public class BookingService {
             if (Booking.bookingList.get(i).getId().equals(booking_id)) {
                 DB.returnCar(booking_id, end_date, end_time, end_lat, end_lng);
                 DB.updateCarAvailable(car.getPlate_no(), true);
-                Car.updateCarList();
+                car.carSim.stopMoving();
+                //Car.updateCarList();
                 Booking.updateBookingList();
                 return true;
             }
@@ -235,8 +244,9 @@ public class BookingService {
      * calculates the total cost of a completed booking<p>
      *
      * Updated 17.9.17 by Alexander Young<p>
-     * renamed method to calculateTotalCostofBooking from getTotalCostofBooking() as the method isn't really a getter method<p>
-     * 
+     * renamed method to calculateTotalCostofBooking from
+     * getTotalCostofBooking() as the method isn't really a getter method<p>
+     *
      * @param booking the booking to calculate total cost for
      * @return the total cost of the completed booking
      */
@@ -265,13 +275,14 @@ public class BookingService {
         //multiply the price per second with the duration in seconds to get the cost of the booking
         return pricePerSecond * durationOfBooking;
     }
-    
+
     /**
      * Author: <b>Alexander Young</b><p>
      * Date: 17.9.17
      * <p>
-     * calculates the elapsed duration in seconds between the collection and return of a booking<p>
-     * 
+     * calculates the elapsed duration in seconds between the collection and
+     * return of a booking<p>
+     *
      * @param booking the booking to calculate duration
      * @return the duration in seconds of the booking
      */
@@ -293,23 +304,24 @@ public class BookingService {
         } catch (ParseException e) {
             System.out.println("could not parse dates in calculateBookingDuration()");
         }
-        int durationInSeconds = (int)durationOfBooking;
+        int durationInSeconds = (int) durationOfBooking;
         return durationInSeconds;
     }
-    
+
     /**
      * Author: <b>Alexander Young</b><p>
      * Date: 17.9.17
      * <p>
-     * calculates the elapsed duration in hours between the collection and return of a booking<p>
-     * 
+     * calculates the elapsed duration in hours between the collection and
+     * return of a booking<p>
+     *
      * @param booking the booking to calculate duration
      * @return the duration in hours of the booking
      */
     public static double calculateBookingHours(Booking booking) {
         //cast the time in seconds to double so it can be divided
-        double durationInSeconds = (double)calculateBookingSeconds(booking);
+        double durationInSeconds = (double) calculateBookingSeconds(booking);
         //divide the result by 60 twice to convert it to hours
-        return ((durationInSeconds)/60)/60;
+        return ((durationInSeconds) / 60) / 60;
     }
 }

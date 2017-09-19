@@ -9,6 +9,9 @@ import java.util.*;
  * Updated 10.9.17 by Rachel Tan<p>
  * Added the variables: collection_date, collection_time and end_date<p>
  *
+ * Updated 10.9.17 by Alexander Young<p>
+ * Added an instance of CarSimulator to each car, this class can be called to simulate car movement<p>
+ * 
  * @author Rachel Tan
  */
 public class Car {
@@ -24,7 +27,8 @@ public class Car {
     private double lng;
     private boolean available;
     public static List<Car> carList = new ArrayList<Car>();
-
+    public transient CarSimulator carSim;
+    
     /**
      * Constructor for a new Car
      * <p>
@@ -53,6 +57,7 @@ public class Car {
         this.lat = lat;
         this.lng = lng;
         this.available = available;
+        carSim = new CarSimulator(this);
     }
 
     //toString method
@@ -80,6 +85,11 @@ public class Car {
      */
     public static void updateCarList() {
         carList = DB.fetchCars();
+        Car car;
+        for(int i = 0; i < carList.size(); i++) {
+            car = carList.get(i);
+            //car.carSim = new CarSimulator(car);
+        }
     }
 
     public String getType() {

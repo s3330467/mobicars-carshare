@@ -97,7 +97,7 @@ public class BookingController {
         post("/process_book_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String plate_no = request.queryParams("plate_no");
-            Car.updateCarList();
+           // Car.updateCarList();
             User.updateUserList();
             System.out.println("booking plate no: " + plate_no);
             Car car = CarService.getCarByPlate_no(plate_no);
@@ -126,7 +126,7 @@ public class BookingController {
          */
         post("/process_confirm_booking", (request, response) -> {
             String plate_no = request.queryParams("plate_no");
-            Car.updateCarList();
+            //Car.updateCarList();
             User.updateUserList();
             Booking.updateBookingList();
             System.out.println("confirm booking plate no: " + plate_no);
@@ -184,7 +184,7 @@ public class BookingController {
          */
         get("/booking_made", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            Car.updateCarList();
+            //Car.updateCarList();
             User.updateUserList();
             Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
@@ -218,7 +218,7 @@ public class BookingController {
          */
         post("/process_collect_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            Car.updateCarList();
+            //Car.updateCarList();
             User.updateUserList();
             Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
@@ -242,7 +242,7 @@ public class BookingController {
          */
         get("/booking_in_progress", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            Car.updateCarList();
+            //Car.updateCarList();
             User.updateUserList();
             Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
@@ -309,7 +309,7 @@ public class BookingController {
          */
         get("/booking_summary", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            Car.updateCarList();
+            //Car.updateCarList();
             User.updateUserList();
             Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));

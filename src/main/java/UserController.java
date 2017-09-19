@@ -70,7 +70,7 @@ public class UserController {
             Map<String, Object> model = new HashMap<String, Object>();
             String currentUserEmail = request.session().attribute("session_email");
             User.updateUserList();
-            Car.updateCarList();
+            //Car.updateCarList();
             boolean bookingState;
             if (request.session().attribute("session_booking") != null) {
                 bookingState = true;
