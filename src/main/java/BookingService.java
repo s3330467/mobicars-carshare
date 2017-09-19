@@ -232,10 +232,13 @@ public class BookingService {
      * Author: <b>Alexander Young</b><p>
      * Date: 17.9.17
      * <p>
-     * calculates the total cost of a completed booking<p>
+     * calculates the total cost of a completed booking based on the number of seconds elapsed, using car's hourly price as the baseline.<p>
      *
      * Updated 17.9.17 by Alexander Young<p>
      * renamed method to calculateTotalCostofBooking from getTotalCostofBooking() as the method isn't really a getter method<p>
+     * 
+     * Updated 19.9.17 by Rachel Tan<p>
+     * Total cost now returns a number rounded to 2 decimal places instead of multiple decimal places.
      * 
      * @param booking the booking to calculate total cost for
      * @return the total cost of the completed booking
@@ -263,7 +266,10 @@ public class BookingService {
         //divide the hourly rate of the car by 60 twice to get the price per second
         double pricePerSecond = (bookedCar.getHourly_price() / 60) / 60;
         //multiply the price per second with the duration in seconds to get the cost of the booking
-        return pricePerSecond * durationOfBooking;
+        double totalCost = pricePerSecond * durationOfBooking;
+        totalCost = Math.round(totalCost * 100);
+        totalCost = totalCost/100;
+        return totalCost;
     }
     
     /**

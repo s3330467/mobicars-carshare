@@ -306,6 +306,9 @@ public class BookingController {
          * Changed booking to call getLastCompleteBookingOfUser() instead of
          * getCurrentBookingOfUser(), because after POST /process_return_car,
          * there is no current booking.<p>
+         * 
+         * Updated 19.9.17 by Rachel Tan<p>
+         * Added set cost method to be able to allow page to display cost.
          */
         get("/booking_summary", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
@@ -314,6 +317,7 @@ public class BookingController {
             Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             Booking booking = BookingService.getLastCompleteBookingOfUser(user.getId());
+            booking.setCost(BookingService.calculateTotalCostOfBooking(booking));
             Car car = CarService.getCarById(booking.getCar_id());
 
             model.put("car", car);
