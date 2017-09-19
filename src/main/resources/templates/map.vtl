@@ -316,7 +316,7 @@ map.addListener('dragend', function () {
                 var difference = google.maps.geometry.spherical.computeDistanceBetween(userCoords, geoPos);
                 //places the marker of the current user at their location for debugging
                 if (difference > 15) {
-                    alert(difference);
+                    //alert(difference);
                     var userMarker = new google.maps.Marker({
                         position: geoPos,
                         title: "$user.email",
