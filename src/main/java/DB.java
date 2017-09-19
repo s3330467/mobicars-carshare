@@ -119,6 +119,9 @@ public class DB {
      * 
      * Updated 28.08.2017 by Vishal Pradhan<p>
      * Added additional field to the Database for registration including credit card details etc<p>
+     * 
+     * Updated 19.9.17 by Rachel Tan<p>
+     * Edited command to correctly only retrieve one entry.
      *
      * @param user_id unique id of the user to fetch booking for
      * @return an arraylist of Bookings, containing only the users most recent
@@ -130,7 +133,7 @@ public class DB {
                 + "WHERE user_id = :user_id AND "
                 + "collection_date IS NOT NULL AND "
                 + "end_date IN (SELECT max(end_date) FROM bookings) "
-                + "AND end_time = (select max(end_time) from bookings);";
+                + "ORDER BY end_time desc limit 1;";
 
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         try (Connection con = sql2o.open()) {
