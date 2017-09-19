@@ -1,12 +1,11 @@
 <! --
 @author: 
 Date: 
-Edited: 6.9.17 by Rachel: Added time elapsed script that counts minutes and seconds.
-Edited: 6.9.17 by Rachel: Edited time elapsed script to count hours.
-Edited: 6.9.17 by Rachel: Fixed minutes as it kept incrementing after reaching 60.
+
 Edited: 16-09-2017 by Vishal Pradhan == display clean up and some css
 -->
 
+<script src="timeelapsed.js"></script>
 <div class="col-xsm-5 col-xsm-offset-2">
     <div class="well" style="width: 390px; height: 390px;">
         <h4>The Car you have booked is-</h4>
@@ -26,30 +25,3 @@ Edited: 16-09-2017 by Vishal Pradhan == display clean up and some css
             </form>
     </div>
 </div>
-
-<script>
-function startTimer(duration, display) {
-    var timer = duration, hours, minutes, seconds;
-    setInterval(function () {
-        hours = parseInt (timer / 3600, 10);
-        minutes = parseInt(timer / 60 % 60, 10);
-        seconds = parseInt(timer % 60, 10);
-
-        hours = hours < 10 ? "0" + hours : hours;
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-
-        display.textContent = hours + " hours " + minutes + " minutes " + seconds + " seconds";
-
-        if (++timer < 0) {
-            timer = duration;
-        }
-    }, 1000);
-}
-
-window.onload = function () {
-    var timeElapsed = 0,
-        display = document.querySelector('#time');
-    startTimer(timeElapsed, display);
-};
-</script>

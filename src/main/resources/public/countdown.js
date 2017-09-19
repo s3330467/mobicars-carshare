@@ -16,7 +16,10 @@ function startTimer(duration, display) {
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
         display.textContent = minutes + ":" + seconds;
-
+        
+        if (timer < 180) {
+            display.style.color = 'red';
+        }
         if (--timer < 0) {
             alert("Your booking has been canceled because you did not collect your car within 15 minutes");
             window.location = "/";
