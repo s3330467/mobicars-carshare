@@ -448,4 +448,34 @@ public class DB {
         }
         return true;
     }
+    
+    /**
+     * Author: <b>Rachel Tan</b><p>
+     * Date: 19.9.17
+     * <p>
+     * Populates the cost field of the last completed booking of user.
+     * CURRENTLY DOES NOT WORK
+     * 
+     * @param cost Total cost of a booking as returned by BookingService.calculateTotalCostOfBooking()
+     * @return True if the booking is updated, otherwise false
+     */
+    public static boolean updateTotalCostOfBookingById(String id) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String sql = "UPDATE bookings "
+                + "SET cost = :cost ";
+                /*
+                + "WHERE user_id = :user_id AND "
+                + "collection_date IS NOT NULL AND "
+                + "end_date IN (SELECT max(end_date) FROM bookings) "
+                + "ORDER BY end_time desc limit 1";
+*/
+        
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+//                    .addParameter("user_id", user_id)
+                    .addParameter("cost", cost)
+                    .executeUpdate();
+        }
+        return true;
+    }
 }
