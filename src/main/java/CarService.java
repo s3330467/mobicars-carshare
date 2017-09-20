@@ -25,7 +25,7 @@ public class CarService {
      * @return a single Booking object that matches the booking_id parameter
      */
     public static List<Car> getAllCars() {
-        Car.updateCarList();
+        //Car.updateCarList();
         return Car.carList;
     }
 
@@ -35,6 +35,10 @@ public class CarService {
      * <p>
      * calls the DB insert car method to insert a new car into the SQL database,
      * then updates the carList<p>
+     *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed updateCarList() method and instead add a single new car the
+     * static Car.carList
      *
      * @param image filename of the image to display for this car
      * @param type the type of the car to be added- e.g., sedan, hatchback,
@@ -50,7 +54,8 @@ public class CarService {
      */
     public static void createCar(String image, String type, String make, String model, String plate_no, double hourly_price, double lat, double lng) {
         DB.insertCar(image, type, make, model, plate_no, hourly_price, lat, lng);
-        Car.updateCarList();
+        Car.carList.add(CarService.getCarByPlate_no(plate_no));
+        //Car.updateCarList();
     }
 
     /**
@@ -59,11 +64,16 @@ public class CarService {
      * <p>
      * deletes a car from the database and updates the static carList array<p>
      *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed reference to the updateCarList method, the method now updates
+     * java objects directly as well as editing the DB<p>
+     *
      * @param plate_no the registration plate number of the car to be deleted
      */
     public static void deleteCar(String plate_no) {
+        Car.carList.remove(getCarByPlate_no(plate_no));
         DB.deleteCar(plate_no);
-        Car.updateCarList();
+        //Car.updateCarList();
     }
 
     /**
@@ -79,7 +89,7 @@ public class CarService {
     public static Car getCarByPlate_no(String plate_no) {
 
         int i;
-        Car.updateCarList();
+        //Car.updateCarList();
         for (i = 0; i < Car.carList.size(); i++) {
             if (Car.carList.get(i).getPlate_no().equals(plate_no)) {
                 System.out.println("checking plate_no: " + Car.carList.get(i).getPlate_no());
@@ -101,7 +111,7 @@ public class CarService {
     public static Car getCarById(String id) {
 
         int i;
-        Car.updateCarList();
+        //Car.updateCarList();
         for (i = 0; i < Car.carList.size(); i++) {
             if (Car.carList.get(i).getId().equals(id)) {
                 return Car.carList.get(i);
@@ -135,7 +145,7 @@ public class CarService {
      * list will be empty if no matches are found
      */
     public static List<Car> carSearch(String type, String make, String model) {
-        Car.updateCarList();
+        //Car.updateCarList();
         List<Car> carList = Car.carList;
         List<Car> searchResults = new ArrayList<Car>();
         if (make.equals("empty") && model.equals("empty") && type.equals("empty")) {
@@ -191,5 +201,23 @@ public class CarService {
             }
         }
         return searchResults;
+    }
+
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 19.9.17
+     * <p>
+     * updates a specified car to a new latitude and longitude<p>
+     *
+     * @param plate_no the registration plate number of the car to be deleted
+     * @param lat the new latitude of the users position
+     * @param lng the new longitude of the users position
+     */
+    public static void updateCarLatLng(String plate_no, double lat, double lng) {
+        Car car = getCarByPlate_no(plate_no);
+        car.setLat(lat);
+        car.setLng(lng);
+        DB.updateCarLatLng(plate_no, lat, lng);
+        //Car.updateCarList();
     }
 }

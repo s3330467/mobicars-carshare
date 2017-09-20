@@ -39,6 +39,28 @@ public class DB {
 
     /**
      * Author: <b>Alexander Young</b><p>
+     * Date: 20.9.17
+     * <p>
+     * fetches a user from the user table that matches a given email
+     *
+     * @return an arraylist of Users, containing only the user that matches the
+     * given email
+     */
+    public static List<User> fetchUserByEmail(String email) {
+        String sql = "SELECT * "
+                + "FROM users "
+                + "WHERE email = :email";
+
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        try (Connection con = sql2o.open()) {
+            return con.createQuery(sql)
+                    .addParameter("email", email)
+                    .executeAndFetch(User.class);
+        }
+    }
+
+    /**
+     * Author: <b>Alexander Young</b><p>
      * Date: 10.8.17
      * <p>
      * fetches all entries from bookings table of the database and returns an
@@ -212,7 +234,7 @@ public class DB {
      * @param start_lng starting longitude of the car being booked
      * @return true if the booking is inserted successfully, false otherwise
      */
-    public static boolean insertBooking(int user_id, int car_id, String start_date, String start_time, double start_lat, double start_lng) {
+    public static boolean insertBooking(String user_id, String car_id, String start_date, String start_time, double start_lat, double start_lng) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String sql = "INSERT INTO bookings (user_id, car_id, start_date, start_time, start_lat, start_lng) "
                 + "VALUES (:user_id, :car_id, :start_date, :start_time, :start_lat, :start_lng)";
@@ -472,8 +494,31 @@ public class DB {
         
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
-//                    .addParameter("user_id", user_id)
+//                  .addParameter("user_id", user_id)
                     .addParameter("cost", cost)
+                    .executeUpdate();
+                    }
+    }
+
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 19.9.17
+     * <p>
+     * update a specified car to a new latitude and longitude<p>
+     *
+     * @param plate_no the plate number of the car to update position for
+     * @param lat the new latitude of the users position
+     * @param lng the new longitude of the users position
+     * @return true if the position is updated, otherwise false
+     */
+    public static boolean updateCarLatLng(String plate_no, double lat, double lng) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String updateSql = "UPDATE cars SET lat = :lat, lng = :lng WHERE plate_no = :plate_no";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(updateSql)
+                    .addParameter("plate_no", plate_no)
+                    .addParameter("lat", lat)
+                    .addParameter("lng", lng)
                     .executeUpdate();
         }
         return true;

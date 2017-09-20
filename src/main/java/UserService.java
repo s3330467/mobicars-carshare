@@ -21,10 +21,14 @@ public class UserService {
      * Author: <b>Alexander Young</b><p>
      * Date: 7.8.17
      * <p>
+     *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed reference to the updateUserList method<p>
+     *
      * @return a list of all users found in the database
      */
     public static List<User> getAllUsers() {
-        User.updateUserList();
+        //User.updateUserList();
         return User.userList;
     }
 
@@ -32,13 +36,17 @@ public class UserService {
      * Author: <b>Alexander Young</b><p>
      * Date: 7.8.17
      * <p>
+     *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed reference to the updateUserList method<p>
+     *
      * @param id unique id of the user to retrieve from the database
      * @return a single User object for the user that matches the id given, or
      * null if no match is found
      */
     public static User getUser(String id) {
         int i;
-        User.updateUserList();
+        //User.updateUserList();
         for (i = 0; i < User.userList.size(); i++) {
             if (User.userList.get(i).getId().equals(id)) {
                 return User.userList.get(i);
@@ -51,13 +59,17 @@ public class UserService {
      * Author: <b>Alexander Young</b><p>
      * Date: 9.8.17
      * <p>
+     *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed reference to the updateUserList method<p>
+     *
      * @param email unique email of the user to retrieve from the database
      * @return a single User object for the user that matches the email given,
      * or null if no match is found
      */
     public static User getUserByEmail(String email) {
         int i;
-        User.updateUserList();
+        //User.updateUserList();
         for (i = 0; i < User.userList.size(); i++) {
             if (User.userList.get(i).getEmail().equals(email)) {
                 System.out.println("fetching user with the email: " + User.userList.get(i).getEmail());
@@ -71,13 +83,17 @@ public class UserService {
      * Author: <b>Alexander Young</b><p>
      * Date: 7.8.17
      * <p>
+     *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed reference to the updateUserList method<p>
+     *
      * @param id unique id of the user to retrieve from the database
      * @return a single User object for the user that matches the id given, or
      * null if no match is found
      */
     public static User getUserById(String id) {
         int i;
-        User.updateUserList();
+        //User.updateUserList();
         for (i = 0; i < User.userList.size(); i++) {
             if (User.userList.get(i).getId().equals(id)) {
                 return User.userList.get(i);
@@ -96,6 +112,11 @@ public class UserService {
      * Updated 29.08.2017  by 29-08-2017 Vishal Pradhan<p>
      * Added card details to be stored along with users personal details<p>
      * 
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed reference to the updateUserList method, now also adds a user to
+     * the userList directly rather than replacing the entire list with an
+     * import from the DB<p>
+     *
      * @param email email address of the user
      * @param userPassword password of the user, at this point the password is
      * not encrypted
@@ -115,16 +136,19 @@ public class UserService {
     // creates a new user
     public static boolean createUser(String email, String userPassword, 
             String f_name, String l_name, String address, String license_no, String phone_no, String card_name, String card_no, String expiry_month, String expiry_year, String cvv) {
-
+        User user;
         //create an encrypted password based off the supplied password string
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(userPassword);
 
-        if (!DB.insertUser(email, encryptedPassword, f_name, l_name, address, license_no, phone_no, card_name, card_no, expiry_month, expiry_year, cvv)) {
-            return false;
+        if (DB.insertUser(email, encryptedPassword, f_name, l_name, address, license_no, phone_no, card_name, card_no, expiry_month, expiry_year, cvv)) {
+            user = DB.fetchUserByEmail(email).get(0);
+            System.out.println("user being added's email: " + user.getEmail());
+            User.userList.add(user);
+            return true;
         }
-        User.updateUserList();
-        return true;
+        //User.updateUserList();
+        return false;
     }
 
     /**
@@ -135,6 +159,9 @@ public class UserService {
      * checks that the supplied plain text password matches the encrypted
      * password stored in the database<p>
      *
+     * Updated 20.9.17 by Alexander Young<p>
+     * removed reference to the updateUserList method<p>
+     *
      * @param email email address of the user
      * @param inputPassword password of the user, at this point the password is
      * not encrypted
@@ -143,7 +170,7 @@ public class UserService {
      */
     public static Boolean validateUser(String email, String inputPassword) {
         //ensure the userlist is up to date
-        User.updateUserList();
+        //User.updateUserList();
         //get the user who matches the supplied email
         User user = getUserByEmail(email);
         //if no user is returned the email is not in the database, return false
