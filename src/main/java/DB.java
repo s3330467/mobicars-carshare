@@ -473,6 +473,31 @@ public class DB {
     
     /**
      * Author: <b>Rachel Tan</b><p>
+     * Date: 21.9.17
+     * <p>
+     * Fetches the booking ID of a user's current booking by user ID.
+     * 
+     * @param user_id
+     * @return 
+     */
+    
+    public static List<Booking> fetchIdOfCurrentBookingByUser_id(String user_id) {
+        String sql = "SELECT id "
+                + "FROM bookings "
+                + "WHERE user_id = :user_id AND "
+                + "collection_date IN (SELECT max(collection_date) FROM bookings "
+                + "ORDER BY collection_time desc limit 1;";
+
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        try (Connection con = sql2o.open()) {
+            return con.createQuery(sql)
+                    .addParameter("user_id", user_id)
+                    .executeAndFetch(Booking.class);
+        }
+    }
+    
+    /**
+     * Author: <b>Rachel Tan</b><p>
      * Date: 19.9.17
      * <p>
      * Populates the cost field of the last completed booking of user.
