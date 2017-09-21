@@ -475,10 +475,10 @@ public class DB {
      * Author: <b>Rachel Tan</b><p>
      * Date: 21.9.17
      * <p>
-     * Fetches the booking ID of a user's current booking by user ID.
+     * Fetches the booking ID of a user's current booking by user ID.<p>
      * 
-     * @param user_id
-     * @return 
+     * @param user_id The ID of the user
+     * @return True if booking ID is fetched, false otherwise
      */
     
     public static List<Booking> fetchIdOfCurrentBookingByUser_id(String user_id) {
@@ -500,29 +500,28 @@ public class DB {
      * Author: <b>Rachel Tan</b><p>
      * Date: 19.9.17
      * <p>
-     * Populates the cost field of the last completed booking of user.
-     * CURRENTLY DOES NOT WORK
+     * Populates the cost field of the last completed booking of user.<p>
      * 
-     * @param cost Total cost of a booking as returned by BookingService.calculateTotalCostOfBooking()
+     * @param id ID of the booking
+     * @param cost Total cost of the booking
      * @return True if the booking is updated, otherwise false
+     * 
+     * Updated 21.9.17 by Rachel Tan<p>
+     * SQL query selects booking ID instead of last complete booking of user
      */
-    public static boolean updateTotalCostOfBookingById(String id) {
+    public static boolean updateTotalCostOfBooking(String booking_id, double cost) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
         String sql = "UPDATE bookings "
-                + "SET cost = :cost ";
-                /*
-                + "WHERE user_id = :user_id AND "
-                + "collection_date IS NOT NULL AND "
-                + "end_date IN (SELECT max(end_date) FROM bookings) "
-                + "ORDER BY end_time desc limit 1";
-*/
+                + "SET cost = :cost "
+                + "WHERE id = :booking_id";
         
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
-//                  .addParameter("user_id", user_id)
+                    .addParameter("booking_id", booking_id)
                     .addParameter("cost", cost)
                     .executeUpdate();
                     }
+        return true;
     }
 
     /**
