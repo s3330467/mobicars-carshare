@@ -427,12 +427,11 @@ public class BookingService {
      */
     public static boolean insertTotalCostOfBookingById(String booking_id) {
         Booking booking = getBooking(booking_id);
+        booking.setCost(BookingService.calculateTotalCostOfBooking(booking));
         double cost = booking.getCost();
         
-        if (DB.updateTotalCostOfBooking(booking_id, cost)) {
-            booking.setCost(BookingService.calculateTotalCostOfBooking(booking));
-            DB.updateTotalCostOfBooking(booking_id, booking.getCost());
-            return true;
+        if (DB.updateTotalCostOfBooking(booking_id, cost)) { 
+        return true;
         }
         return false;
     }
