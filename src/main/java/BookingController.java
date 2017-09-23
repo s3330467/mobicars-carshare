@@ -317,7 +317,6 @@ public class BookingController {
         post("/process_return_car", (request, response) -> {
             //Booking.updateBookingList();
             if (BookingService.returnCar(request.session().attribute("session_booking"))) {
-                
                 request.session().attribute("session_booking", null);
                 response.redirect("/booking_summary");
             }
@@ -343,6 +342,9 @@ public class BookingController {
          * Updated 20.9.17 by Alexander Young<p>
          * removed reference to the updateBookingList, updateUserList and
          * updateCarList methods<p>
+         * 
+         * Updated 21.9.17 by Rachel Tan<p>
+         * Calls method to insert cost of booking in database<p>
          */
         get("/booking_summary", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
@@ -351,7 +353,7 @@ public class BookingController {
             //Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             Booking booking = BookingService.getLastCompleteBookingOfUser(user.getId());
-            booking.setCost(BookingService.calculateTotalCostOfBooking(booking));
+            BookingService.insertTotalCostOfBookingById(booking.getId());
             booking.setHours(BookingService.calculateBookingHours(booking));
             Car car = CarService.getCarById(booking.getCar_id());
 

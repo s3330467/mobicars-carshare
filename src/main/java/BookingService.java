@@ -256,7 +256,7 @@ public class BookingService {
             //Booking.updateBookingList();
             return true;
         }
-
+        
         return false;
     }
 
@@ -322,7 +322,7 @@ public class BookingService {
      * getTotalCostofBooking() as the method isn't really a getter method<p>
      * 
      * Updated 19.9.17 by Rachel Tan<p>
-     * Total cost now returns a number rounded to 2 decimal places instead of multiple decimal places.
+     * Total cost now returns a number rounded to 2 decimal places instead of multiple decimal places.<p>
      * 
      * @param booking the booking to calculate total cost for
      * @return the total cost of the completed booking
@@ -396,7 +396,7 @@ public class BookingService {
      * return of a booking<p>
      * 
      * Updated 19.9.17 by Rachel Tan<p>
-     * Time is reduced to 2 decimal places.
+     * Time is reduced to 2 decimal places.<p>
      * 
      * @param booking the booking to calculate duration
      * @return the duration in hours of the booking
@@ -410,19 +410,29 @@ public class BookingService {
         durationInSeconds = durationInSeconds/100;
         return durationInSeconds;
     }
-    
+       
     /**
      * Author: <b>Rachel Tan</b><p>
      * Date 19.9.17
      * <p>
-     * Gets ID of user's current booking to update total cost in database with
-     * NOT CURRENTLY WORKING OR COMPLETE
+     * 
+     * Calls method that calculates the total cost of booking then calls DB
+     * method which updates the cost of the booking by ID<p>
+     * 
+     * @param booking_id The ID of the user's current booking
+     * @return True if cost is updated, otherwise false
+     * 
+     * Updated 21.9.17 by Rachel Tan<p>
+     * Changed the method called that retrieves booking ID<p>
      */
-    /*
-    public static boolean insertTotalCostOfBookingById() {
-        Booking.updateBookingList();
-        Booking booking = getCurrentBookingByUser_id(user.getId());
-        DB.updateTotalCostOfBookingById(getCurrent)
+    public static boolean insertTotalCostOfBookingById(String booking_id) {
+        Booking booking = getBooking(booking_id);
+        booking.setCost(BookingService.calculateTotalCostOfBooking(booking));
+        double cost = booking.getCost();
+        
+        if (DB.updateTotalCostOfBooking(booking_id, cost)) { 
+        return true;
+        }
+        return false;
     }
-*/
 }
