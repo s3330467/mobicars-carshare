@@ -47,7 +47,6 @@ public class BookingController {
          */
         get("/get_booking_history", (request, response) -> {
             Gson gson = new Gson();
-            //Booking.updateBookingList();
             String jsonObject = gson.toJson(Booking.bookingList);
             return "{\"data\":" + jsonObject + "}";
         });
@@ -76,12 +75,9 @@ public class BookingController {
          */
         get("/get_booking_history_for_current_user", (request, response) -> {
             Gson gson = new Gson();
-            //Booking.updateBookingList();
-            //User.updateUserList();
             User currentUser = UserService.getUserByEmail(request.session().attribute("session_email"));
             System.out.println(currentUser.getId());
             List<Booking> usersBookings = BookingService.getAllBookingsByUser_id(currentUser.getId());
-            // Booking.updateBookingList();
             String jsonObject = gson.toJson(usersBookings);
             return "{\"data\":" + jsonObject + "}";
         });
@@ -140,9 +136,6 @@ public class BookingController {
          */
         post("/process_confirm_booking", (request, response) -> {
             String plate_no = request.queryParams("plate_no");
-            //Car.updateCarList();
-            //User.updateUserList();
-            //Booking.updateBookingList();
             System.out.println("confirm booking plate no: " + plate_no);
             Car car = CarService.getCarByPlate_no(plate_no);
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
@@ -202,9 +195,6 @@ public class BookingController {
          */
         get("/booking_made", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            //Car.updateCarList();
-            //User.updateUserList();
-            //Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
             Date current_date = new Date();
@@ -240,9 +230,6 @@ public class BookingController {
          */
         post("/process_collect_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            //Car.updateCarList();
-            //User.updateUserList();
-            //Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
             Car car = CarService.getCarById(booking.getCar_id());
@@ -268,9 +255,6 @@ public class BookingController {
          */
         get("/booking_in_progress", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            //Car.updateCarList();
-            //User.updateUserList();
-            //Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
             Car car = CarService.getCarById(booking.getCar_id());
@@ -315,7 +299,6 @@ public class BookingController {
          * removed reference to the updateBookingList method<p>
          */
         post("/process_return_car", (request, response) -> {
-            //Booking.updateBookingList();
             if (BookingService.returnCar(request.session().attribute("session_booking"))) {
                 request.session().attribute("session_booking", null);
                 response.redirect("/booking_summary");
@@ -337,7 +320,7 @@ public class BookingController {
          * there is no current booking.<p>
          * 
          * Updated 19.9.17 by Rachel Tan<p>
-         * Added set cost method to be able to allow page to display cost.
+         * setHours method to be able to allow page to display cost.
          *
          * Updated 20.9.17 by Alexander Young<p>
          * removed reference to the updateBookingList, updateUserList and
@@ -348,9 +331,6 @@ public class BookingController {
          */
         get("/booking_summary", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
-            //Car.updateCarList();
-            //User.updateUserList();
-            //Booking.updateBookingList();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             Booking booking = BookingService.getLastCompleteBookingOfUser(user.getId());
             BookingService.insertTotalCostOfBookingById(booking.getId());

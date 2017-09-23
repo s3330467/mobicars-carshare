@@ -470,32 +470,7 @@ public class DB {
         }
         return true;
     }
-    
-    /**
-     * Author: <b>Rachel Tan</b><p>
-     * Date: 21.9.17
-     * <p>
-     * Fetches the booking ID of a user's current booking by user ID.<p>
-     * 
-     * @param user_id The ID of the user
-     * @return True if booking ID is fetched, false otherwise
-     */
-    
-    public static List<Booking> fetchIdOfCurrentBookingByUser_id(String user_id) {
-        String sql = "SELECT id "
-                + "FROM bookings "
-                + "WHERE user_id = :user_id AND "
-                + "collection_date IN (SELECT max(collection_date) FROM bookings "
-                + "ORDER BY collection_time desc limit 1;";
-
-        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        try (Connection con = sql2o.open()) {
-            return con.createQuery(sql)
-                    .addParameter("user_id", user_id)
-                    .executeAndFetch(Booking.class);
-        }
-    }
-    
+       
     /**
      * Author: <b>Rachel Tan</b><p>
      * Date: 19.9.17
@@ -507,7 +482,7 @@ public class DB {
      * @return True if the booking is updated, otherwise false
      * 
      * Updated 21.9.17 by Rachel Tan<p>
-     * SQL query selects booking ID instead of last complete booking of user
+     * SQL query selects booking ID instead of last complete booking of user<p>
      */
     public static boolean updateTotalCostOfBooking(String booking_id, double cost) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
