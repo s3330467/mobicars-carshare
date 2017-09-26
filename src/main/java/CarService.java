@@ -184,6 +184,19 @@ public class CarService {
                     }
                 }
             }
+        }
+        if (type.equals("empty")) {
+            //user is searching for make and model
+            System.out.println(make + model);
+            for (int i = 0; i < carList.size(); i++) {
+                if (carList.get(i).getMake().toLowerCase().equals(make.toLowerCase())) {
+                    System.out.println("1 criteria met");
+                    if (carList.get(i).getModel().toLowerCase().equals(model.toLowerCase())) {
+                        System.out.println("2 criteria met");
+                        searchResults.add(carList.get(i));
+                    }
+                }
+            }
         } else {
             //user is searching for type, make, model
             System.out.println(type + make + model);
