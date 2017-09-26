@@ -103,8 +103,6 @@ public class BookingController {
         post("/process_book_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String plate_no = request.queryParams("plate_no");
-            // Car.updateCarList();
-            //User.updateUserList();
             System.out.println("booking plate no: " + plate_no);
             Car car = CarService.getCarByPlate_no(plate_no);
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
@@ -151,7 +149,6 @@ public class BookingController {
                 timer.schedule(new TimerTask() {
                     public void run() {
                         System.out.println("\n\n\n\nattempting to cancel booking");
-                        //Booking.updateBookingList();
                         Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
                         if (booking.getCollection_date() == null) {
                             if (BookingService.cancelBooking(request.session().attribute("session_booking"))) {

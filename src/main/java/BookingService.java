@@ -29,7 +29,6 @@ public class BookingService {
      */
     public static Booking getBooking(String booking_id) {
         int i;
-        //Booking.updateBookingList();
         for (i = 0; i < Booking.bookingList.size(); i++) {
             if (Booking.bookingList.get(i).getId().equals(booking_id)) {
                 return Booking.bookingList.get(i);
@@ -60,7 +59,6 @@ public class BookingService {
      * object list<p>
      */
     public static Booking getCurrentBookingByUser_id(String user_id) {
-        //Booking.updateBookingList();
         Booking booking;
         for (int i = 0; i < Booking.bookingList.size(); i++) {
             booking = Booking.bookingList.get(i);
@@ -110,7 +108,6 @@ public class BookingService {
      */
     public static boolean cancelBooking(String booking_id) {
         Date current_date = new Date();
-        //Booking.updateBookingList();
         Booking booking = getBooking(booking_id);
         Car car = CarService.getCarById(booking.getCar_id());
         String end_date = date.format(current_date);
@@ -120,8 +117,6 @@ public class BookingService {
             booking.setEnd_time(end_time);
             DB.updateCarAvailable(car.getPlate_no(), true);
             car.setAvailable(true);
-            //Car.updateCarList();
-            //Booking.updateBookingList();
             return true;
         }
         return false;
@@ -150,18 +145,18 @@ public class BookingService {
         Date current_date = new Date();
         String start_date = date.format(current_date);
         String start_time = time.format(current_date);
+        String exp_date = "1992-10-29";
+        String exp_time = "12:12:12";
         double start_lat = car.getLat();
         double start_lng = car.getLng();
         if (car.isAvailable());
-        if (DB.insertBooking(user_id, car_id, start_date, start_time, start_lat, start_lng)) {
+        if (DB.insertBooking(user_id, car_id, start_date, start_time, start_lat, start_lng, exp_date, exp_time)) {
             Booking booking = getCurrentBookingByUser_id(user_id);
             System.out.println(user_id);
             System.out.println("this booking exists and its id is: " + booking.getId());
             Booking.bookingList.add(booking);
             DB.updateCarAvailable(car.getPlate_no(), false);
             car.setAvailable(false);
-            //Car.updateCarList();
-            // Booking.updateBookingList();
             return true;
         }
         return false;
@@ -202,7 +197,6 @@ public class BookingService {
         int i;
         Booking booking;
         Car car;
-        //Booking.updateBookingList();
         booking = BookingService.getBooking(booking_id);
         if (DB.collectCar(booking_id, collection_date, collection_time)) {
             car = CarService.getCarById(booking.getCar_id());
@@ -212,8 +206,6 @@ public class BookingService {
 //            car.carSim.setCar(car);
             car.carSim = new CarSimulator(car);
             car.carSim.startMoving();
-            // Car.updateCarList();
-            //Booking.updateBookingList();
             return true;
         }
         return false;
@@ -239,7 +231,6 @@ public class BookingService {
         Date current_date = new Date();
         String end_date = date.format(current_date);
         String end_time = time.format(current_date);
-        //Booking.updateBookingList();
         Booking booking = getBooking(booking_id);
         Car car = CarService.getCarById(booking.getCar_id());
         double end_lat = car.getLat();
@@ -252,8 +243,6 @@ public class BookingService {
             booking.setEnd_lat(end_lat);
             booking.setEnd_lng(end_lng);
             car.carSim.stopMoving();
-            //Car.updateCarList();
-            //Booking.updateBookingList();
             return true;
         }
         
@@ -275,7 +264,6 @@ public class BookingService {
      * bookings
      */
     public static List<Booking> getAllBookingsByUser_id(String user_id) {
-        //Booking.updateBookingList();
         List<Booking> usersBookings = new ArrayList<Booking>();
         for (int i = 0; i < Booking.bookingList.size(); i++) {
             if (Booking.bookingList.get(i).getUser_id().equals(user_id)) {
