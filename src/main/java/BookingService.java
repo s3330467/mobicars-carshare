@@ -145,11 +145,12 @@ public class BookingService {
         Date current_date = new Date();
         String start_date = date.format(current_date);
         String start_time = time.format(current_date);
-//        String exp_date = date.format()
+        String exp_date = "1992-10-29";
+        String exp_time = "12:12:12";
         double start_lat = car.getLat();
         double start_lng = car.getLng();
         if (car.isAvailable());
-        if (DB.insertBooking(user_id, car_id, start_date, start_time, start_lat, start_lng)) {
+        if (DB.insertBooking(user_id, car_id, start_date, start_time, start_lat, start_lng, exp_date, exp_time)) {
             Booking booking = getCurrentBookingByUser_id(user_id);
             System.out.println(user_id);
             System.out.println("this booking exists and its id is: " + booking.getId());
