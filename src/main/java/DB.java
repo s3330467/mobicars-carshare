@@ -234,10 +234,10 @@ public class DB {
      * @param start_lng starting longitude of the car being booked
      * @return true if the booking is inserted successfully, false otherwise
      */
-    public static boolean insertBooking(String user_id, String car_id, String start_date, String start_time, double start_lat, double start_lng, String exp_date, String exp_time) {
+    public static boolean insertBooking(String user_id, String car_id, String start_date, String start_time, double start_lat, double start_lng) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "INSERT INTO bookings (user_id, car_id, start_date, start_time, start_lat, start_lng, exp_date, exp_time) "
-                + "VALUES (:user_id, :car_id, :start_date, :start_time, :start_lat, :start_lng, :exp_date, :exp_time)";
+        String sql = "INSERT INTO bookings (user_id, car_id, start_date, start_time, start_lat, start_lng) "
+                + "VALUES (:user_id, :car_id, :start_date, :start_time, :start_lat, :start_lng)";
 
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
@@ -247,8 +247,6 @@ public class DB {
                     .addParameter("start_time", start_time)
                     .addParameter("start_lat", start_lat)
                     .addParameter("start_lng", start_lng)
-                    .addParameter("exp_date", exp_date)
-                    .addParameter("exp_time", exp_time)
                     .executeUpdate();
         }
         return true;
