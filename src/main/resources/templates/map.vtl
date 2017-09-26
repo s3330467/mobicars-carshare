@@ -113,11 +113,23 @@ pick up date and time.. it also acts as a live time checker...-->
         var userIcon = {
             url: 'images/user.png'
         };
-        var sedanAvailableIcon = {
-            url: 'images/sedanAvailable.png'
+        var carAvailableIcon = {
+            url: 'images/CarAvailable.png'
         };
-        var sedanBookedIcon = {
-            url: 'images/sedanBooked.png'
+        var carBookedIcon = {
+            url: 'images/CarBooked.png'
+        };
+        var suvAvailableIcon = {
+            url: 'images/SuvAvailable.png'
+        };
+        var suvBookedIcon = {
+            url: 'images/SuvBooked.png'
+        };
+        var sportsAvailableIcon = {
+            url: 'images/SportsAvailable.png'
+        };
+        var sportsBookedIcon = {
+            url: 'images/SportsBooked.png'
         };
         function initMap() {
 
@@ -417,7 +429,6 @@ pick up date and time.. it also acts as a live time checker...-->
                 marker = new google.maps.Marker({
                     position: carPos,
                     title: car.plate_no,
-                    icon: sedanAvailableIcon
                 });
 
                 /* during the process of creating each marker, also create
@@ -441,8 +452,29 @@ pick up date and time.. it also acts as a live time checker...-->
                         };
                     })(marker));
                 }
-                if (car.available === false) {
-                    marker.setIcon(sedanBookedIcon);
+                if(car.type === "suv") {
+                    if (car.available === false) {
+                        marker.setIcon(suvBookedIcon);
+                    }
+                    else{
+                         marker.setIcon(suvAvailableIcon);
+                    }
+                }
+                else if(car.type === "sports") {
+                    if (car.available === false) {
+                        marker.setIcon(sportsBookedIcon);
+                    }
+                    else{
+                         marker.setIcon(sportsAvailableIcon);
+                    }
+                }
+                else{
+                    if (car.available === false) {
+                        marker.setIcon(carBookedIcon);
+                    }
+                    else{
+                         marker.setIcon(carAvailableIcon);
+                    }
                 }
 
                 //add marker to the global marker array, replace its old marker if it exists, check if the array is empty and add this car to the start if it is
