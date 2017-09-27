@@ -6,9 +6,12 @@ import java.util.*;
  * <p>
  * POJO Booking object declaring the bookings MySQL table fields as variables
  * <p>
- * Edited 22.8.17 by Rachel: Added the variables: collection_date,
- * collection_time and end_date
- *
+ * Edited 22.8.17 by Rachel Tan<p>
+ * Added the variables: collection_date, collection_time and end_date<p>
+ * 
+ * Edited 26.9.17 by Rachel Tan<p>
+ *Added the variables: exp_date and exp_time<p>
+ * 
  * @author Rachel Tan
  */
 public class Booking {

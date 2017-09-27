@@ -58,7 +58,7 @@ public class BookingService {
      * matching booking from the SQL database and then adds it to the java
      * object list<p>
      */
-    public static Booking getCurrentBookingByUser_id(String user_id) {
+        public static Booking getCurrentBookingByUser_id(String user_id) {
         Booking booking;
         for (int i = 0; i < Booking.bookingList.size(); i++) {
             booking = Booking.bookingList.get(i);
@@ -133,21 +133,28 @@ public class BookingService {
      * Updated 20.9.17 by Alexander Young<p>
      * removed reference to the updateBookingList and updateCarList methods, the
      * method now updates java objects directly as well as editing the DB<p>
+     * 
+     * Updated 27.9.17 by Rachel Tan<p>
+     * Added expectedDateTime parameter
      *
      * @param car the car that is being booked
      * @param user the user making the booking
+     * @param expectedDateTime the date and time selected by user during booking
+     * for when they intend to return the car
      * @return true if the booking is created successfully, otherwise false
      */
-    public static boolean createBooking(Car car, User user) {
+    public static boolean createBooking(Car car, User user, String expectedDateTime) {
         String user_id = user.getId();
         System.out.println("Creating booking for userid: " + user_id);
         String car_id = car.getId();
         Date current_date = new Date();
         String start_date = date.format(current_date);
         String start_time = time.format(current_date);
-        Date expectedReturn = new Date();
-        String exp_date = date.format(expectedReturn);
-        String exp_time = time.format(expectedReturn);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date expDateTime = df.parse(expDateTime);
+        String exp_date = date.format(expDateTime);
+        String exp_time = time.format(expDateTime);
+        System.out.println("BookingService exp date: " + exp_date + "exp time: " + exp_time);
         double start_lat = car.getLat();
         double start_lng = car.getLng();
         if (car.isAvailable());

@@ -137,12 +137,17 @@ public class BookingController {
             System.out.println("confirm booking plate no: " + plate_no);
             Car car = CarService.getCarByPlate_no(plate_no);
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
-            if (BookingService.createBooking(car, user)) {
+            String expectedDateTime = request.queryParams("datetimepicker1");
+            System.out.println("Booking Controller query params date time: " + expectedDateTime);
+            if (BookingService.createBooking(car, user, expectedDateTime)) {
                 Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
                 request.session().attribute("session_booking", booking.getId());
                 Date current_date = new Date();
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date booking_date = df.parse(booking.getStart_date() + " " + booking.getStart_time());
+                Date expDateTime = df.parse(booking.getExp_date() + " " + booking.getExp_time());
+                String exp_date = expDateTime
+                System.out.println(" Booking Controller Expected date: " + booking.getExp_date() + "Expected time: " + booking.getExp_time());
                 Date expireTime = new Date(booking_date.getTime() + 900000);
                 System.out.println("\nexpire time: " + expireTime);
                 Timer timer = new Timer();

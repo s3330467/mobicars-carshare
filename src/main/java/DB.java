@@ -225,6 +225,9 @@ public class DB {
      * <p>
      * New entry is created in bookings table and is populated with the values
      * start date and time, and start location.<p>
+     * 
+     * Updated 26.9.17 by Rachel Tan<p>
+     * Added the parameters exp_date and exp_time, and edited MySQL command to include those<p>
      *
      * @param user_id unique id of the user who booked the car
      * @param car_id unique id of the car being booked
@@ -232,6 +235,8 @@ public class DB {
      * @param start_time start time of the booking
      * @param start_lat starting latitude of the car being booked
      * @param start_lng starting longitude of the car being booked
+     * @param exp_date expected return date selected by user
+     * @param exp_time expected return time selected by user
      * @return true if the booking is inserted successfully, false otherwise
      */
     public static boolean insertBooking(String user_id, String car_id, String start_date, String start_time, double start_lat, double start_lng, String exp_date, String exp_time) {
