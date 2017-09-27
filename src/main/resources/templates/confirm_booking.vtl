@@ -1,7 +1,7 @@
 <!--
 *Edited by Vishal Pradhan
 Edited: 16-09-2017 by Vishal Pradhan == display clean up and some css
-
+Edited: 25-09-2017 by Vishal Pradhan == adding the return date and time field 
 -->
 
 <div class="col-sm-10 col-sm-offset-2">
@@ -11,39 +11,22 @@ Edited: 16-09-2017 by Vishal Pradhan == display clean up and some css
         <p><b>Type:</b> $car.getType()</p>
         <p><b>Registration No:</b> $car.getPlate_no()</p>
         <p><b>Hourly rate:</b> $$car.getHourly_price()</p>
+        <p><b>Estimated Return Date and Time: </b></p>
+        
+       <div class="form-group">
+            <div class='col-sm-4'>
+                <div class='input-group date' id='datetimepicker1'>
+                
+                    <!--<label for="return">Return Date and Time:</label>-->
+                    <input type='text' id="dateandtime" size='2' class="form-control" placeholder="MM/DD/YYYY" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <br></br>
         <div class="text-center">
-
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-<!--
-  <script>
-  $( function() {
-    $( "#datepicker" ).datepicker();
-  } );
-  </script>
--->
-
-<script>
-$(function() {
-   $("#datepicker").datepicker({
-      dateFormat: "yy-mm-dd"
-   });
-});
-
-function formToJSON() {
-            return JSON.stringify({
-                   "expectedReturn": $('#datepicker').val()
-            });
-}
-</script>
-
-</head>
-<body>
- 
-<p>Date: <input type="text" id="datepicker"></p>
 
             <form action="/" method="POST">
                 <input type="hidden" name="plate_no" value="$car.getPlate_no()">
@@ -51,9 +34,69 @@ function formToJSON() {
             </form>
             <form action="/process_confirm_booking" method="POST">
                 <input type="hidden" name="plate_no" value="$car.getPlate_no()">
-                <input type="submit" class ="btn btn-success btn-sm" style="float: left" value="Confirm Booking" />
+                <input type="submit" id="confirmBooking" class ="btn btn-success btn-sm" style="float: left" value="Confirm Booking" />
             </form>
     
         </div>
     </div>
 </div>
+</div>
+<!--Edited: 25-09-2017 by Vishal Pradhan == adding the return date and time field -->
+<script type="text/javascript">
+            $(function () {
+                $('#datetimepicker1').datetimepicker({
+                    dateFormat: 'yy-mm-dd',
+                    onSelect: function (date) {
+                    //need to define a method here
+                    alert(date);
+                    }
+                });
+            });
+
+
+
+            /*
+                Playing up with it to see if it works or not
+            */
+           /*jQuery().ready(function() {
+           var v = jQuery("#confirmBooking").validate({
+            rules: {
+              dateandtime: {
+                required: true,
+                
+              },
+              },
+              errorElement: "span",
+              errorClass: "help-inline"
+
+              });
+
+              $(document).ready(function(){
+                $('#confirmBooking').click(function(){
+                    var exp_date = $("#exp_date").val();//how do i split that input into two seperate time and date??
+                    var exp_time = $("#exp_time").val();//some suggests using DateTimePicker.Value to do so
+                    var isvalid= true;//or something like this DateTimePicker.Value.ToShortDateString() - will give you a date string
+                                      //DateTimePicker.Value.ToShortTimeSttring() - will give you time string
+                    
+                     if(exp_date == "" || exp_time == "")
+                        {
+                            isvalid = false;
+                            alert("Field entry is required")
+                        }
+                        if(isValid == true){
+                        $.ajax({
+                        url: "/confirm_booking",
+                        type: "POST",
+                        data:{
+                            exp_date: exp_date,
+                            exp_time: exp_time
+                        },
+                        success: function(){
+                            alert("Your extension has been approved");
+                        }
+                        });
+                    }else{
+                        return false;
+                    }
+            */});
+        </script>
