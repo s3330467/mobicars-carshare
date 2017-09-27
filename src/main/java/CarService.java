@@ -18,10 +18,10 @@ public class CarService {
      * <p>
      * Updates the carList array from the DB and then returns an arraylist of
      * Car's
-     * 
+     *
      * Updated 28.08.2017 by Vishal Pradhan<p>
      * Added image field on create car<p>
-     * 
+     *
      * @return a single Booking object that matches the booking_id parameter
      */
     public static List<Car> getAllCars() {
@@ -134,6 +134,10 @@ public class CarService {
      *
      * a field that is not being searched for should not be null, it should be a
      * string that contains the text "empty"
+     * <p>
+     *
+     * Updated 26.9.17 by Alexander Young added if statements to cover the
+     * scenario of searching for make and model but not type
      *
      * @param type the type of car being searched for, if not searching for type
      * the expected parameter is "empty" not null
@@ -179,6 +183,19 @@ public class CarService {
                 if (carList.get(i).getType().toLowerCase().equals(type.toLowerCase())) {
                     System.out.println("1 criteria met");
                     if (carList.get(i).getMake().toLowerCase().equals(make.toLowerCase())) {
+                        System.out.println("2 criteria met");
+                        searchResults.add(carList.get(i));
+                    }
+                }
+            }
+        }
+        if (type.equals("empty")) {
+            //user is searching for make and model
+            System.out.println(make + model);
+            for (int i = 0; i < carList.size(); i++) {
+                if (carList.get(i).getMake().toLowerCase().equals(make.toLowerCase())) {
+                    System.out.println("1 criteria met");
+                    if (carList.get(i).getModel().toLowerCase().equals(model.toLowerCase())) {
                         System.out.println("2 criteria met");
                         searchResults.add(carList.get(i));
                     }

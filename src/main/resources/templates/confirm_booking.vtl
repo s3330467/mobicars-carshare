@@ -2,12 +2,14 @@
 *Edited by Vishal Pradhan
 Edited: 16-09-2017 by Vishal Pradhan == display clean up and some css
 Edited: 25-09-2017 by Vishal Pradhan == adding the return date and time field 
+Edited 29-9-17 by Alexander Young
+modified the previous button to change the current window back to the map screen rather than submit a form
 -->
 
 <div class="col-sm-10 col-sm-offset-2">
-    <div class="well" style="width: 390px; height: 380px;">
+    <!--<div class="well" style="width: 390px; height: 380px;">-->
         <img src="images/$car.getImage()" style="width: 350px; height: 200px;" alt="$car.getMake() $car.getModel() $car.getImage()">
-        <p><b>$car.getMake() $car.getModel()</b></p>
+        <p> <b>$car.getMake() $car.getModel()</b></p>
         <p><b>Type:</b> $car.getType()</p>
         <p><b>Registration No:</b> $car.getPlate_no()</p>
         <p><b>Hourly rate:</b> $$car.getHourly_price()</p>
@@ -27,19 +29,14 @@ Edited: 25-09-2017 by Vishal Pradhan == adding the return date and time field
         </div>
         <br></br>
         <div class="text-center">
-
-            <form action="/" method="POST">
-                <input type="hidden" name="plate_no" value="$car.getPlate_no()">
-                <input type="submit" class ="btn btn-warning btn-sm " style="float: left" value="Previous" />
-            </form>
+          <button class="btn btn-warning btn-sm" onclick="window.location.href='/'">Previous</button>
             <form action="/process_confirm_booking" method="POST">
                 <input type="hidden" name="plate_no" value="$car.getPlate_no()">
                 <input type="submit" id="confirmBooking" class ="btn btn-success btn-sm" style="float: left" value="Confirm Booking" />
             </form>
     
         </div>
-    </div>
-</div>
+    <!--</div>-->
 </div>
 <!--Edited: 25-09-2017 by Vishal Pradhan == adding the return date and time field -->
 <script type="text/javascript">
@@ -100,3 +97,8 @@ Edited: 25-09-2017 by Vishal Pradhan == adding the return date and time field
                     }
             */});
         </script>
+
+
+
+
+
