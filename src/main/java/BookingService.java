@@ -135,7 +135,10 @@ public class BookingService {
      * method now updates java objects directly as well as editing the DB<p>
      * 
      * Updated 27.9.17 by Rachel Tan<p>
-     * Added expectedDateTime parameter
+     * Added expectedDateTime parameter<p>
+     * 
+     * Updated 27.9.17 by Alexander Young<p>
+     * reworked the time formatting code to work with the format supplied by the HTML<p>
      *
      * @param car the car that is being booked
      * @param user the user making the booking
@@ -150,10 +153,21 @@ public class BookingService {
         Date current_date = new Date();
         String start_date = date.format(current_date);
         String start_time = time.format(current_date);
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date expDateTime = df.parse(expDateTime);
-        String exp_date = date.format(expDateTime);
-        String exp_time = time.format(expDateTime);
+        String exp_date = "";
+        String exp_time = "";
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+        try {
+            Date expected_date = df.parse(expectedDateTime);
+            exp_date = date.format(expected_date);
+            exp_time = time.format(expected_date);
+            System.out.print("expected date: " + exp_date);
+            System.out.print("expected time: " + exp_time);
+        } catch (ParseException e) {
+            System.out.println("could not parse dates in createBooking()");
+        }
+        
+        
+        
         System.out.println("BookingService exp date: " + exp_date + "exp time: " + exp_time);
         double start_lat = car.getLat();
         double start_lng = car.getLng();

@@ -6,6 +6,8 @@ Edited 27-9-17 by Alexander Young
 modified the previous button to change the current window back to the map screen rather than submit a form
 Edited 27.9.17 by Rachel Tan
 Replaced DateTimePicker script as previous one was not working.
+Edited 27.9.17 by Alexander Young
+moved POST to javascript rather than HTML form, added a check to make sure the expected return date is at least half an hour into the future
 -->
 
 <div class="col-sm-10 col-sm-offset-2">
@@ -32,9 +34,10 @@ Replaced DateTimePicker script as previous one was not working.
         <br></br>
         <div class="text-center">
           <button class="btn btn-warning btn-sm" onclick="window.location.href='/'">Previous</button>
-            <form action="/process_confirm_booking" method="POST">
+            <form id="confirm-form" action="/process_confirm_booking" method="POST">
                 <input type="hidden" name="plate_no" value="$car.getPlate_no()">
-                <input type="submit" id="datetimepicker1" class ="btn btn-success btn-sm" style="float: left" value="Confirm Booking" />
+                <input type="hidden" id="datetimeinput" name="datetime" value="">
+                <input type="button" id="confirm-booking-btn" class ="btn btn-success btn-sm" style="float: left" value="Confirm Booking" />
             </form>
     
         </div>
@@ -52,7 +55,21 @@ Replaced DateTimePicker script as previous one was not working.
                 });
             });
     */
-
+$(document).ready(function () {
+    
+    document.getElementById("confirm-booking-btn").onclick = function () {
+        var today = new Date;
+        var inputValue = document.getElementById("dateandtime").value;
+        //check if the supplied expected date is at least one hour in the future (1,800,000 is half an hour in milliseconds)
+        if(Date.parse(today)+ 1800000 < Date.parse(inputValue)) {
+            document.getElementById("datetimeinput").value = inputValue;
+            document.getElementById("confirm-form").submit();
+        }
+        else{
+            alert("please pick a time at least one hour into the future");
+        }
+    };
+});
  $(function () { 
         $('#datetimepicker1').datetimepicker(); 
 
