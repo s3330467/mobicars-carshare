@@ -10,9 +10,16 @@ function testCreditCard () {
   myCardNo = document.getElementById('card_no').value;
   myCardType = document.getElementById('card_type').value;
   if (checkCreditCard (myCardNo,myCardType)) {
-    alert ("Credit card has a valid format");
+//    alert ("Credit card has a valid format");
+//    document.getElementById("contact-form").submit();
+    return true;
   } 
-  else {alert (ccErrors[ccErrorNo]);};
+  else {
+      alert (ccErrors[ccErrorNo]);
+      return false;
+  };
+  
+  
 }
 
 var ccErrorNo = 0;
@@ -119,7 +126,7 @@ function checkCreditCard (cardnumber, cardname) {
       checksum = checksum + calc;
     
       // Switch the value of j
-      if (j ==1) {j = 2} else {j = 1};
+      if (j === 1) {j = 2;} else {j = 1;};
     } 
   
     // All done - if checksum is divisible by 10, it is a valid modulus 10.
@@ -163,14 +170,18 @@ function checkCreditCard (cardnumber, cardname) {
   // See if the length is valid for this card
   lengths = cards[cardType].length.split(",");
   for (j=0; j<lengths.length; j++) {
-    if (cardNo.length === lengths[j]) LengthValid = true;
+      alert(cardnumber.length + " " + lengths[j]);
+    if (cardnumber.length == lengths[j]) 
+    {
+        LengthValid = true;
+    }
   }
   
   // See if all is OK by seeing if the length was valid. We only check the length if all else was 
   if (!LengthValid) {
      ccErrorNo = 4;
      return false; 
-  };   
+  }   
   
   // The credit card is in the required format.
   return true;
