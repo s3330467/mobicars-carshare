@@ -400,5 +400,23 @@ public class BookingController {
             Date collection_date = df.parse(booking.getCollection_date() + " " + booking.getCollection_time());
             return (current_date.getTime() - collection_date.getTime()) / 1000;
         });
+        
+        /**
+         * Author: <b>Alexander Young</b><p>
+         * Date: 29.9.17
+         * <p>
+         * POST request<p>
+         * returns the amount of milliseconds between the currrent time and the expected end time
+         * <p>
+         */
+        post("/process_get_time_before_expiry", (request, response) -> {
+            User currentUser = UserService.getUserByEmail(request.session().attribute("session_email"));
+            Booking booking = BookingService.getCurrentBookingByUser_id(currentUser.getId());
+            Date current_date = new Date();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date expected_date = df.parse(booking.getExp_date() + " " + booking.getExp_time());
+            //check if the current
+            return current_date.getTime()/1000 - expected_date.getTime()/1000;
+        });
     }
 }

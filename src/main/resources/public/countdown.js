@@ -6,7 +6,7 @@
     timer now subtracts time already elapsed to accurately display the time remaining
     when timer expires the user is given an error and redirected back to the map
 */
-function startTimer(duration, display) {
+function startCollectionCountdown(duration, display) {
     var timer = duration, minutes, seconds;
     setInterval(function () {
         minutes = parseInt(timer / 60, 10);
@@ -30,5 +30,5 @@ function startTimer(duration, display) {
 window.onload = function () {
     var timeRemaining = (60 * 15) - $timeSinceBooking,
         display = document.querySelector('#time');
-    startTimer(timeRemaining, display);
+    startCollectionCountdown(timeRemaining, display);
 };
