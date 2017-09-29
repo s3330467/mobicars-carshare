@@ -10,7 +10,7 @@ Edited 27.9.17 by Alexander Young
 moved POST to javascript rather than HTML form, added a check to make sure the expected return date is at least half an hour into the future
 -->
 
-<div class="col-sm-10 col-sm-offset-2">
+<div class="col-sm-10 col-sm-offset-4">
     <!--<div class="well" style="width: 390px; height: 380px;">-->
         <img src="images/$car.getImage()" style="width: 350px; height: 200px;" alt="$car.getMake() $car.getModel() $car.getImage()">
         <p> <b>$car.getMake() $car.getModel()</b></p>
@@ -19,26 +19,26 @@ moved POST to javascript rather than HTML form, added a check to make sure the e
         <p><b>Hourly rate:</b> $$car.getHourly_price()</p>
         <p><b>Estimated Return Date and Time: </b></p>
         
-       <div class="form-group">
-            <div class='col-sm-4'>
+       <!--<div class="form-group">-->
+            <div class='col-sm-3'>
                 <div class='input-group date' id='datetimepicker1'>
-                
-                    <!--<label for="return">Return Date and Time:</label>-->
-                    <input type='text' id="dateandtime" size='2' class="form-control" placeholder="MM/DD/YYYY" />
+                    <input type='text' id="dateandtime" class="form-control" placeholder="MM/DD/YYYY" />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
                 </div>
             </div>
-        </div>
+        <!--</div>-->
         <br></br>
         <div class="text-center">
-          <button class="btn btn-warning btn-sm" onclick="window.location.href='/'">Previous</button>
+          <button type="button" class="btn btn-warning btn-sm" style="float: left" onclick="window.location.href='/'">Previous</button>
+          <button type="button" id="confirm-booking-btn" class ="btn btn-success btn-sm" style="float: left" value="Confirm Booking" />Confirm booking</button>
             <form id="confirm-form" action="/process_confirm_booking" method="POST">
                 <input type="hidden" name="plate_no" value="$car.getPlate_no()">
                 <input type="hidden" id="datetimeinput" name="datetime" value="">
-                <input type="button" id="confirm-booking-btn" class ="btn btn-success btn-sm" style="float: left" value="Confirm Booking" />
+                <!--<input type="button" id="confirm-booking-btn" class ="btn btn-success btn-sm" style="float: left" value="Confirm Booking" />-->
             </form>
+                
     
         </div>
     <!--</div>-->
