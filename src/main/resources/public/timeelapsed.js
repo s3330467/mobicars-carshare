@@ -1,15 +1,15 @@
 /* 
-@author: Rachel
-Date: 30.8.18
-
-Edited: 6.9.17 by Rachel: Added time elapsed script that counts minutes and seconds.
-Edited: 6.9.17 by Rachel: Edited time elapsed script to count hours.
-Edited: 6.9.17 by Rachel: Fixed minutes as it kept incrementing after reaching 60.
+ @author: Rachel
+ Date: 30.8.18
+ 
+ Edited: 6.9.17 by Rachel: Added time elapsed script that counts minutes and seconds.
+ Edited: 6.9.17 by Rachel: Edited time elapsed script to count hours.
+ Edited: 6.9.17 by Rachel: Fixed minutes as it kept incrementing after reaching 60.
  */
 function startTimer(duration, display) {
     var timer = duration, hours, minutes, seconds;
     setInterval(function () {
-        hours = parseInt (timer / 3600, 10);
+        hours = parseInt(timer / 3600, 10);
         minutes = parseInt(timer / 60 % 60, 10);
         seconds = parseInt(timer % 60, 10);
 
@@ -26,7 +26,10 @@ function startTimer(duration, display) {
 }
 
 window.onload = function () {
-    var timeElapsed = 0,
-        display = document.querySelector('#time');
-    startTimer(timeElapsed, display);
+    var display = document.querySelector('#time');
+    $.post("/process_get_time_elapsed_since_collection",
+            function (result)
+            {
+                startTimer(result, display);
+            });
 };

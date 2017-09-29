@@ -383,5 +383,22 @@ public class BookingController {
             }
             return null;
         });
+        
+        /**
+         * Author: <b>Alexander Young</b><p>
+         * Date: 29.9.17
+         * <p>
+         * POST request<p>
+         * returns the time elapsed for the users current booking
+         * <p>
+         */
+        post("/process_get_time_elapsed_since_collection", (request, response) -> {
+            User currentUser = UserService.getUserByEmail(request.session().attribute("session_email"));
+            Booking booking = BookingService.getCurrentBookingByUser_id(currentUser.getId());
+            Date current_date = new Date();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date collection_date = df.parse(booking.getCollection_date() + " " + booking.getCollection_time());
+            return (current_date.getTime() - collection_date.getTime()) / 1000;
+        });
     }
 }
