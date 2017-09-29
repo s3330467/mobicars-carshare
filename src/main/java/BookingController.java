@@ -286,7 +286,7 @@ public class BookingController {
             User user = UserService.getUserByEmail(request.session().attribute("session_email")); 
             Booking booking = BookingService.getCurrentBookingByUser_id(user.getId()); 
              
-            if (BookingService.extendBooking(booking.getId(), expectedDateTime)) { 
+            if (BookingService.extendBooking(booking, expectedDateTime)) { 
                 response.redirect("/booking_in_progress"); 
             } 
             return null; 
