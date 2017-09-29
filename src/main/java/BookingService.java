@@ -238,29 +238,31 @@ public class BookingService {
      * Date: 28.9.17
      * <p>
      * 
-     * @param booking_id id of the booking
+     * Updated 29.9.17 by Alexander Young<p>
+     * changed the input parameter of extendBooking to use a Booking object rather than a booking id
+     * @param booking booking to modify
      * @param expectedDateTime the new date and time selected by user when extending
      * booking for when they intend to return the car
      * @return true if expected date and time are updated, otherwise false
      */
-    public static boolean extendBooking(String booking_id, String expectedDateTime) {
-        Booking booking = getBooking(booking_id);
-        String exp_date = booking.getExp_date();
-        String exp_time = booking.getExp_time();
+    public static boolean extendBooking(Booking booking, String expectedDateTime) {
+        //String exp_date = booking.getExp_date();
+        //String exp_time = booking.getExp_time();
+        String new_exp_date = "";
+        String new_exp_time = "";
         SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy h:mm a");
         try {
-            Date expected_date = df.parse(expectedDateTime);
-            exp_date = date.format(expected_date);
-            exp_time = time.format(expected_date);
-            System.out.print("expected date: " + exp_date);
-            System.out.print("expected time: " + exp_time);
+            Date new_expected_date = df.parse(expectedDateTime);
+            new_exp_date = date.format(new_expected_date);
+            new_exp_time = time.format(new_expected_date);
+            System.out.print("new expected date: " + new_exp_date);
+            System.out.print("new expected time: " + new_exp_time);
         } catch (ParseException e) {
             System.out.println("could not parse dates in extendBooking()");
         }
-        
-        if (DB.updateExpDateTime(booking.getId(), exp_date, exp_time)) {
-            booking.setExp_date(exp_date);
-            booking.setExp_time(exp_time);
+        if (DB.updateExpDateTime(booking.getId(), new_exp_date, new_exp_time)) {
+            booking.setExp_date(new_exp_date);
+            booking.setExp_time(new_exp_time);
             return true;
         }
         return false;
