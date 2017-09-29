@@ -318,6 +318,33 @@ public class DB {
         }
         return true;
     }
+    
+    /**
+     * Author: <b>Rachel Tan</b><p>
+     * Date: 29.9.17
+     * <p>
+     * Updates the expected date and time fields of a booking that the user
+     * chooses to extend booking to
+     * @param booking_id id of the booking
+     * @param exp_date expected return date selected by user
+     * @param exp_time expected return time selected by user
+     * @return true if the expected date and time are updated, false otherwise
+     */
+    public static boolean updateExpDateTime(String booking_id, String exp_date, String exp_time) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String sql = "UPDATE bookings "
+                + "SET exp_date = :exp_date, exp_time = :exp_time "
+                + "WHERE id = :booking_id";
+        
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("booking_id", booking_id)
+                    .addParameter("exp_date", exp_date)
+                    .addParameter("exp_time", exp_time)
+                    .executeUpdate();
+        }
+        return true;
+    }
 
     /**
      * Author: <b>Rachel Tan</b><p>
