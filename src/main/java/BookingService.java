@@ -58,7 +58,7 @@ public class BookingService {
      * matching booking from the SQL database and then adds it to the java
      * object list<p>
      */
-        public static Booking getCurrentBookingByUser_id(String user_id) {
+    public static Booking getCurrentBookingByUser_id(String user_id) {
         Booking booking;
         for (int i = 0; i < Booking.bookingList.size(); i++) {
             booking = Booking.bookingList.get(i);
@@ -133,12 +133,13 @@ public class BookingService {
      * Updated 20.9.17 by Alexander Young<p>
      * removed reference to the updateBookingList and updateCarList methods, the
      * method now updates java objects directly as well as editing the DB<p>
-     * 
+     *
      * Updated 27.9.17 by Rachel Tan<p>
      * Added expectedDateTime parameter<p>
-     * 
+     *
      * Updated 27.9.17 by Alexander Young<p>
-     * reworked the time formatting code to work with the format supplied by the HTML<p>
+     * reworked the time formatting code to work with the format supplied by the
+     * HTML<p>
      *
      * @param car the car that is being booked
      * @param user the user making the booking
@@ -165,9 +166,7 @@ public class BookingService {
         } catch (ParseException e) {
             System.out.println("could not parse dates in createBooking()");
         }
-        
-        
-        
+
         System.out.println("BookingService exp date: " + exp_date + "exp time: " + exp_time);
         double start_lat = car.getLat();
         double start_lng = car.getLng();
@@ -237,12 +236,14 @@ public class BookingService {
      * Author: <b>Rachel Tan</b><p>
      * Date: 28.9.17
      * <p>
-     * 
+     *
      * Updated 29.9.17 by Alexander Young<p>
-     * changed the input parameter of extendBooking to use a Booking object rather than a booking id
+     * changed the input parameter of extendBooking to use a Booking object
+     * rather than a booking id
+     *
      * @param booking booking to modify
-     * @param expectedDateTime the new date and time selected by user when extending
-     * booking for when they intend to return the car
+     * @param expectedDateTime the new date and time selected by user when
+     * extending booking for when they intend to return the car
      * @return true if expected date and time are updated, otherwise false
      */
     public static boolean extendBooking(Booking booking, String expectedDateTime) {
@@ -267,7 +268,7 @@ public class BookingService {
         }
         return false;
     }
-        
+
     /**
      * Author: <b>Rachel Tan</b><p>
      * Date: 22.8.17
@@ -302,7 +303,7 @@ public class BookingService {
             car.carSim.stopMoving();
             return true;
         }
-        
+
         return false;
     }
 
@@ -360,15 +361,17 @@ public class BookingService {
      * Author: <b>Alexander Young</b><p>
      * Date: 17.9.17
      * <p>
-     * calculates the total cost of a completed booking based on the number of seconds elapsed, using car's hourly price as the baseline.<p>
+     * calculates the total cost of a completed booking based on the number of
+     * seconds elapsed, using car's hourly price as the baseline.<p>
      *
      * Updated 17.9.17 by Alexander Young<p>
-     * renamed method to calculateTotalCostofBooking from 
+     * renamed method to calculateTotalCostofBooking from
      * getTotalCostofBooking() as the method isn't really a getter method<p>
-     * 
+     *
      * Updated 19.9.17 by Rachel Tan<p>
-     * Total cost now returns a number rounded to 2 decimal places instead of multiple decimal places.<p>
-     * 
+     * Total cost now returns a number rounded to 2 decimal places instead of
+     * multiple decimal places.<p>
+     *
      * @param booking the booking to calculate total cost for
      * @return the total cost of the completed booking
      */
@@ -397,7 +400,46 @@ public class BookingService {
         //multiply the price per second with the duration in seconds to get the cost of the booking
         double totalCost = pricePerSecond * durationOfBooking;
         totalCost = Math.round(totalCost * 100);
-        totalCost = totalCost/100;
+        totalCost = totalCost / 100;
+        double penaltyCost = calculatePenaltyCostOfBooking(booking);
+        return totalCost + penaltyCost;
+    }
+
+    /**
+     * Author: <b>Alexander Young</b><p>
+     * Date: 29.9.17
+     * <p>
+     * calculates the cost of the penalty time a booking has<p>
+     *
+     * @param booking the booking to calculate penalty cost
+     * @return the total penalty cost
+     */
+    public static double calculatePenaltyCostOfBooking(Booking booking) {
+        //initialise the duration to 0;
+        long durationOfBooking = 0;
+        //create a dateFormat object that matches the date formats used in the database
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            //parse the separate time and date strings stored in the database into a single Date object
+            Date expectedDateTime = df.parse(booking.getExp_date() + " " + booking.getExp_time());
+            Date endDateTime = df.parse(booking.getEnd_date() + " " + booking.getEnd_time());
+            /**
+             * calculate the duration of the booking in seconds by subtracting
+             * the collection time from the end time. this result is given in
+             * milliseconds, so divide it by 1000 to turn it into seconds
+             */
+            durationOfBooking = ((endDateTime.getTime() - expectedDateTime.getTime()) / 1000);
+        } catch (ParseException e) {
+            System.out.println("could not parse dates in calculateTotalCostOfBooking()");
+        }
+        //get the car that was booked so that we can get price information from it
+        Car bookedCar = CarService.getCarById(booking.getCar_id());
+        //divide the hourly rate of the car by 60 twice to get the price per second
+        double pricePerSecond = (bookedCar.getHourly_price() / 60) / 60;
+        //multiply the price per second with the duration in seconds to get the cost of the booking
+        double totalCost = pricePerSecond * durationOfBooking;
+        totalCost = Math.round(totalCost * 100);
+        totalCost = totalCost / 100;
         return totalCost;
     }
 
@@ -437,12 +479,12 @@ public class BookingService {
      * Author: <b>Alexander Young</b><p>
      * Date: 17.9.17
      * <p>
-     * calculates the elapsed duration in hours between the collection and 
+     * calculates the elapsed duration in hours between the collection and
      * return of a booking<p>
-     * 
+     *
      * Updated 19.9.17 by Rachel Tan<p>
      * Time is reduced to 2 decimal places.<p>
-     * 
+     *
      * @param booking the booking to calculate duration
      * @return the duration in hours of the booking
      */
@@ -450,23 +492,23 @@ public class BookingService {
         //cast the time in seconds to double so it can be divided
         double durationInSeconds = (double) calculateBookingSeconds(booking);
         //divide the result by 60 twice to convert it to hours
-        durationInSeconds = ((durationInSeconds)/60)/60;
+        durationInSeconds = ((durationInSeconds) / 60) / 60;
         durationInSeconds = Math.round(durationInSeconds * 100);
-        durationInSeconds = durationInSeconds/100;
+        durationInSeconds = durationInSeconds / 100;
         return durationInSeconds;
     }
-       
+
     /**
      * Author: <b>Rachel Tan</b><p>
      * Date 19.9.17
      * <p>
-     * 
+     *
      * Calls method that calculates the total cost of booking then calls DB
      * method which updates the cost of the booking by ID<p>
-     * 
+     *
      * @param booking_id The ID of the user's current booking
      * @return True if cost is updated, otherwise false
-     * 
+     *
      * Updated 21.9.17 by Rachel Tan<p>
      * Changed the method called that retrieves booking ID<p>
      */
@@ -474,9 +516,9 @@ public class BookingService {
         Booking booking = getBooking(booking_id);
         booking.setCost(BookingService.calculateTotalCostOfBooking(booking));
         double cost = booking.getCost();
-        
-        if (DB.updateTotalCostOfBooking(booking_id, cost)) { 
-        return true;
+
+        if (DB.updateTotalCostOfBooking(booking_id, cost)) {
+            return true;
         }
         return false;
     }

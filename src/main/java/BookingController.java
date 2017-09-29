@@ -3,6 +3,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import com.google.gson.Gson;
+import org.json.*;
 
 import spark.ModelAndView;
 import spark.template.velocity.VelocityTemplateEngine;
@@ -74,12 +75,29 @@ public class BookingController {
          * <p>
          */
         get("/get_booking_history_for_current_user", (request, response) -> {
-            Gson gson = new Gson();
+            JSONArray bookingArray = new JSONArray();
             User currentUser = UserService.getUserByEmail(request.session().attribute("session_email"));
-            System.out.println(currentUser.getId());
             List<Booking> usersBookings = BookingService.getAllBookingsByUser_id(currentUser.getId());
-            String jsonObject = gson.toJson(usersBookings);
-            return "{\"data\":" + jsonObject + "}";
+            for(int i = 0; i < usersBookings.size(); i++){
+                Booking booking = usersBookings.get(i);
+                Car car = CarService.getCarById(booking.getCar_id());
+                JSONObject json = new JSONObject();
+                json.put("plate_no", car.getPlate_no());
+                json.put("type", car.getType());
+                json.put("make", car.getMake());
+                json.put("model", car.getModel());
+                json.put("plate_no", car.getPlate_no());
+                json.put("status", "gravy");
+                json.put("startTime", "  "+booking.getStart_time()+"   "+booking.getStart_date());
+                json.put("collectionTime", "  "+booking.getCollection_time()+"   "+booking.getCollection_date());
+                json.put("returnTime", booking.getEnd_time()+" "+booking.getEnd_date());
+                json.put("duration", BookingService.calculateBookingHours(booking)+" hours");
+                json.put("overduePenalty", "$"+BookingService.calculatePenaltyCostOfBooking(booking));
+                json.put("totalCost", "$"+booking.getCost());  
+                bookingArray.put(json);
+            }
+            System.out.println("json array = "+bookingArray);
+            return "{\"data\":" + bookingArray + "}";
         });
 
         after("/get_booking_history_for_current_user", (req, res) -> {
