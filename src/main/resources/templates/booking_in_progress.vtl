@@ -3,6 +3,8 @@
 Date: 
 
 Edited: 16-09-2017 by Vishal Pradhan == display clean up and some css
+Edited 28.9.17 by Rachel Tan
+Added Extend Booking button and DateTimePicker script
 -->
 
 <script src="timeelapsed.js"></script>
@@ -18,10 +20,37 @@ Edited: 16-09-2017 by Vishal Pradhan == display clean up and some css
 
         <div><b>Time elapsed:</b> <div id="time"></div></div>
         <br></br>
+
+<div class="form-group">
+            <div class='col-sm-4'>
+                <div class='input-group date' id='datetimepicker1'>
+                
+                    <!--<label for="return">Return Date and Time:</label>-->
+                    <input type='text' id="dateandtime" size='2' class="form-control" placeholder="MM/DD/YYYY" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <br></br>
+
         <div class="text-center">
+            <form action="/process_extend_booking" method="POST">
+                <input type="hidden" name="booking_id" value="$booking.getId()">
+                <input type="hidden" id="datetimeinput" name="datetime" value="">
+                <input type="submit" class ="btn btn-success btn-sm" style="float: left" value="Extend booking" />
+            </form>
             <form action="/process_return_car" method="POST">
                 <input type="hidden" name="booking_id" value="$booking.getId()">
                 <input type="submit" class ="btn btn-success btn-sm" style="float: left" value="Return car and finish booking" />
             </form>
     <!--</div>-->
 </div>
+
+<script type="text/javascript">
+ $(function () { 
+        $('#datetimepicker1').datetimepicker(); 
+
+});
+</script>
