@@ -272,6 +272,28 @@ public class BookingController {
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
 
+         /** 
+         * Author: <b>Rachel Tan</b><p> 
+         * Date: 28.9.17 
+         * <p> 
+         * Gets the date and time from the DateTimePicker script in /booking_in_progress 
+         * and calls extendBooking(), then redirects back to the booking in 
+         * progress page.<p> 
+         */ 
+        post("/process_extend_booking", (request, response) -> { 
+            String expectedDateTime = request.queryParams("datetime"); 
+            System.out.println("Booking Controller query params date time: " + expectedDateTime); 
+            User user = UserService.getUserByEmail(request.session().attribute("session_email")); 
+            Booking booking = BookingService.getCurrentBookingByUser_id(user.getId()); 
+             
+            if (BookingService.extendBooking(booking.getId(), expectedDateTime)) { 
+                response.redirect("/booking_in_progress"); 
+            } 
+            return null; 
+        }); 
+         
+        /** 
+        
         /**
          * Author: <b>Alexander Young</b><p>
          * Date: 25.8.17

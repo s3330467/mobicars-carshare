@@ -235,12 +235,45 @@ public class BookingService {
 
     /**
      * Author: <b>Rachel Tan</b><p>
+     * Date: 28.9.17
+     * <p>
+     * 
+     * @param booking_id id of the booking
+     * @param expectedDateTime the new date and time selected by user when extending
+     * booking for when they intend to return the car
+     * @return true if expected date and time are updated, otherwise false
+     */
+    public static boolean extendBooking(String booking_id, String expectedDateTime) {
+        Booking booking = getBooking(booking_id);
+        String exp_date = booking.getExp_date();
+        String exp_time = booking.getExp_time();
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+        try {
+            Date expected_date = df.parse(expectedDateTime);
+            exp_date = date.format(expected_date);
+            exp_time = time.format(expected_date);
+            System.out.print("expected date: " + exp_date);
+            System.out.print("expected time: " + exp_time);
+        } catch (ParseException e) {
+            System.out.println("could not parse dates in extendBooking()");
+        }
+        
+        if (DB.updateExpDateTime(booking.getId(), exp_date, exp_time)) {
+            booking.setExp_date(exp_date);
+            booking.setExp_time(exp_time);
+            return true;
+        }
+        return false;
+    }
+        
+    /**
+     * Author: <b>Rachel Tan</b><p>
      * Date: 22.8.17
      * <p>
      * when user returns their booked car, the array bookingList is looped to
      * locate their booking and the returnCar method from DB.java is called,
      * which inserts the end date and time and end location values in the
-     * bookings table on the database. The car availability is set to true.
+     * bookings table on the database. The car availability is set to true.<p>
      *
      * Updated 20.9.17 by Alexander Young<p>
      * removed reference to the updateBookingList and updateCarList methods, the
