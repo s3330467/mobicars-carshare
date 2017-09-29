@@ -402,6 +402,7 @@ public class BookingService {
         totalCost = Math.round(totalCost * 100);
         totalCost = totalCost / 100;
         double penaltyCost = calculatePenaltyCostOfBooking(booking);
+        System.out.println("total cost: "+(totalCost+penaltyCost));
         return totalCost + penaltyCost;
     }
 
@@ -440,6 +441,9 @@ public class BookingService {
         double totalCost = pricePerSecond * durationOfBooking;
         totalCost = Math.round(totalCost * 100);
         totalCost = totalCost / 100;
+        if(totalCost < 0){
+            totalCost = 0;
+        }
         return totalCost;
     }
 
