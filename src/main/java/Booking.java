@@ -6,9 +6,12 @@ import java.util.*;
  * <p>
  * POJO Booking object declaring the bookings MySQL table fields as variables
  * <p>
- * Edited 22.8.17 by Rachel: Added the variables: collection_date,
- * collection_time and end_date
- *
+ * Edited 22.8.17 by Rachel Tan<p>
+ * Added the variables: collection_date, collection_time and end_date<p>
+ * 
+ * Edited 26.9.17 by Rachel Tan<p>
+ *Added the variables: exp_date and exp_time<p>
+ * 
  * @author Rachel Tan
  */
 public class Booking {
@@ -18,6 +21,8 @@ public class Booking {
     private String car_id;
     private String start_date;
     private String start_time;
+    private String exp_date;
+    private String exp_time;
     private String collection_date;
     private String collection_time;
     private String end_date;
@@ -41,12 +46,14 @@ public class Booking {
      * @param start_date the date of the booking in the format yyyy-MM-dd
      * @param start_time the time of the booking in the format HH:mm:ss
      */
-    public Booking(String id, String user_id, String car_id, String start_date, String start_time) {
+    public Booking(String id, String user_id, String car_id, String start_date, String start_time, String exp_date, String exp_time) {
         this.id = id;
         this.user_id = user_id;
         this.car_id = car_id;
         this.start_date = start_date;
         this.start_time = start_time;
+        this.exp_date = exp_date;
+        this.exp_time = exp_time;
     }
 
     @Override
@@ -104,6 +111,24 @@ public class Booking {
         this.start_time = start_time;
     }
 
+    public String getExp_date() {
+        return exp_date;
+    }
+
+    public void setExp_date(String exp_date) {
+        this.exp_date = exp_date;
+    }
+
+    public String getExp_time() {
+        return exp_time;
+    }
+
+    public void setExp_time(String exp_time) {
+        this.exp_time = exp_time;
+    }
+
+    
+    
     public String getCollection_date() {
         return collection_date;
     }

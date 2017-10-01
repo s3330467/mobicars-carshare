@@ -225,6 +225,9 @@ public class DB {
      * <p>
      * New entry is created in bookings table and is populated with the values
      * start date and time, and start location.<p>
+     * 
+     * Updated 26.9.17 by Rachel Tan<p>
+     * Added the parameters exp_date and exp_time, and edited MySQL command to include those<p>
      *
      * @param user_id unique id of the user who booked the car
      * @param car_id unique id of the car being booked
@@ -232,12 +235,14 @@ public class DB {
      * @param start_time start time of the booking
      * @param start_lat starting latitude of the car being booked
      * @param start_lng starting longitude of the car being booked
+     * @param exp_date expected return date selected by user
+     * @param exp_time expected return time selected by user
      * @return true if the booking is inserted successfully, false otherwise
      */
-    public static boolean insertBooking(String user_id, String car_id, String start_date, String start_time, double start_lat, double start_lng) {
+    public static boolean insertBooking(String user_id, String car_id, String start_date, String start_time, double start_lat, double start_lng, String exp_date, String exp_time) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        String sql = "INSERT INTO bookings (user_id, car_id, start_date, start_time, start_lat, start_lng) "
-                + "VALUES (:user_id, :car_id, :start_date, :start_time, :start_lat, :start_lng)";
+        String sql = "INSERT INTO bookings (user_id, car_id, start_date, start_time, start_lat, start_lng, exp_date, exp_time) "
+                + "VALUES (:user_id, :car_id, :start_date, :start_time, :start_lat, :start_lng, :exp_date, :exp_time)";
 
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
@@ -247,6 +252,8 @@ public class DB {
                     .addParameter("start_time", start_time)
                     .addParameter("start_lat", start_lat)
                     .addParameter("start_lng", start_lng)
+                    .addParameter("exp_date", exp_date)
+                    .addParameter("exp_time", exp_time)
                     .executeUpdate();
         }
         return true;
@@ -307,6 +314,33 @@ public class DB {
                     .addParameter("booking_id", booking_id)
                     .addParameter("collection_date", collection_date)
                     .addParameter("collection_time", collection_time)
+                    .executeUpdate();
+        }
+        return true;
+    }
+    
+    /**
+     * Author: <b>Rachel Tan</b><p>
+     * Date: 29.9.17
+     * <p>
+     * Updates the expected date and time fields of a booking that the user
+     * chooses to extend booking to
+     * @param booking_id id of the booking
+     * @param exp_date expected return date selected by user
+     * @param exp_time expected return time selected by user
+     * @return true if the expected date and time are updated, false otherwise
+     */
+    public static boolean updateExpDateTime(String booking_id, String exp_date, String exp_time) {
+        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
+        String sql = "UPDATE bookings "
+                + "SET exp_date = :exp_date, exp_time = :exp_time "
+                + "WHERE id = :booking_id";
+        
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("booking_id", booking_id)
+                    .addParameter("exp_date", exp_date)
+                    .addParameter("exp_time", exp_time)
                     .executeUpdate();
         }
         return true;
@@ -470,32 +504,7 @@ public class DB {
         }
         return true;
     }
-    
-    /**
-     * Author: <b>Rachel Tan</b><p>
-     * Date: 21.9.17
-     * <p>
-     * Fetches the booking ID of a user's current booking by user ID.<p>
-     * 
-     * @param user_id The ID of the user
-     * @return True if booking ID is fetched, false otherwise
-     */
-    
-    public static List<Booking> fetchIdOfCurrentBookingByUser_id(String user_id) {
-        String sql = "SELECT id "
-                + "FROM bookings "
-                + "WHERE user_id = :user_id AND "
-                + "collection_date IN (SELECT max(collection_date) FROM bookings "
-                + "ORDER BY collection_time desc limit 1;";
-
-        Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
-        try (Connection con = sql2o.open()) {
-            return con.createQuery(sql)
-                    .addParameter("user_id", user_id)
-                    .executeAndFetch(Booking.class);
-        }
-    }
-    
+       
     /**
      * Author: <b>Rachel Tan</b><p>
      * Date: 19.9.17
@@ -507,7 +516,7 @@ public class DB {
      * @return True if the booking is updated, otherwise false
      * 
      * Updated 21.9.17 by Rachel Tan<p>
-     * SQL query selects booking ID instead of last complete booking of user
+     * SQL query selects booking ID instead of last complete booking of user<p>
      */
     public static boolean updateTotalCostOfBooking(String booking_id, double cost) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);

@@ -2,7 +2,7 @@
 Date: 23-08-2017-->
 
 <script src="search.js"></script>
-    <script src="advancesearch.js"></script>
+<script src="advancesearch.js"></script>
 
 <!--On clicking the icon a sliding menu bar opens up which provides user with advance searching ability-->
 
@@ -46,16 +46,55 @@ Date: 23-08-2017-->
             <label for="price_min">Price: </label>
             <input type="range" name="price_min" id="price_min" step="10" value="0" min="0" max="100">
             <p>Find car under Price : $ <span id="price_range"> </span></p>
-            
+
         </div>
         <br />
+
+        <!-- Edited : Vishal Pradhan    Date : 25-09-2017       Adding Pickup date and time and return date and time-->
+
+        <div class="form-group">
+
+            <div class='input-group' id='datetimepicker1'>
+                <label for="pickup">PickUp Date and Time:</label>
+                <input type='text' name="date" class="form-control" placeholder="MM/DD/YYYY" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class='input-group date' id='datetimepicker2'>
+                <label for="return">Return Date and Time:</label>
+                <input type='text' class="form-control" placeholder="MM/DD/YYYY" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
 
         <button id="search-btn" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
         <button id="find-nearest-btn" type="button" class="btn btn-primary">find nearest car</button>
         <button id="reset-map-btn" type="button" class="btn btn-primary">reset</button>
     </form>           
 </div>
-
+<!--Edited: Vishal Pradhan Date: 25-09-2017 Added Javascript function for the date and time value-->
+<!--This function is a linked date picker where the return date automatically disables any date or time chosen before the
+pick up date and time.. it also acts as a live time checker...-->
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker();
+        $('#datetimepicker2').datetimepicker({
+            useCurrent: false //Important! See issue #1075
+        });
+        $("#datetimepicker1").on("dp.change", function (e) {
+            $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker2").on("dp.change", function (e) {
+            $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+</script>
 
 <!--@Author: Alexander Young-->
 
@@ -63,10 +102,35 @@ Date: 23-08-2017-->
     <script>
         //this global variable keeps track of all the map markers so they can be deleted at will
         var global_markers = [];
+        var loaded_cars = [];
+        var loaded_search_results = [];
         //this global variable is a reference to the main map
         var map;
         //this global variable is the current users most up to date coordinates
-        var userCoords
+        var userCoords;
+
+        //create the vector art styling for a map markers
+        var userIcon = {
+            url: 'images/user.png'
+        };
+        var carAvailableIcon = {
+            url: 'images/CarAvailable.png'
+        };
+        var carBookedIcon = {
+            url: 'images/CarBooked.png'
+        };
+        var suvAvailableIcon = {
+            url: 'images/SuvAvailable.png'
+        };
+        var suvBookedIcon = {
+            url: 'images/SuvBooked.png'
+        };
+        var sportsAvailableIcon = {
+            url: 'images/SportsAvailable.png'
+        };
+        var sportsBookedIcon = {
+            url: 'images/SportsBooked.png'
+        };
         function initMap() {
 
             userCoords = new google.maps.LatLng($user.getLat(), $user.getLng());
@@ -263,26 +327,35 @@ Date: 23-08-2017-->
                 ]
             });
 
-map.addListener('dragend', function () {
-            loadNearbyCars();
-            //alert("center changed");
-        });
 
-            /* bookingstate is set to true if the user currently has a booking in progress
-             * 
-             * if the is no booking in progress the map loads all the cars from the database
-             * so that the user may pick a car
-             * 
-             * insert functions into the "true" if statement that should only
-             * run if the user DOES currently have a booking,
-             * functions such as navigation and tracking*/
+            map.addListener('dragend', function () {
+                loadCarsAtNewLocation();
+                //displayCars(loaded_cars);
+                //alert("center changed");
+            });
+
             var bookingState = $bookingState;
-            if (bookingState == false) {
-                loadNearbyCars(map);
+            if (bookingState === false) {
+                loadCarsNearUser(50);
             }
-            if (bookingState == true) {
+            if (bookingState === true) {
                 alert("user has a booking, you shouldnt see this screen");
             }
+            var userMarker = new google.maps.Marker({
+                position: userCoords,
+                title: "$user.email",
+                map: map,
+                icon: userIcon
+            });
+            /**
+             * Author: <b>Alexander Young</b><p>
+             * Date: 23.9.17
+             * <p>
+             * every second the map is updated to keep it in sync with the database<p>
+             */
+            setInterval(function () {
+                loadModifiedCars();
+            }, 1000);
 
 
             //functions below will execute regardless of booking state
@@ -301,7 +374,6 @@ map.addListener('dragend', function () {
                 //if geolocation is not supported, show this error and log the user out
             } else {
                 error('Geolocation is not supported by this browser');
-                window.location.replace("/process_logout");
             }
 
             /*if geolocation can successfully find the users location this function is run
@@ -317,17 +389,13 @@ map.addListener('dragend', function () {
                 //places the marker of the current user at their location for debugging
                 if (difference > 15) {
                     //alert(difference);
-                    var userMarker = new google.maps.Marker({
-                        position: geoPos,
-                        title: "$user.email",
-                        label: "user",
-                        map: map
-                    });
-
+                    userMarker.setPosition(geoPos);
+                    
                     $.post("/process_update_user_location", {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
                     });
+                    //alert(userCoords);
                     userCoords = geoPos;
                 }
             }
@@ -338,65 +406,191 @@ map.addListener('dragend', function () {
              */
             function locationError(err) {
                 alert("location services not enabled, please turn on to use this app");
-                window.location.replace("/process_logout");
+                //window.location.replace("/");
             }
-}
-        /* load every car from the arraylist of cars stored in the car class
-         * loop through the list of cars and create a marker for each car if 
-         * the car is within 100km of the user
+        }
+        /**
+         * Author: <b>Alexander Young</b><p>
+         * Date: 23.9.17
+         * <p>
+         * displays map markers for cars that are within 30km of the map center point<p>
+         * @param cars_to_display an array of cars to create markers for on the map
          */
-        function loadNearbyCars() {  
-            //create the vector art styling for a sedan
-            var sedanIcon = {
-                url: 'images/carmarker - Copy.png'
-            };
-
+        function displayCars(cars_to_display) {
+            var car;
             //create the empty infowindow that will be filled with car specific info
             var infowindow = new google.maps.InfoWindow;
-            //loop through the json object carList and operate on each car
+            for (var i = 0; i < cars_to_display.length; i++) {
+                car = cars_to_display[i];
+                //get the distance between the userPos and the carPos in km
+                carPos = new google.maps.LatLng(car.lat, car.lng);
+                distance = google.maps.geometry.spherical.computeDistanceBetween(carPos, map.getCenter()) / 1000;
+                //alert("creating a marker");
+                marker = new google.maps.Marker({
+                    position: carPos,
+                    title: car.plate_no,
+                });
+
+                /* during the process of creating each marker, also create
+                 * the function that runs when that marker is clicked.
+                 * when clicked each car marker will display an info window 
+                 * which contains info about the car, as well as a button
+                 * that allows the user to book that car
+                 */
+                if (car.available === true) {
+                    google.maps.event.addListener(marker, 'click', (function (marker) {
+                        return function () {
+                            $.post("/process_get_car_details",
+                                    {
+                                        plate_no: marker.title
+                                    },
+                                    function (result)
+                                    {
+                                        infowindow.setContent(result);
+                                        infowindow.open(map, marker);
+                                    });
+                        };
+                    })(marker));
+                }
+                if(car.type === "suv") {
+                    if (car.available === false) {
+                        marker.setIcon(suvBookedIcon);
+                    }
+                    else{
+                         marker.setIcon(suvAvailableIcon);
+                    }
+                }
+                else if(car.type === "sports") {
+                    if (car.available === false) {
+                        marker.setIcon(sportsBookedIcon);
+                    }
+                    else{
+                         marker.setIcon(sportsAvailableIcon);
+                    }
+                }
+                else{
+                    if (car.available === false) {
+                        marker.setIcon(carBookedIcon);
+                    }
+                    else{
+                         marker.setIcon(carAvailableIcon);
+                    }
+                }
+
+                //add marker to the global marker array, replace its old marker if it exists, check if the array is empty and add this car to the start if it is
+                if (global_markers.length === 0) {
+                    //alert("first marker, adding");
+                    global_markers.push(marker);
+                    marker.setMap(map);
+                }
+                for (var j = 0; j < global_markers.length; j++) {
+                    //alert(global_markers[j].title + "   " + marker.title);
+                    if (global_markers[j].title === marker.title) {
+                        //alert("marker already exists, replacing");
+                        //alert("new place:" + carPos);
+                        //global_markers[j].setPlace(carPos);
+                        global_markers[j].setMap(null);
+                        global_markers.splice(j, 1, marker);
+                        global_markers[j].setMap(map);
+                        break;
+                    } else if (j === (global_markers.length - 1)) {
+                        // alert("marker doesnt exist, adding");
+                        global_markers.push(marker);
+                        marker.setMap(map);
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        /**
+         * Author: <b>Alexander Young</b><p>
+         * Date: 23.9.17
+         * <p>
+         * updates map markers at a new location after moving the map screen<p>
+         */
+        function loadCarsAtNewLocation() {
+            //create the empty infowindow that will be filled with car specific info
+            var new_cars = [];
             $.getJSON("/cars", function (cars) {
-                //for each data object(car) in the Json retrieved, create a map marker, 
+                //for each data object(car) in the Json retrieved, add it to the array of cars to load
                 //the variable i is the incrementing count, it must be present but is not ever used
                 $.each(cars, function (i, car) {
-                    if (car.available == true || car.available == false) {
-                        //get the distance between the userPos and the carPos in km
-                        carPos = new google.maps.LatLng(car.lat, car.lng);
-                        distance = google.maps.geometry.spherical.computeDistanceBetween(carPos, map.getCenter()) / 1000;
-
-                        //if cars are further away than 100km, dont load them
-                        if (distance < 20) {
-                            marker = new google.maps.Marker({
-                                position: carPos,
-                                title: car.plate_no,
-                                icon: sedanIcon,
-                                map: map
-                            });
-
-                            //add marker to the global marker array
-                            global_markers.push(marker);
-
-                            /* during the process of creating each marker, also create
-                             * the function that runs when that marker is clicked.
-                             * when clicked each car marker will display an info window 
-                             * which contains info about the car, as well as a button
-                             * that allows the user to book that car
-                             */
-                            google.maps.event.addListener(marker, 'click', (function (marker) {
-                                return function () {
-                                    $.post("/process_get_car_details",
-                                            {
-                                                plate_no: marker.title
-                                            },
-                                            function (result)
-                                            {
-                                                infowindow.setContent(result);
-                                                infowindow.open(map, marker);
-                                            });
-                                }
-                            })(marker));
+                    //get the distance between the userPos and the carPos in km
+                    carPos = new google.maps.LatLng(car.lat, car.lng);
+                    distance = google.maps.geometry.spherical.computeDistanceBetween(carPos, map.getCenter()) / 1000;
+                    //if cars are further away than 30km from the center point of the map, dont load them
+                    if (distance < 30) {
+                        for (var j = 0; j < loaded_cars.length; j++) {
+                            if (loaded_cars[j].plate_no === car.plate_no) {
+                                //alert("car already exists");
+                                break;
+                            } else if (j === (loaded_cars.length - 1)) {
+                                //alert("adding a car");
+                                new_cars.push(car);
+                                loaded_cars.push(car);
+                                break;
+                            }
                         }
                     }
                 });
+                displayCars(new_cars);
+            });
+        }
+        function loadCarsNearUser(distance_from_user) {
+            //loop through the json object carList and operate on each car
+            $.getJSON("/cars", function (cars) {
+                //for each data object(car) in the Json retrieved, add it to the array of cars to load
+                //the variable i is the incrementing count, it must be present but is not ever used
+                $.each(cars, function (i, car) {
+                    //get the distance between the userPos and the carPos in km
+                    userPos = new google.maps.LatLng($user.getLat(), $user.getLng());
+                    carPos = new google.maps.LatLng(car.lat, car.lng);
+                    distance = google.maps.geometry.spherical.computeDistanceBetween(carPos, userPos) / 1000;
+                    //load cars within
+                    if (distance < distance_from_user) {
+                        loaded_cars.push(car);
+                    }
+                });
+                displayCars(loaded_cars);
+            });
+        }
+
+        /**
+         * Author: <b>Alexander Young</b><p>
+         * Date: 23.9.17
+         * <p>
+         * load the new data for any car that has changed lat, lng or availabilty<p>
+         */
+        function loadModifiedCars() {
+            //loop through the json object carList and operate on each car
+            var modifiedCars = [];
+            $.get("/cars", function (cars) {
+                //for each data object(car) in the Json retrieved, add it to the array of cars to load
+                //the variable i is the incrementing count, it must be present but is not ever used
+                $.each(cars, function (i, car) {
+                    //add car to the global car array
+                    for (var i = 0; i < loaded_cars.length; i++) {
+                        if (car.plate_no === loaded_cars[i].plate_no) {
+                            //alert("modifed car plate_no match");
+                            if (car.lat !== loaded_cars[i].lat || car.lng !== loaded_cars[i].lng || car.available !== loaded_cars[i].available) {
+                                if (loaded_search_results.length > 0) {
+                                    for (var k = 0; k < loaded_search_results.length; k++) {
+                                        if (car.plate_no === loaded_search_results[k].plate_no) {
+                                            loaded_cars.splice(i, 1, car);
+                                            modifiedCars.push(car);
+                                        }
+                                    }
+                                } else {
+                                    loaded_cars.splice(i, 1, car);
+                                    modifiedCars.push(car);
+                                }
+                            }
+                        }
+                    }
+                });
+                displayCars(modifiedCars);
             });
         }
 
@@ -408,80 +602,66 @@ map.addListener('dragend', function () {
             for (i = 0; i < global_markers.length; i++) {
                 global_markers[i].setMap(null);
             }
+            loaded_cars.length = 0;
+            loaded_search_results.length = 0;
             global_markers.length = 0;
         }
-        
+
+        /* @author Alexander Young
+         * 07-09-17
+         * this function removes all map markers from the map
+         */
+        function unloadAllMarkers() {
+            for (i = 0; i < global_markers.length; i++) {
+                global_markers[i].setMap(null);
+            }
+            global_markers.length = 0;
+        }
+
         /* Load a specific subset of cars that are a JSON result from the search function
          */
 
-         /*
-            Edited: 19-09-2017  by Vishal Pradhan
-            added inputDistance and inputCost pararmeter to the function which now fetches the price range and 
-            distance range and shows the outcome of the search based on the users selection
+        /*
+         Edited: 19-09-2017  by Vishal Pradhan
+         added inputDistance and inputCost pararmeter to the function which now fetches the price range and 
+         distance range and shows the outcome of the search based on the users selection
          */
         function loadSearchResults(searchResults, inputDistance, inputCost) {
-                        
+
             var loadDistance = 0;
             var maxCost = 0;
+            loaded_search_results.length = 0;
 
-            if(inputDistance !== undefined){
-                loadDistance = inputDistance ;
-            
+            if (inputDistance !== undefined) {
+                loadDistance = inputDistance;
+
             }
-            if(inputCost !== undefined){
+            if (inputCost !== undefined) {
                 maxCost = inputCost;
             }
-            //create the vector art styling for a sedan
-            var sedanIcon = {
-                url: 'images/carmarker - Copy.png'
-            };
-            //create the empty infowindow that will be filled with car specific info
-            var infowindow = new google.maps.InfoWindow;
-            //loop through the json object carList and operate on each car
-                //for each data object(car) in the Json retrieved, create a map marker, 
-                //the variable i is the incrementing count, it must be present but is not ever used
-                $.each(searchResults, function (i, car) {
-                    if (car.available == true) {
-                        //get the distance between the userPos and the carPos in km
-                        userPos = new google.maps.LatLng($user.getLat(), $user.getLng());
-                        carPos = new google.maps.LatLng(car.lat, car.lng);
-                        distance = google.maps.geometry.spherical.computeDistanceBetween(carPos, userPos) / 1000;
+            for (var i = 0; i < global_markers.length; i++) {
+                global_markers[i].setMap(null);
+            }
+            if (searchResults.length === 0) {
+                //alert("no search results");
+                //searchResults = loaded_cars;
+            }
+            $.each(searchResults, function (i, car) {
+                //get the distance between the userPos and the carPos in km
+                userPos = new google.maps.LatLng($user.getLat(), $user.getLng());
+                carPos = new google.maps.LatLng(car.lat, car.lng);
+                distance = google.maps.geometry.spherical.computeDistanceBetween(carPos, userPos) / 1000;
 
-                        //if cars are further away than 100km, dont load them
-                       
-                        if (distance < loadDistance && car.hourly_price < maxCost) {
-                            marker = new google.maps.Marker({
-                                position: carPos,
-                                title: car.plate_no,
-                                icon: sedanIcon,
-                                map: map
-                            });
-
-                            //add marker to the global marker array
-                            global_markers.push(marker);
-
-                            /* during the process of creating each marker, also create
-                             * the function that runs when that marker is clicked.
-                             * when clicked each car marker will display an info window 
-                             * which contains info about the car, as well as a button
-                             * that allows the user to book that car
-                             */
-                            google.maps.event.addListener(marker, 'click', (function (marker) {
-                                return function () {
-                                    $.post("/process_get_car_details",
-                                            {
-                                                plate_no: marker.title
-                                            },
-                                            function (result)
-                                            {
-                                                infowindow.setContent(result);
-                                                infowindow.open(map, marker);
-                                            });
-                                }
-                            })(marker));
+                //if car meets the supplied distance and max cost criteria, add it to an array
+                if (distance < loadDistance && car.hourly_price < maxCost) {
+                    loaded_search_results.push(car);
+                    for (var i = 0; i < global_markers.length; i++) {
+                        if (global_markers[i].title === car.plate_no) {
+                            global_markers[i].setMap(map);
                         }
                     }
-                });
+                }
+            });
         }
     </script>
     <script async defer

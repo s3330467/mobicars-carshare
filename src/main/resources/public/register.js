@@ -16,7 +16,7 @@ jQuery().ready(function() {
  //general rules that the variables need to follow while the form field is getting
  //filled with clients input
  
-  var v = jQuery("#contactform").validate({
+  var v = jQuery("#contact-form").validate({
       rules: {
         f_name: {
           required: true,
@@ -119,7 +119,8 @@ jQuery().ready(function() {
           var expiry_month =$("#expiry_month").val();
           var expiry_year =$("#expiry_year").val();
           var cvv =$("#cvv").val();
-          var isvalid= true;
+          var isvalid= testCreditCard();
+    
           
           /*
            * edited on : 29-08-2017

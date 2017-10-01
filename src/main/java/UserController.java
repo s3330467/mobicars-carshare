@@ -43,13 +43,18 @@ public class UserController {
          *
          * Updated 17.8.17 by Alexander Young<p>
          * no longer redirects to /register if the user isn't logged in<p>
+         * 
+         * Updated 29.9.17 by Rachel Tan<p>
+         * When a user reopens the web page while a booking is active, they are
+         * redirected to /booking_in_progress instead of the old
+         * /booking_details<p>
          */
         before("/", (request, response) -> {
             if (request.session().attribute("session_email") == null) {
                 response.redirect("/login");
             }
             if (request.session().attribute("session_booking") != null) {
-                response.redirect("/booking_details");
+                response.redirect("/booking_in_progress");
             }
         });
 
@@ -73,8 +78,6 @@ public class UserController {
         get("/", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String currentUserEmail = request.session().attribute("session_email");
-            //User.updateUserList();
-            //Car.updateCarList();
             boolean bookingState;
             if (request.session().attribute("session_booking") != null) {
                 bookingState = true;
