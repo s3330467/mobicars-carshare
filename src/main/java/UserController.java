@@ -53,7 +53,13 @@ public class UserController {
             if (request.session().attribute("session_email") == null) {
                 response.redirect("/login");
             }
-            if (request.session().attribute("session_booking") != null) {
+            if(request.session().attribute("booking_status") == null){
+                return;
+            }
+            if (request.session().attribute("booking_status").equals("uncollected")) {
+                response.redirect("/booking_made");
+            }
+            if (request.session().attribute("booking_status").equals("collected")) {
                 response.redirect("/booking_in_progress");
             }
         });
@@ -79,7 +85,7 @@ public class UserController {
             Map<String, Object> model = new HashMap<String, Object>();
             String currentUserEmail = request.session().attribute("session_email");
             boolean bookingState;
-            if (request.session().attribute("session_booking") != null) {
+            if (request.session().attribute("booking_status") != null) {
                 bookingState = true;
             } else {
                 bookingState = false;
@@ -255,7 +261,12 @@ public class UserController {
                 User user = UserService.getUserByEmail(email);
                 Booking existing_booking = BookingService.getCurrentBookingByUser_id(user.getId());
                 if (existing_booking != null) {
-                    request.session().attribute("session_booking", existing_booking.getId());
+                    if(existing_booking.getCollection_date() == null){
+                        request.session().attribute("booking_status", "uncollected");
+                    }
+                    else{
+                        request.session().attribute("booking_status", "collected");
+                    }
                 }
                 response.redirect("/");
                 return null;
@@ -275,7 +286,7 @@ public class UserController {
          */
         get("/process_logout", (request, response) -> {
             request.session().removeAttribute("session_email");
-            request.session().removeAttribute("session_booking");
+            request.session().removeAttribute("booking_status");
             response.redirect("/login");
             return null;
         });

@@ -159,7 +159,7 @@ public class BookingController {
             System.out.println("Booking Controller query params date time: " + expectedDateTime);
             if (BookingService.createBooking(car, user, expectedDateTime)) {
                 Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
-                request.session().attribute("session_booking", booking.getId());
+                request.session().attribute("booking_status", "uncollected");
                 Date current_date = new Date();
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date booking_date = df.parse(booking.getStart_date() + " " + booking.getStart_time());
@@ -173,9 +173,9 @@ public class BookingController {
                         System.out.println("\n\n\n\nattempting to cancel booking");
                         Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
                         if (booking.getCollection_date() == null) {
-                            if (BookingService.cancelBooking(request.session().attribute("session_booking"))) {
+                            if (BookingService.cancelBooking(booking.getId())) {
                                 System.out.println("and it was cancelled.");
-                                request.session().attribute("session_booking", null);
+                                request.session().attribute("booking_status", null);
                                 response.redirect("/");
                             } else {
                                 System.out.println("but something unexpected happened.");
@@ -252,7 +252,8 @@ public class BookingController {
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
             Car car = CarService.getCarById(booking.getCar_id());
-            if (BookingService.collectCar(request.session().attribute("session_booking"))) {
+            if (BookingService.collectCar(booking.getId())) {
+                request.session().attribute("booking_status", "collected");
                 model.put("car", car);
                 model.put("booking", booking);
                 response.redirect("/booking_in_progress");
@@ -275,9 +276,11 @@ public class BookingController {
         get("/booking_in_progress", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
+            System.out.println("user id of booking in progress: "+user.getId());
             Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
             Car car = CarService.getCarById(booking.getCar_id());
-
+            
+            System.out.println("booking id of booking in progress: "+booking.getId()+booking.getCollection_date() + " " + booking.getCollection_time());
             Date current_date = new Date();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date collection_date = df.parse(booking.getCollection_date() + " " + booking.getCollection_time());
@@ -340,8 +343,11 @@ public class BookingController {
          * removed reference to the updateBookingList method<p>
          */
         post("/process_return_car", (request, response) -> {
-            if (BookingService.returnCar(request.session().attribute("session_booking"))) {
-                request.session().attribute("session_booking", null);
+            User user = UserService.getUserByEmail(request.session().attribute("session_email"));
+            Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
+            Car car = CarService.getCarById(booking.getCar_id());
+            if (BookingService.returnCar(booking.getId())) {
+                request.session().attribute("booking_status", null);
                 response.redirect("/booking_summary");
             }
             return null;
@@ -394,8 +400,10 @@ public class BookingController {
          * <p>
          */
         post("/process_cancel_booking", (request, response) -> {
-            if (BookingService.cancelBooking(request.session().attribute("session_booking"))) {
-                request.session().attribute("session_booking", null);
+            User user = UserService.getUserByEmail(request.session().attribute("session_email"));
+            Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
+            if (BookingService.cancelBooking(booking.getId())) {
+                request.session().attribute("booking_status", null);
                 response.redirect("/");
                 return null;
             }
