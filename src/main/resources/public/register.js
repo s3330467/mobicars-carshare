@@ -113,13 +113,13 @@ jQuery().ready(function() {
           var phone_no = $("#phone_no").val();
           var email = $("#email").val();
           var password1 = $("#password1").val();
-          var password2 =$("#password2").val();
-          var card_name =$("#card_name").val();
-          var card_no =$("#card_no").val();
-          var expiry_month =$("#expiry_month").val();
-          var expiry_year =$("#expiry_year").val();
-          var cvv =$("#cvv").val();
-          var isvalid= testCreditCard();
+          var password2 = $("#password2").val();
+          var card_name = $("#card_name").val();
+          var card_no = $("#card_no").val();
+          var expiry_month = $("#expiry_month").val();
+          var expiry_year = $("#expiry_year").val();
+          var cvv = $("#cvv").val();
+          var isValid = testCreditCard();
     
           
           /*
@@ -128,11 +128,11 @@ jQuery().ready(function() {
            */
           if(card_name == "" || card_no == "" || expiry_month == "" || expiry_year == "" || cvv =="")
           {
-              isvalid = false;
+              isValid = false;
               alert("Field entry is required")
           }
           //if all the fields are full it processes that data into DB using ajax 
-             if(isValid == true){
+             if(isValid === true){
                 $.ajax({
                 url: "/process_register",
                 type: "POST",
@@ -143,7 +143,7 @@ jQuery().ready(function() {
                     license_no: license_no,
                     phone_no: phone_no,
                     email: email,
-                    password: password1,
+                    password1: password1,
                     card_name: card_name,
                     card_no: card_no,
                     expiry_month: expiry_month,
@@ -151,8 +151,11 @@ jQuery().ready(function() {
                     cvv: cvv
                 },
                 success: function(){
-                    alert("Data was successfully stored");
-                }
+                    window.location = "/login";
+                },
+                error: function() { 
+                    window.location = "/register"; 
+                }   
                 });
             }else{
                 return false;
