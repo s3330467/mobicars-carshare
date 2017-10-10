@@ -170,7 +170,7 @@ function checkCreditCard (cardnumber, cardname) {
   // See if the length is valid for this card
   lengths = cards[cardType].length.split(",");
   for (j=0; j<lengths.length; j++) {
-      alert(cardnumber.length + " " + lengths[j]);
+      //alert(cardnumber.length + " " + lengths[j]);
     if (cardnumber.length == lengths[j]) 
     {
         LengthValid = true;
