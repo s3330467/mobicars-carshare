@@ -203,6 +203,9 @@ public class UserController {
          * Updated 13.8.17 by Alexander Young<p>
          * added new fields to keep in sync with changes to the SQL database and
          * User class<p>
+         * 
+         * Updated 10.10.17 by Alexander Young<p>
+         * added check to prevent duplicate user email's being added to the database<p>
          */
         post("/process_register", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
@@ -218,6 +221,9 @@ public class UserController {
             String expiry_month = request.queryParams("expiry_month");
             String expiry_year = request.queryParams("expiry_year");
             String cvv = request.queryParams("cvv");
+            if(UserService.getUserByEmail(email) != null){
+                return null;
+            }
             if (UserService.createUser(email, password, f_name, l_name, address, license_no, phone_no, card_name, card_no, expiry_month, expiry_year, cvv)) {
                 response.redirect("/login");
             } else {
