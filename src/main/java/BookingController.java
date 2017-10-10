@@ -78,6 +78,7 @@ public class BookingController {
             JSONArray bookingArray = new JSONArray();
             User currentUser = UserService.getUserByEmail(request.session().attribute("session_email"));
             List<Booking> usersBookings = BookingService.getAllBookingsByUser_id(currentUser.getId());
+            String status;
             for(int i = 0; i < usersBookings.size(); i++){
                 Booking booking = usersBookings.get(i);
                 Car car = CarService.getCarById(booking.getCar_id());
@@ -87,12 +88,36 @@ public class BookingController {
                 json.put("make", car.getMake());
                 json.put("model", car.getModel());
                 json.put("plate_no", car.getPlate_no());
-                json.put("status", "gravy");
+                if(BookingService.calculatePenaltyCostOfBooking(booking) > 0){
+                    status = "overdue";
+                }
+                else if(booking.getEnd_time() != null){
+                    status = "completed";
+                }
+                else{
+                    status = "in progress";
+                }
+                json.put("status", status);
                 json.put("startTime", "  "+booking.getStart_time()+"   "+booking.getStart_date());
-                json.put("collectionTime", "  "+booking.getCollection_time()+"   "+booking.getCollection_date());
-                json.put("returnTime", booking.getEnd_time()+" "+booking.getEnd_date());
+                if(booking.getCollection_time() == null){
+                    json.put("collectionTime", "not yet collected");
+                }
+                else{
+                    json.put("collectionTime", "  "+booking.getCollection_time()+"   "+booking.getCollection_date());
+                }
+                if(booking.getEnd_time() == null){
+                    json.put("returnTime", "not yet returned");
+                }
+                else{
+                    json.put("returnTime", booking.getEnd_time()+" "+booking.getEnd_date());
+                }
                 json.put("duration", BookingService.calculateBookingHours(booking)+" hours");
-                json.put("overduePenalty", "$"+BookingService.calculatePenaltyCostOfBooking(booking));
+                if(BookingService.calculatePenaltyCostOfBooking(booking) == 0){
+                    json.put("overduePenalty", "$0");
+                }
+                else{
+                    json.put("overduePenalty", "$"+BookingService.calculatePenaltyCostOfBooking(booking));
+                }
                 json.put("totalCost", "$"+booking.getCost());  
                 bookingArray.put(json);
             }
