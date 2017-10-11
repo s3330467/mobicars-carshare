@@ -10,8 +10,6 @@ function testCreditCard () {
   myCardNo = document.getElementById('card_no').value;
   myCardType = document.getElementById('card_type').value;
   if (checkCreditCard (myCardNo,myCardType)) {
-//    alert ("Credit card has a valid format");
-//    document.getElementById("contact-form").submit();
     return true;
   } 
   else {

@@ -73,7 +73,6 @@ public class BookingService {
             booking = DB.fetchCurrentBookingByUser_id(user_id).get(0);
             return booking;
         }
-        System.out.println("could not find any current booking for user");
         return null;
     }
 

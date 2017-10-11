@@ -9,27 +9,6 @@ $(document).ready(function () {
      * date: 16-09-2017
      * added slider bars for distance and price
      */
-//        $('#price_min').change(function(){  
-//           var price = $(this).val();  
-//           $("#price_range").text("Cars under Price $" + price);  
-//           $.ajax({  
-//                url:"loadNearbyCars();",  
-//                method:"POST",  
-//                data:{price:price},  
-//                success:function(data){  
-//                     $("#price_range").fadeIn(500).html(data);  
-//                }  
-//           }); 
-//             
-//      });  
-//        $('#distance_min').change(function(){  
-//           var distance = $(this).val();  
-//           $("#distance_range").text("Cars within the Distance of " + distance + " Km");  
-//           $.ajax({  
-////                 $loadNearbyCars();
-//           }); 
-//             
-//      }); 
 
     /*
      * Edited: Vishal Pradhan
