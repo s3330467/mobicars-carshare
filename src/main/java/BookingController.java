@@ -146,7 +146,6 @@ public class BookingController {
         post("/process_book_car", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             String plate_no = request.queryParams("plate_no");
-            System.out.println("booking plate no: " + plate_no);
             Car car = CarService.getCarByPlate_no(plate_no);
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             model.put("car", car);
@@ -177,11 +176,9 @@ public class BookingController {
          */
         post("/process_confirm_booking", (request, response) -> {
             String plate_no = request.queryParams("plate_no");
-            System.out.println("confirm booking plate no: " + plate_no);
             Car car = CarService.getCarByPlate_no(plate_no);
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
             String expectedDateTime = request.queryParams("datetime");
-            System.out.println("Booking Controller query params date time: " + expectedDateTime);
             if (BookingService.createBooking(car, user, expectedDateTime)) {
                 Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
                 request.session().attribute("booking_status", "uncollected");
@@ -189,17 +186,13 @@ public class BookingController {
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date booking_date = df.parse(booking.getStart_date() + " " + booking.getStart_time());
                 Date expDateTime = df.parse(booking.getExp_date() + " " + booking.getExp_time());
-                System.out.println(" Booking Controller Expected date: " + booking.getExp_date() + "Expected time: " + booking.getExp_time());
                 Date expireTime = new Date(booking_date.getTime() + 900000);
-                System.out.println("\nexpire time: " + expireTime);
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     public void run() {
-                        System.out.println("\n\n\n\nattempting to cancel booking");
                         Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
                         if (booking.getCollection_date() == null) {
                             if (BookingService.cancelBooking(booking.getId())) {
-                                System.out.println("and it was cancelled.");
                                 request.session().attribute("booking_status", null);
                                 response.redirect("/");
                             } else {
@@ -245,8 +238,6 @@ public class BookingController {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date booking_date = df.parse(booking.getStart_date() + " " + booking.getStart_time());
             long timeSinceBooking = (current_date.getTime() - booking_date.getTime()) / 1000;
-            System.out.println(timeSinceBooking);
-
             Car car = CarService.getCarById(booking.getCar_id());
             model.put("timeSinceBooking", timeSinceBooking);
             model.put("car", car);
@@ -301,16 +292,13 @@ public class BookingController {
         get("/booking_in_progress", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
             User user = UserService.getUserByEmail(request.session().attribute("session_email"));
-            System.out.println("user id of booking in progress: "+user.getId());
             Booking booking = BookingService.getCurrentBookingByUser_id(user.getId());
             Car car = CarService.getCarById(booking.getCar_id());
             
-            System.out.println("booking id of booking in progress: "+booking.getId()+booking.getCollection_date() + " " + booking.getCollection_time());
             Date current_date = new Date();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date collection_date = df.parse(booking.getCollection_date() + " " + booking.getCollection_time());
             long timeSinceCollection = (current_date.getTime() - collection_date.getTime()) / 1000;
-            System.out.println(timeSinceCollection);
             model.put("car", car);
             model.put("booking", booking);
             model.put("timeSinceCollection", timeSinceCollection);
@@ -328,7 +316,6 @@ public class BookingController {
          */ 
         post("/process_extend_booking", (request, response) -> { 
             String expectedDateTime = request.queryParams("datetime"); 
-            System.out.println("Booking Controller query params date time: " + expectedDateTime); 
             User user = UserService.getUserByEmail(request.session().attribute("session_email")); 
             Booking booking = BookingService.getCurrentBookingByUser_id(user.getId()); 
              
@@ -466,7 +453,6 @@ public class BookingController {
             Date current_date = new Date();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date expected_date = df.parse(booking.getExp_date() + " " + booking.getExp_time());
-            //check if the current
             return current_date.getTime()/1000 - expected_date.getTime()/1000;
         });
     }

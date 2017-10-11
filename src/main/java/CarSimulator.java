@@ -70,7 +70,6 @@ public class CarSimulator {
         public void run() {
             randResult = rand.nextDouble();
             if(randResult < 0.05) {
-                //System.out.print("result was :" + randResult + " 20% chance triggered");
                 latMovement = ((rand.nextDouble()-0.5)*0.0005);
                 lngMovement = ((rand.nextDouble()-0.5)*0.0005);
             }
@@ -79,7 +78,6 @@ public class CarSimulator {
             newLat += latMovement;
             newLng += lngMovement;
             car = CarService.getCarByPlate_no(car.getPlate_no());
-            //System.out.println("modifying car: " + car.getPlate_no() + " with new lat/lng: " + newLat + " " + newLng);
             CarService.updateCarLatLng(car.getPlate_no(), newLat,  newLng);
         }
     }

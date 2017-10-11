@@ -90,7 +90,6 @@ public class UserController {
             } else {
                 bookingState = false;
             }
-            System.out.println("users booking state: " + bookingState);
             model.put("carList", Car.carList);
             model.put("user", UserService.getUserByEmail(currentUserEmail));
             model.put("bookingState", bookingState);
@@ -150,10 +149,9 @@ public class UserController {
          * @return a list of all users
          * <p>
          */
-        get("/users", (request, response) -> {
-            //User.updateUserList();
-            return User.userList;
-        });
+//        get("/users", (request, response) -> {
+//            return User.userList;
+//        });
 
         /**
          * Author: <b>Vishal Pradhan</b><p>
@@ -254,8 +252,6 @@ public class UserController {
             Map<String, Object> model = new HashMap<String, Object>();
             String email = request.queryParams("email").toLowerCase();
             String password = request.queryParams("password");
-            System.out.println("logging in with password: " + password);
-            System.out.println("logging in with email: " + email);
             if (UserService.validateUser(email, password)) {
                 request.session().attribute("session_email", email);
                 User user = UserService.getUserByEmail(email);
@@ -271,7 +267,6 @@ public class UserController {
                 response.redirect("/");
                 return null;
             }
-            System.out.println("user login validation failed");
             response.redirect("/login");
             return null;
         });

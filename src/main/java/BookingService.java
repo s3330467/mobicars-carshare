@@ -71,20 +71,8 @@ public class BookingService {
 
         if (DB.fetchCurrentBookingByUser_id(user_id).size() == 1) {
             booking = DB.fetchCurrentBookingByUser_id(user_id).get(0);
-            //return DB.fetchCurrentBookingByUser_id(user_id).get(0);
             return booking;
         }
-//        Booking booking;
-//        for (int i = 0; i < Booking.bookingList.size(); i++) {
-//            booking = Booking.bookingList.get(i);
-//            System.out.println("User Id of this user is: " + booking.getUser_id());
-//            if (Booking.bookingList.get(i).getUser_id().equals(user_id)) {
-//                System.out.println("user matched, end date looks like: " + booking.getEnd_date());
-//                if (booking.getEnd_date() == null) {
-//                    return booking;
-//                }
-//            }
-//        }
         System.out.println("could not find any current booking for user");
         return null;
     }
@@ -149,7 +137,6 @@ public class BookingService {
      */
     public static boolean createBooking(Car car, User user, String expectedDateTime) {
         String user_id = user.getId();
-        System.out.println("Creating booking for userid: " + user_id);
         String car_id = car.getId();
         Date current_date = new Date();
         String start_date = date.format(current_date);
@@ -161,20 +148,15 @@ public class BookingService {
             Date expected_date = df.parse(expectedDateTime);
             exp_date = date.format(expected_date);
             exp_time = time.format(expected_date);
-            System.out.print("expected date: " + exp_date);
-            System.out.print("expected time: " + exp_time);
         } catch (ParseException e) {
             System.out.println("could not parse dates in createBooking()");
         }
 
-        System.out.println("BookingService exp date: " + exp_date + "exp time: " + exp_time);
         double start_lat = car.getLat();
         double start_lng = car.getLng();
         if (car.isAvailable());
         if (DB.insertBooking(user_id, car_id, start_date, start_time, start_lat, start_lng, exp_date, exp_time)) {
             Booking booking = getCurrentBookingByUser_id(user_id);
-            System.out.println(user_id);
-            System.out.println("this booking exists and its id is: " + booking.getId());
             Booking.bookingList.add(booking);
             DB.updateCarAvailable(car.getPlate_no(), false);
             car.setAvailable(false);
@@ -224,7 +206,6 @@ public class BookingService {
             System.out.println(car.getPlate_no());
             booking.setCollection_date(collection_date);
             booking.setCollection_time(collection_time);
-//            car.carSim.setCar(car);
             car.carSim = new CarSimulator(car);
             car.carSim.startMoving();
             return true;
@@ -247,8 +228,6 @@ public class BookingService {
      * @return true if expected date and time are updated, otherwise false
      */
     public static boolean extendBooking(Booking booking, String expectedDateTime) {
-        //String exp_date = booking.getExp_date();
-        //String exp_time = booking.getExp_time();
         String new_exp_date = "";
         String new_exp_time = "";
         SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy h:mm a");
@@ -256,8 +235,6 @@ public class BookingService {
             Date new_expected_date = df.parse(expectedDateTime);
             new_exp_date = date.format(new_expected_date);
             new_exp_time = time.format(new_expected_date);
-            System.out.print("new expected date: " + new_exp_date);
-            System.out.print("new expected time: " + new_exp_time);
         } catch (ParseException e) {
             System.out.println("could not parse dates in extendBooking()");
         }

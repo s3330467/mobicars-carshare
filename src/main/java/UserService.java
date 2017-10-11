@@ -28,7 +28,6 @@ public class UserService {
      * @return a list of all users found in the database
      */
     public static List<User> getAllUsers() {
-        //User.updateUserList();
         return User.userList;
     }
 
@@ -46,7 +45,6 @@ public class UserService {
      */
     public static User getUser(String id) {
         int i;
-        //User.updateUserList();
         for (i = 0; i < User.userList.size(); i++) {
             if (User.userList.get(i).getId().equals(id)) {
                 return User.userList.get(i);
@@ -69,7 +67,6 @@ public class UserService {
      */
     public static User getUserByEmail(String email) {
         int i;
-        //User.updateUserList();
         for (i = 0; i < User.userList.size(); i++) {
             if (User.userList.get(i).getEmail().equals(email)) {
                 System.out.println("fetching user with the email: " + User.userList.get(i).getEmail());
@@ -93,7 +90,6 @@ public class UserService {
      */
     public static User getUserById(String id) {
         int i;
-        //User.updateUserList();
         for (i = 0; i < User.userList.size(); i++) {
             if (User.userList.get(i).getId().equals(id)) {
                 return User.userList.get(i);
@@ -143,11 +139,9 @@ public class UserService {
 
         if (DB.insertUser(email, encryptedPassword, f_name, l_name, address, license_no, phone_no, card_name, card_no, expiry_month, expiry_year, cvv)) {
             user = DB.fetchUserByEmail(email).get(0);
-            System.out.println("user being added's email: " + user.getEmail());
-            User.userList.add(user);
+             User.userList.add(user);
             return true;
         }
-        //User.updateUserList();
         return false;
     }
 
@@ -169,8 +163,6 @@ public class UserService {
      * false otherwise
      */
     public static Boolean validateUser(String email, String inputPassword) {
-        //ensure the userlist is up to date
-        //User.updateUserList();
         //get the user who matches the supplied email
         User user = getUserByEmail(email);
         //if no user is returned the email is not in the database, return false
