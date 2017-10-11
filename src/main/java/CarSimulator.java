@@ -39,9 +39,9 @@ public class CarSimulator {
     
     /**
      * Author: <b>Alexander Young</b><p>
-     * Date: 20.9.17
-     * <p>
-     * sets the movementState flag to true and starts a timer that executes the moveCar() method every second<p>
+     * Date: 20.9.17<p>
+     * 
+     * sets the movementState flag to true and starts a timer that executes the moveCar() method every second
      */
     public void startMoving() {
         movementState = true;
@@ -50,9 +50,9 @@ public class CarSimulator {
     
     /**
      * Author: <b>Alexander Young</b><p>
-     * Date: 20.9.17
-     * <p>
-     * sets the movementState flag to false cancels the timer that executes the moveCar() method<p>
+     * Date: 20.9.17<p>
+     * 
+     * sets the movementState flag to false cancels the timer that executes the moveCar() method
      */
     public void stopMoving() {
         movementState = false;
@@ -63,7 +63,7 @@ public class CarSimulator {
      * Author: <b>Alexander Young</b><p>
      * Date: 20.9.17
      * <p>
-     * applies scaling factors to random doubles in order to simulate random x and y axis movement<p>
+     * applies scaling factors to random doubles in order to simulate random x and y axis movement
      */
     class moveCar extends TimerTask {
 

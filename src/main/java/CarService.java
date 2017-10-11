@@ -84,7 +84,7 @@ public class CarService {
      * plate_no<p>
      *
      * @param plate_no the registration plate number of the car to be fetched,
-     * return null if the car cannot be found
+     * @return null if the car cannot be found
      */
     public static Car getCarByPlate_no(String plate_no) {
 
@@ -105,7 +105,8 @@ public class CarService {
      * <p>
      * get a single car from the carList array that matches the given car id<p>
      *
-     * @param id the unique id of the car to be fetched, return null if the car
+     * @param id the unique id of the car to be fetched
+     * @return null if the car
      * cannot be found
      */
     public static Car getCarById(String id) {

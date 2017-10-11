@@ -38,6 +38,7 @@ public class Car {
      * <p>
      * Author: <b>Rachel Tan</b>
      *
+     * @param image an image of the car
      * @param id the unique car identifier, an auto incrementing integer
      * @param type the type of the car - e.g., sedan, hatchback, luxury
      * @param make the make of the car - e.g., Ford, Mazda, Toyota

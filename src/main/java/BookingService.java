@@ -44,19 +44,19 @@ public class BookingService {
      * returns a current, unfinished booking of a user. if the user has a
      * booking with no end date this would mean they had started a booking but
      * not finished it. checks that a user only has one current booking before
-     * returning the booking.
+     * returning the booking.<p>
      *
      * @param user_id the unique id of a user to find the current booking for
      * @return an array of the users current bookings,
-     * <p>
+     * 
      * there should only ever be 1 booking in this array, but its size is
-     * checked to be 1 in case things go wrong.
+     * checked to be 1 in case things go wrong.<p>
      *
      * Updated 20.9.17 by Alexander Young<p>
      * removed reference to the updateBookingList method, the code first checks
      * if a complete entry exists in the java object list, if not it fetches the
      * matching booking from the SQL database and then adds it to the java
-     * object list<p>
+     * object list
      */
     public static Booking getCurrentBookingByUser_id(String user_id) {
         Booking booking;
@@ -104,7 +104,7 @@ public class BookingService {
      *
      * Updated 20.9.17 by Alexander Young<p>
      * removed reference to the updateBookingList and updateUserList methods,
-     * the method now updates java objects directly as well as editing the DB<p>
+     * the method now updates java objects directly as well as editing the DB
      */
     public static boolean cancelBooking(String booking_id) {
         Date current_date = new Date();
@@ -514,7 +514,7 @@ public class BookingService {
      * @return True if cost is updated, otherwise false
      *
      * Updated 21.9.17 by Rachel Tan<p>
-     * Changed the method called that retrieves booking ID<p>
+     * Changed the method called that retrieves booking ID
      */
     public static boolean insertTotalCostOfBookingById(String booking_id) {
         Booking booking = getBooking(booking_id);

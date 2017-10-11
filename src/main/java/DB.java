@@ -43,6 +43,7 @@ public class DB {
      * <p>
      * fetches a user from the user table that matches a given email
      *
+     * @param email the user's email address
      * @return an arraylist of Users, containing only the user that matches the
      * given email
      */
@@ -403,6 +404,7 @@ public class DB {
      * <p>
      * Insert a new car into the database<p>
      *
+     * @param image the image of the car
      * @param type the type of the car - e.g., sedan, hatchback, luxury
      * @param make the make of the car - e.g., Ford, Mazda, Toyota
      * @param model the model of the car - e.g., Festiva, Corolla, Camry
@@ -511,12 +513,12 @@ public class DB {
      * <p>
      * Populates the cost field of the last completed booking of user.<p>
      * 
-     * @param id ID of the booking
+     * @param booking_id ID of the booking
      * @param cost Total cost of the booking
      * @return True if the booking is updated, otherwise false
      * 
      * Updated 21.9.17 by Rachel Tan<p>
-     * SQL query selects booking ID instead of last complete booking of user<p>
+     * SQL query selects booking ID instead of last complete booking of user
      */
     public static boolean updateTotalCostOfBooking(String booking_id, double cost) {
         Sql2o sql2o = new Sql2o(sqlDB, sqlUser, sqlPass);
