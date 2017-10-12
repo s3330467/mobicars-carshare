@@ -162,6 +162,20 @@ public class UserController {
             model.put("template", "templates/booking_history.vtl");
             return new ModelAndView(model, "templates/layout_main.vtl");
         }, new VelocityTemplateEngine());
+        
+        /**
+         * Author: <b>Vishal Pradhan</b><p>
+         * Date: 12.10.2017
+         * <p>
+         * GET request<p>
+         * @return contact page 
+         */
+      
+        get("/contact", (request, response) -> {
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("template", "templates/contact.vtl");
+            return new ModelAndView(model, "templates/layout_main.vtl");
+        }, new VelocityTemplateEngine());
 
         /**
          * Author: <b>Alexander Young</b><p>
