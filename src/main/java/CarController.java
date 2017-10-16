@@ -82,9 +82,6 @@ public class CarController {
             String type = request.queryParams("type");
             String make = request.queryParams("make");
             String model = request.queryParams("model");
-            System.out.println(type);
-            System.out.println(make);
-            System.out.println(model);
             List<Car> searchResults = CarService.carSearch(type, make, model);
             return searchResults;
         }, JsonUtil.json());
@@ -108,7 +105,6 @@ public class CarController {
             for (int i = 0; i < Car.carList.size(); i++) {
                 results.add(Car.carList.get(i).getType());
             }
-            System.out.print(results);
             return results;
         }, JsonUtil.json());
 
@@ -131,7 +127,6 @@ public class CarController {
             for (int i = 0; i < Car.carList.size(); i++) {
                 results.add(Car.carList.get(i).getMake());
             }
-            System.out.print(results);
             return results;
         }, JsonUtil.json());
 
@@ -158,7 +153,6 @@ public class CarController {
                     results.add(Car.carList.get(i).getMake());
                 }
             }
-            System.out.print(results);
             return results;
         }, JsonUtil.json());
 
@@ -181,7 +175,6 @@ public class CarController {
                     results.add(Car.carList.get(i).getModel());
                 }
             }
-            System.out.print(results);
             return results;
         }, JsonUtil.json());
 

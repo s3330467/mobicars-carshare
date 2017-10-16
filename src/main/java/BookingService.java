@@ -44,19 +44,19 @@ public class BookingService {
      * returns a current, unfinished booking of a user. if the user has a
      * booking with no end date this would mean they had started a booking but
      * not finished it. checks that a user only has one current booking before
-     * returning the booking.
+     * returning the booking.<p>
      *
      * @param user_id the unique id of a user to find the current booking for
      * @return an array of the users current bookings,
-     * <p>
+     * 
      * there should only ever be 1 booking in this array, but its size is
-     * checked to be 1 in case things go wrong.
+     * checked to be 1 in case things go wrong.<p>
      *
      * Updated 20.9.17 by Alexander Young<p>
      * removed reference to the updateBookingList method, the code first checks
      * if a complete entry exists in the java object list, if not it fetches the
      * matching booking from the SQL database and then adds it to the java
-     * object list<p>
+     * object list
      */
     public static Booking getCurrentBookingByUser_id(String user_id) {
         Booking booking;
@@ -71,21 +71,8 @@ public class BookingService {
 
         if (DB.fetchCurrentBookingByUser_id(user_id).size() == 1) {
             booking = DB.fetchCurrentBookingByUser_id(user_id).get(0);
-            //return DB.fetchCurrentBookingByUser_id(user_id).get(0);
             return booking;
         }
-//        Booking booking;
-//        for (int i = 0; i < Booking.bookingList.size(); i++) {
-//            booking = Booking.bookingList.get(i);
-//            System.out.println("User Id of this user is: " + booking.getUser_id());
-//            if (Booking.bookingList.get(i).getUser_id().equals(user_id)) {
-//                System.out.println("user matched, end date looks like: " + booking.getEnd_date());
-//                if (booking.getEnd_date() == null) {
-//                    return booking;
-//                }
-//            }
-//        }
-        System.out.println("could not find any current booking for user");
         return null;
     }
 
@@ -104,7 +91,7 @@ public class BookingService {
      *
      * Updated 20.9.17 by Alexander Young<p>
      * removed reference to the updateBookingList and updateUserList methods,
-     * the method now updates java objects directly as well as editing the DB<p>
+     * the method now updates java objects directly as well as editing the DB
      */
     public static boolean cancelBooking(String booking_id) {
         Date current_date = new Date();
@@ -149,7 +136,6 @@ public class BookingService {
      */
     public static boolean createBooking(Car car, User user, String expectedDateTime) {
         String user_id = user.getId();
-        System.out.println("Creating booking for userid: " + user_id);
         String car_id = car.getId();
         Date current_date = new Date();
         String start_date = date.format(current_date);
@@ -161,20 +147,15 @@ public class BookingService {
             Date expected_date = df.parse(expectedDateTime);
             exp_date = date.format(expected_date);
             exp_time = time.format(expected_date);
-            System.out.print("expected date: " + exp_date);
-            System.out.print("expected time: " + exp_time);
         } catch (ParseException e) {
             System.out.println("could not parse dates in createBooking()");
         }
 
-        System.out.println("BookingService exp date: " + exp_date + "exp time: " + exp_time);
         double start_lat = car.getLat();
         double start_lng = car.getLng();
         if (car.isAvailable());
         if (DB.insertBooking(user_id, car_id, start_date, start_time, start_lat, start_lng, exp_date, exp_time)) {
             Booking booking = getCurrentBookingByUser_id(user_id);
-            System.out.println(user_id);
-            System.out.println("this booking exists and its id is: " + booking.getId());
             Booking.bookingList.add(booking);
             DB.updateCarAvailable(car.getPlate_no(), false);
             car.setAvailable(false);
@@ -224,7 +205,6 @@ public class BookingService {
             System.out.println(car.getPlate_no());
             booking.setCollection_date(collection_date);
             booking.setCollection_time(collection_time);
-//            car.carSim.setCar(car);
             car.carSim = new CarSimulator(car);
             car.carSim.startMoving();
             return true;
@@ -247,8 +227,6 @@ public class BookingService {
      * @return true if expected date and time are updated, otherwise false
      */
     public static boolean extendBooking(Booking booking, String expectedDateTime) {
-        //String exp_date = booking.getExp_date();
-        //String exp_time = booking.getExp_time();
         String new_exp_date = "";
         String new_exp_time = "";
         SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy h:mm a");
@@ -256,8 +234,6 @@ public class BookingService {
             Date new_expected_date = df.parse(expectedDateTime);
             new_exp_date = date.format(new_expected_date);
             new_exp_time = time.format(new_expected_date);
-            System.out.print("new expected date: " + new_exp_date);
-            System.out.print("new expected time: " + new_exp_time);
         } catch (ParseException e) {
             System.out.println("could not parse dates in extendBooking()");
         }
@@ -514,7 +490,7 @@ public class BookingService {
      * @return True if cost is updated, otherwise false
      *
      * Updated 21.9.17 by Rachel Tan<p>
-     * Changed the method called that retrieves booking ID<p>
+     * Changed the method called that retrieves booking ID
      */
     public static boolean insertTotalCostOfBookingById(String booking_id) {
         Booking booking = getBooking(booking_id);

@@ -28,9 +28,5 @@ public class Main {
         new UserController(new UserService());
         new CarController(new CarService());
         new BookingController(new BookingService());
-        
-//        Car car = CarService.getCarByPlate_no("RPK094");
-//        car.carSim.setCar(car);
-//        car.carSim.startMoving();
-    }
+        }
 }

@@ -1,6 +1,6 @@
 /* 
- * jquery plugin 
- * @original author: Jquery programmer
+ * 
+ * Author: Vishal Pradhan
  */
 
 
@@ -1178,14 +1178,10 @@ $.extend($.validator, {
 
 });
 
-// deprecated, use $.validator.format instead
 $.format = $.validator.format;
 
 }(jQuery));
 
-// ajax mode: abort
-// usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
-// if mode:"abort" is used, the previous request on that port (port can be undefined) is aborted via XMLHttpRequest.abort()
 (function($) {
 	var pendingRequests = {};
 	// Use a prefilter if available (1.5+)
@@ -1217,13 +1213,10 @@ $.format = $.validator.format;
 }(jQuery));
 
 // provides cross-browser focusin and focusout events
-// IE has native support, in other browsers, use event caputuring (neither bubbles)
-
 // provides delegate(type: String, delegate: Selector, handler: Callback) plugin for easier event delegation
 // handler is only called when $(event.target).is(delegate), in the scope of the jquery-object for event.target
 (function($) {
 	// only implement if not provided by jQuery core (since 1.4)
-	// TODO verify if jQuery 1.4's implementation is compatible with older jQuery special-event APIs
 	if (!jQuery.event.special.focusin && !jQuery.event.special.focusout && document.addEventListener) {
 		$.each({
 			focus: 'focusin',

@@ -10,8 +10,6 @@ function testCreditCard () {
   myCardNo = document.getElementById('card_no').value;
   myCardType = document.getElementById('card_type').value;
   if (checkCreditCard (myCardNo,myCardType)) {
-//    alert ("Credit card has a valid format");
-//    document.getElementById("contact-form").submit();
     return true;
   } 
   else {
@@ -170,7 +168,7 @@ function checkCreditCard (cardnumber, cardname) {
   // See if the length is valid for this card
   lengths = cards[cardType].length.split(",");
   for (j=0; j<lengths.length; j++) {
-      alert(cardnumber.length + " " + lengths[j]);
+      //alert(cardnumber.length + " " + lengths[j]);
     if (cardnumber.length == lengths[j]) 
     {
         LengthValid = true;

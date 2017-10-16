@@ -25,7 +25,6 @@ public class CarService {
      * @return a single Booking object that matches the booking_id parameter
      */
     public static List<Car> getAllCars() {
-        //Car.updateCarList();
         return Car.carList;
     }
 
@@ -55,7 +54,6 @@ public class CarService {
     public static void createCar(String image, String type, String make, String model, String plate_no, double hourly_price, double lat, double lng) {
         DB.insertCar(image, type, make, model, plate_no, hourly_price, lat, lng);
         Car.carList.add(CarService.getCarByPlate_no(plate_no));
-        //Car.updateCarList();
     }
 
     /**
@@ -73,7 +71,6 @@ public class CarService {
     public static void deleteCar(String plate_no) {
         Car.carList.remove(getCarByPlate_no(plate_no));
         DB.deleteCar(plate_no);
-        //Car.updateCarList();
     }
 
     /**
@@ -84,15 +81,13 @@ public class CarService {
      * plate_no<p>
      *
      * @param plate_no the registration plate number of the car to be fetched,
-     * return null if the car cannot be found
+     * @return null if the car cannot be found
      */
     public static Car getCarByPlate_no(String plate_no) {
 
         int i;
-        //Car.updateCarList();
         for (i = 0; i < Car.carList.size(); i++) {
             if (Car.carList.get(i).getPlate_no().equals(plate_no)) {
-                System.out.println("checking plate_no: " + Car.carList.get(i).getPlate_no());
                 return Car.carList.get(i);
             }
         }
@@ -105,14 +100,14 @@ public class CarService {
      * <p>
      * get a single car from the carList array that matches the given car id<p>
      *
-     * @param id the unique id of the car to be fetched, return null if the car
+     * @param id the unique id of the car to be fetched
+     * @return null if the car
      * cannot be found
      */
     public static Car getCarById(String id) {
 
         int i;
-        //Car.updateCarList();
-        for (i = 0; i < Car.carList.size(); i++) {
+         for (i = 0; i < Car.carList.size(); i++) {
             if (Car.carList.get(i).getId().equals(id)) {
                 return Car.carList.get(i);
             }
@@ -149,7 +144,6 @@ public class CarService {
      * list will be empty if no matches are found
      */
     public static List<Car> carSearch(String type, String make, String model) {
-        //Car.updateCarList();
         List<Car> carList = Car.carList;
         List<Car> searchResults = new ArrayList<Car>();
         if (make.equals("empty") && model.equals("empty") && type.equals("empty")) {

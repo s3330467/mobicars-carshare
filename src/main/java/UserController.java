@@ -53,7 +53,13 @@ public class UserController {
             if (request.session().attribute("session_email") == null) {
                 response.redirect("/login");
             }
-            if (request.session().attribute("session_booking") != null) {
+            if(request.session().attribute("booking_status") == null){
+                return;
+            }
+            if (request.session().attribute("booking_status").equals("uncollected")) {
+                response.redirect("/booking_made");
+            }
+            if (request.session().attribute("booking_status").equals("collected")) {
                 response.redirect("/booking_in_progress");
             }
         });
@@ -79,12 +85,11 @@ public class UserController {
             Map<String, Object> model = new HashMap<String, Object>();
             String currentUserEmail = request.session().attribute("session_email");
             boolean bookingState;
-            if (request.session().attribute("session_booking") != null) {
+            if (request.session().attribute("booking_status") != null) {
                 bookingState = true;
             } else {
                 bookingState = false;
             }
-            System.out.println("users booking state: " + bookingState);
             model.put("carList", Car.carList);
             model.put("user", UserService.getUserByEmail(currentUserEmail));
             model.put("bookingState", bookingState);
@@ -144,10 +149,9 @@ public class UserController {
          * @return a list of all users
          * <p>
          */
-        get("/users", (request, response) -> {
-            //User.updateUserList();
-            return User.userList;
-        });
+//        get("/users", (request, response) -> {
+//            return User.userList;
+//        });
 
         /**
          * Author: <b>Vishal Pradhan</b><p>
@@ -203,6 +207,9 @@ public class UserController {
          * Updated 13.8.17 by Alexander Young<p>
          * added new fields to keep in sync with changes to the SQL database and
          * User class<p>
+         * 
+         * Updated 10.10.17 by Alexander Young<p>
+         * added check to prevent duplicate user email's being added to the database<p>
          */
         post("/process_register", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
@@ -218,6 +225,9 @@ public class UserController {
             String expiry_month = request.queryParams("expiry_month");
             String expiry_year = request.queryParams("expiry_year");
             String cvv = request.queryParams("cvv");
+            if(UserService.getUserByEmail(email) != null){
+                return null;
+            }
             if (UserService.createUser(email, password, f_name, l_name, address, license_no, phone_no, card_name, card_no, expiry_month, expiry_year, cvv)) {
                 response.redirect("/login");
             } else {
@@ -242,19 +252,21 @@ public class UserController {
             Map<String, Object> model = new HashMap<String, Object>();
             String email = request.queryParams("email").toLowerCase();
             String password = request.queryParams("password");
-            System.out.println("logging in with password: " + password);
-            System.out.println("logging in with email: " + email);
             if (UserService.validateUser(email, password)) {
                 request.session().attribute("session_email", email);
                 User user = UserService.getUserByEmail(email);
                 Booking existing_booking = BookingService.getCurrentBookingByUser_id(user.getId());
                 if (existing_booking != null) {
-                    request.session().attribute("session_booking", existing_booking.getId());
+                    if(existing_booking.getCollection_date() == null){
+                        request.session().attribute("booking_status", "uncollected");
+                    }
+                    else{
+                        request.session().attribute("booking_status", "collected");
+                    }
                 }
                 response.redirect("/");
                 return null;
             }
-            System.out.println("user login validation failed");
             response.redirect("/login");
             return null;
         });
@@ -269,7 +281,7 @@ public class UserController {
          */
         get("/process_logout", (request, response) -> {
             request.session().removeAttribute("session_email");
-            request.session().removeAttribute("session_booking");
+            request.session().removeAttribute("booking_status");
             response.redirect("/login");
             return null;
         });

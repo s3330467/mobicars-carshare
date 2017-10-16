@@ -45,6 +45,8 @@ public class Booking {
      * @param car_id the unique id of the car being booking
      * @param start_date the date of the booking in the format yyyy-MM-dd
      * @param start_time the time of the booking in the format HH:mm:ss
+     * @param exp_date the expected return date selected by user
+     * @param exp_time the expected return time selected by user
      */
     public Booking(String id, String user_id, String car_id, String start_date, String start_time, String exp_date, String exp_time) {
         this.id = id;
